@@ -1,0 +1,51 @@
+/*
+
+*/
+// @import '~element-ui/packages/theme-chalk/src/common/var.scss';
+@import './common.scss';
+
+$-size-base: 14px;
+$page-header-height: 48px;
+
+$findAndReplaceItem: #ffff02;
+$findAndReplaceSelectedItem: #f59632;
+$findAndReplaceTitleColor: #252525;
+$cellTextColor: #39414D;
+$cellCommentColor: #66A0A4;
+$cellStringColor: #1021D5;
+$cellKeywordColor: #CF2F72;
+$pattern-blue-400: #2492F7;
+$pattern-blue-500: #0875DA;
+$pattern-blue-600: #0867BF;
+$pattern-blue-700: #0659A7;
+$pattern-purple-400: #A261E3;
+$pattern-purple-500: #8B3ADC;
+$pattern-purple-600: #6F22BD;
+$pattern-orange-500: #FE9412;
+$pattern-orange-600: #FE9412;
+$pattern-orange-700: #EC8600;
+$pattern-green-500: #66C942;
+$pattern-green-600: #4DBA2F;
+$pattern-green-700: #49A82B;
+$pattern-pink-500: #DC3A72;
+$pattern-pink-600: #BD2257;
+$pattern-pink-700: #8E1941;
+$--background-color-white: #fff !default;
+$--background-color-secondary: #F8F9FB !default;
+$--background-color-hover: #ECF0F8 !default;
+$--background-color-active: #E6EBF4 !default;
+
+$--border-divider-color: #ECF0F8 !default;
+$--border-secondary: #E6EBF4 !default;
+$--border-secondary-hover: #CED6E4 !default;
+$--border-secondary-active: #A5B2C5 !default;
+
+$--color-text-primary: #2F374C !default;
+$--color-text-regular: #546174 !default;
+$--color-text-secondary: #546174 !default;
+$--color-text-placeholder: #A5B2C5 !default;
+$--color-text-disabled: #8B99AE !default;
+
+
+
+

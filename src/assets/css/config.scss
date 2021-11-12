@@ -1,0 +1,257 @@
+/*
+
+*/
+@import './variables.scss';
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+body {
+  font-family: "Lato","Noto Sans S Chinese",sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  font-size: $-size-base;
+}
+* {
+  margin:0;
+  padding:0;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+  color: $--color-primary;
+}
+:focus{outline: 0}
+ul,li {list-style:none;}
+.clear {clear: both;}
+.clearfix:after {
+  content: '.';
+  clear: both;
+  display: block;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+  line-height: 0
+}
+
+.ksd-fleft{
+  float: left;
+}
+
+.ksd-fright{
+  float: right;
+}
+
+.is-disabled {
+  cursor: not-allowed;
+  // pointer-events: unset;
+}
+.disabled-style {
+  color: $--color-text-disabled;
+}
+
+.ellipsis-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hasEvent {
+  cursor: pointer;
+}
+.fl {
+  float: left;
+}
+.fr {
+  float: right;
+}
+.txt-danger {
+  color: $--color-danger;
+}
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+.txt-success {
+  color: $--color-success;
+}
+.txt-danger {
+  color: $--color-danger;
+}
+
+
+.page-inner-header {
+  line-height: 38px;
+  font-size: 26px;
+  font-weight: 600;
+}
+.page-outer-padding {
+  padding: 36px 54px;
+}
+.dialog-footer-400 {
+  .el-button {
+    width: 170px;
+  }
+}
+.el-tooltip__popper div {
+  overflow: auto;
+}
+// 编辑器样式设置
+.mlsql-editor {
+  &.active-editor {
+    .ace-chrome {
+      background-color: $--background-color-secondary;
+      .ace_gutter {
+        background-color: $--background-color-hover !important;
+        .ace_gutter-active-line {
+          background-color: $--background-color-hover;
+        }
+      }
+      .ace_marker-layer .ace_active-line {
+        background-color: $--background-color-hover !important;
+      }
+    }
+  }
+
+.ace-chrome {
+  background-color: $--color-white;
+  .ace_gutter {
+    background-color: $--color-white !important;
+    .ace_gutter-cell {
+      color: #CED7E4;
+    }
+    .ace_gutter-active-line {
+      background-color: $--color-white;
+    }
+  }
+  .ace_marker-layer .ace_active-line {
+    background-color: $--color-white !important;
+  }
+  .ace_hidden-cursors .ace_cursor {
+    opacity: 0;
+  }
+  // 颜色设置
+  .ace_line {
+    color: $cellTextColor;
+  }
+  .ace_comment, .ace_constant.ace_numeric {
+    color: $cellCommentColor;
+  }
+  .ace_identifier {
+    color: $cellTextColor;
+  }
+  .ace_keyword, .ace_storage {
+    color:$cellKeywordColor;
+  }
+  .ace_keyword.ace_operator {
+    color: $cellTextColor;
+  }
+  .ace_string {
+    color: $cellStringColor;
+  }
+}
+}
+
+.form-alert-type {
+  padding-top: 6px;
+  padding-bottom: 0;
+  color: #8b99ae;
+}
+
+.node-icon-item { // workflow 节点样式
+  &.tool, &.select {
+    border-color: $pattern-blue-500;
+    background-color: $pattern-blue-400;
+    &:hover {
+      border-color: $pattern-blue-500;
+      background-color: $pattern-blue-600;
+    }
+  }
+  &.feature, &.load {
+    border-color: $pattern-purple-500;
+    background-color: $pattern-purple-400;
+    &:hover {
+      border-color: $pattern-purple-500;
+      background-color: $pattern-purple-600;
+    }
+  }
+  &.algorithm, &.train {
+    border-color: $pattern-green-700;
+    background-color: $pattern-green-600;
+    &:hover {
+      border-color: $pattern-green-500;
+      background-color: $pattern-green-600;
+    }
+  }
+  &.data {
+    border-color: $pattern-pink-500;
+    background-color: $pattern-pink-600;
+    &:hover {
+      border-color: $pattern-pink-600;
+      background-color: $pattern-pink-700;
+    }
+  }
+  &.save {
+    border-color: $pattern-orange-700;
+    background-color: $pattern-orange-600;
+    &:hover {
+      border-color: $pattern-orange-700;
+      background-color: $pattern-orange-700;
+    }
+  }
+  &.predict {
+    border-color: $pattern-blue-600;
+    background-color: $pattern-blue-500;
+    &:hover {
+      border-color: $pattern-blue-600;
+      background-color: $pattern-blue-700;
+    }
+  }
+  &.register {
+    border-color: $pattern-orange-600;
+    background-color: $pattern-orange-500;
+    &:hover {
+      border-color: $pattern-orange-600;
+      background-color: $pattern-orange-700;
+    }
+  }
+}
+
+$sizeArr: (2, 5, 10, 12, 15, 16, 20, 22, 24, 48);
+@each $size in $sizeArr {
+  .font-#{$size} {
+    font-size: $size + px;
+  }
+  .pl-#{$size} {
+    padding-left: $size + px;
+  }
+  .pr-#{$size} {
+    padding-right: $size + px;
+  }
+  .pt-#{$size} {
+    padding-top: $size + px;
+  }
+  .pb-#{$size} {
+    padding-bottom: $size + px;
+  }
+  .ml-#{$size} {
+    margin-left: $size + px;
+  }
+  .mr-#{$size} {
+    margin-right: $size + px;
+  }
+  .mt-#{$size} {
+    margin-top: $size + px;
+  }
+  .mb-#{$size} {
+    margin-bottom: $size + px;
+  }
+}
