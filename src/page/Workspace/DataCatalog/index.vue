@@ -80,7 +80,7 @@ export default class DataCataLog extends Vue {
       label: 'Hive',
       id: 'hive',
       children: [],
-      icon: 'el-ksd-icon-kyligence_16',
+      icon: 'el-ksd-icon-hive_old',
       showExpandIcon: true
     },
     {

@@ -1,7 +1,20 @@
 const path = require('path')
+const fs = require('fs');
+const FileManagerPlugin = require('filemanager-webpack-plugin')
+
 function resolvePath(dir) {
   return path.resolve(__dirname, '.', dir)
 }
+function getCompressionName() {
+  try {
+    const projectName = JSON.parse(fs.readFileSync('package.json')).name;
+    const projectVersion = JSON.parse(fs.readFileSync('package.json')).version;
+    return `./build/${projectName}-${projectVersion}.tar.gz`;
+  } catch (e) {
+    return './build/dist.tar.gz';
+  }
+}
+const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
   lintOnSave: false,
@@ -37,9 +50,9 @@ module.exports = {
       .end()
     // 让其他svg loader不要对src/icons进行操作
     config.module
-    .rule('svg')
-    .exclude.add(resolvePath('src/icons/svg'))
-    .end()
+      .rule('svg')
+      .exclude.add(resolvePath('src/icons/svg'))
+      .end()
     // 使用svg-sprite-loader 对 src/icons下的svg进行操作
     config.module
       .rule('icons')
@@ -52,5 +65,20 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+    if (isProd) {
+      config.plugin('filemanager')
+      .use(
+        new FileManagerPlugin({
+          events: {
+            onEnd: [{
+              delete: [ getCompressionName() ],
+              archive: [
+                { source: './dist', format: 'tar', destination: getCompressionName()}
+              ]
+            }]
+          }
+        })
+      )
+    }
   }
 }

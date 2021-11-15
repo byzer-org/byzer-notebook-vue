@@ -7,17 +7,17 @@
       <div class="home-page-container-item">
         <div class="home-page-container-item-title">Quick Start</div>
         <div class="home-page-container-item-text">Get started with a sample notebook</div>
-        <el-button type="primary" @click="gotoNotebook">Explore</el-button>
+        <el-button class="mt-15" type="primary" @click="gotoNotebook">Explore</el-button>
       </div>
       <div class="home-page-container-item">
         <div class="home-page-container-item-title">Import & Connect Data</div>
         <div class="home-page-container-item-text">Quickly import and connect data</div>
-        <el-button type="primary" @click="handleUploadFile">Upload</el-button>
+        <el-button class="mt-15" type="primary" @click="handleUploadFile">Upload</el-button>
       </div>
       <div class="home-page-container-item">
         <div class="home-page-container-item-title">Create a New Notebook</div>
         <div class="home-page-container-item-text">Create a notebook to start cleaning, processing, visualizing, and modeling your data.</div>
-        <el-button type="primary" @click="handleCreateNotebook">Create</el-button>
+        <el-button class="mt-15" type="primary" @click="handleCreateNotebook">Create</el-button>
       </div>
     </div>
   </div>
@@ -128,32 +128,21 @@ export default class HomePage extends Vue {
 .home-page {
   width: 100%;
   height: calc(100vh - $page-header-height);
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &-container {
     width: 1000px;
-    margin: 0 auto;
     height: 300px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     justify-content: space-around;
     &-item {
-      width: 270px;
-      height: 300px;
+      flex: 1;
+      padding: 0 20px;
+      height: 200px;
       text-align: center;
-      &:nth-child(2) {
-        margin: 0px 50px;
-      }
-      img {
-        display: block;
-        width: 100px;
-        height: 100px;
-        margin: 0 auto;
-      }
       &-title {
-        line-height: 66px;
+        height: 66px;
         font-size: 24px;
         font-weight: 400;
       }
@@ -161,7 +150,6 @@ export default class HomePage extends Vue {
         line-height: 18px;
         height: 36px;
         font-size: 12px;
-        margin-bottom: 15px;
       }
     }
   }
