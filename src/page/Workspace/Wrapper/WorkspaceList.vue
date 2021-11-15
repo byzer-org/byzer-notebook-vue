@@ -3,7 +3,7 @@
 -->
 
 <template>
-  <div class="notebook-list">
+  <div ref="notebookListRef" class="notebook-list">
     <div class="header">
       <span class="title">Workspace</span>
       <el-dropdown class="notebook-drop" @command="command => handleWorkspace(command)">
@@ -283,7 +283,11 @@ export default class WorkspaceList extends Vue {
       centerButton: true
     })
   }
-  async handleDrop(draggingNode, dropNode, dropType) {
+  async handleDrop(draggingNode, dropNode, dropType, event) {
+    if(event.x > this.$refs['notebookListRef'].offsetWidth + 30) {
+      this.renderList = _.cloneDeep(this.originalList)
+      return
+    }
     // 移动的目标文件夹中有同名的
     try {
       let moveInfo = null
