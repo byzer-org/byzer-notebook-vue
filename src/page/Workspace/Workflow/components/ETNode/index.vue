@@ -34,8 +34,8 @@
                 <div class="label">
                   Group {{index}}
                   <span @click="handleGroupVisible(index)" >
-                    <el-button type="primary" text v-if="groupVisibleList[index].isShow"><span class="icon el-ksd-icon-arrow_down_22"></span></el-button>
-                    <el-button type="primary" text icon="el-ksd-icon-arrow_up_22" v-else></el-button>
+                    <el-button type="text" size="medium" v-if="groupVisibleList[index].isShow"><span class="icon el-ksd-icon-arrow_down_22"></span></el-button>
+                    <el-button type="text" size="medium" icon="el-ksd-icon-arrow_up_22" v-else></el-button>
                   </span>
                 </div>
                 <div class="form-group-list-item-label-btn">

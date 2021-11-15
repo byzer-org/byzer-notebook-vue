@@ -54,11 +54,7 @@ export default class Notebook extends Vue {
       { name: 'catalog', icon: 'el-ksd-icon-data_base_16' },
       { name: 'workflow', icon: 'el-ksd-icon-workflow_16' }
     ]
-    if (!this.activeNotebook || this.activeNotebook.type === 'notebook') {
-      return list.filter(v => v.name !== 'workflow')
-    } else {
-      return list
-    }
+    return list
   }
 
   changeActiveTab (tab) {
