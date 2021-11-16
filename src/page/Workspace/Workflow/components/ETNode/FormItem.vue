@@ -27,6 +27,7 @@
       v-model="ruleForm[formItem.name]"
       filterable
       :separator="'/'"
+      clearable
     ></el-cascader>
     <div class="form-code-editor" v-else-if="formItem['value_type'] === 'TEXT'" >
       <CodeEditor height="200" v-model="ruleForm[formItem.name]" :isSelected="true" @changeContent="changeContent"/>

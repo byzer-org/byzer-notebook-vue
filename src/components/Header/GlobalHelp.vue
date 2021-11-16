@@ -3,13 +3,12 @@
 -->
 
 <template>
-  <div class="global-help" v-show="(inNotebook && isNotebook) || isTrial">
+  <div class="global-help" v-show="isTrial">
     <el-dropdown @command="handleCommand">
       <i class="el-ksd-icon-help_22 drop-icon"></i>
       <el-dropdown-menu slot="dropdown" class="global-help-drop">
-        <el-dropdown-item command="handleShowShortcutHelp" v-show="inNotebook && isNotebook">{{ $t('showShortcutHelp') }}</el-dropdown-item>
-        <el-dropdown-item command="" v-show="isTrial"><a href="https://github.com/allwefantasy/mlsql" target="_blank">Give Feedback</a></el-dropdown-item>
-        <el-dropdown-item command="" v-show="isTrial"><a href="https://mlsql-docs.kyligence.io/latest/zh-hans/" target="_blank">MLSQL Docs</a></el-dropdown-item>
+        <el-dropdown-item command=""><a href="https://github.com/allwefantasy/mlsql" target="_blank">Give Feedback</a></el-dropdown-item>
+        <el-dropdown-item command=""><a href="https://mlsql-docs.kyligence.io/latest/zh-hans/" target="_blank">MLSQL Docs</a></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>

@@ -223,13 +223,9 @@ export default class ETNodeForm extends Vue {
       form[name] = ''
     }
     if (['MULTI_ENUM'].includes(value_type)) {
-      const value = form[name] ? (form[name].includes(',') ? form[name].split(',')  : [formItem]) : []
+      const value = form[name] ? (form[name].includes(',') ? form[name].split(',')  : [form[name]]) : []
       form[name] = value
     }
-    // const inputList = this.inputList(value_type)
-    // if (['INPUT/MODEL', 'INPUT/TABLE'].includes(value_type) && !inputList.includes(form[name])) {
-    //   this.ruleForm[name] = ''
-    // }
     if (value_type === 'INPUT/HDFS' && form[name]) {
       form[name] = this.getSourceFileValue(form[name])
     }

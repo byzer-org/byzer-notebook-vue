@@ -114,9 +114,6 @@
 }
 .el-tabs {
   > .el-tabs__header {
-    // .el-tabs__nav {
-    //   border: none;
-    // }
     .el-tabs__item {
       font-weight: normal;
       &:not(.is-active) {
@@ -175,4 +172,34 @@
     color: $--color-text-primary;
     box-shadow: 0px 4px 12px rgba(48, 70, 103, 0.32);
   }
+}
+.el-tag {
+  padding: 1px 5px;
+  font-size: 14px;
+  line-height: 22px;
+  height: 26px;
+  color: $--color-nav;
+  background-color: $--color-info-tag-bg;
+  border-color: $--color-info-tag-bg;
+  &.el-tag--success {
+    background-color: $--color-success-tag-bg;
+    border-color: $--color-success-tag-bg;
+    color: $--color-success-active;
+  }
+  &.el-tag--info {
+    background-color: $--color-info-secondary-tag-bg;
+    border-color: $--color-info-secondary-tag-bg;
+    color: $--color-info-secondary-active;
+    .el-tag__close {
+      color: $--color-info-secondary-active;
+    }
+  }
+  &.el-tag--danger {
+    background-color: $--color-danger-tag-bg;
+    border-color: $--color-danger-tag-bg;
+    color: $--color-danger-active;
+  }
+}
+.el-select .el-tag__close.el-icon-close {
+  background-color: transparent;
 }
