@@ -129,12 +129,15 @@ export default {
                 if (resl && Object.prototype.toString.call(resl.data).slice(8, -1) === 'Array') {
                   callback(
                     null,
-                    resl.data.reverse().map((item, index) => ({
-                      meta: item.extra?.desc || '',
-                      caption: item.name,
-                      value: item.name,
-                      score: index + 1 // score越大，越靠前显示
-                    }))
+                    resl.data.reverse().map((item, index) => {
+                      item.name = item.name.startsWith('/') ? item.name.replace('/', '') : item.name
+                      return {
+                        meta: item.extra?.desc || '',
+                        caption: item.name,
+                        value: item.name,
+                        score: index + 1 // score越大，越靠前显示
+                      }
+                    })
                   )
                 } else {
                   callback(null, [])
