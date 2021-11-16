@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="find-and-replace">
@@ -102,7 +99,7 @@ import CodeEditor from '../../../../components/CodeEditor'
   components: { CodeEditor },
   watch: {
     results: {
-      handler(newVal) {
+      handler () {
         // 有查询结果的行刷新后重新定位查询结果的文本的position
         this.locateFindKey()
       },
@@ -130,7 +127,7 @@ export default class FindAndReplace extends Vue {
    * @description: 定位所有符合查找条件的文本
    * @Date: 2021-09-08 11:10:52
    */
-  locateFindKey() {
+  locateFindKey () {
     if (!this.findKey) {
       return
     }
@@ -147,7 +144,7 @@ export default class FindAndReplace extends Vue {
    * @description: 选中下一个
    * @Date: 2021-09-08 14:11:11
    */
-  selectNext() {
+  selectNext () {
     let index = this.positions.findIndex(
       ({ cellId = '', cellIndex = '', lineIndex = '', pos = '' }) =>
         this.currentResult ===
@@ -169,7 +166,7 @@ export default class FindAndReplace extends Vue {
    * @description: 选中上一个
    * @Date: 2021-09-08 14:10:58
    */
-  selectPrevious() {
+  selectPrevious () {
     let index = this.positions.findIndex(
       ({ cellId = '', cellIndex = '', lineIndex = '', pos = '' }) =>
         this.currentResult ===
@@ -196,7 +193,7 @@ export default class FindAndReplace extends Vue {
    * @param {pos} 当前查找的位置
    * @Date: 2021-09-08 11:08:03
    */
-  findPos(
+  findPos (
     { cellIndex, lineIndex, content = '', cellInfo: { id: cellId } },
     pos
   ) {
@@ -221,7 +218,7 @@ export default class FindAndReplace extends Vue {
    * @return {*} 添加背景颜色后的查找结果
    * @Date: 2021-09-08 10:04:55
    */
-  handleContent({
+  handleContent ({
     cellIndex,
     lineIndex,
     content = '',
@@ -265,7 +262,7 @@ export default class FindAndReplace extends Vue {
    * @return {*} 替换后的文本
    * @Date: 2021-09-08 11:43:57
    */
-  replaceByIndex(content, linePosList = []) {
+  replaceByIndex (content, linePosList = []) {
     linePosList.forEach(({ pos, isActive }) => {
       if (isActive) {
         content =
@@ -286,7 +283,7 @@ export default class FindAndReplace extends Vue {
    * @description: 替换当前选中
    * @Date: 2021-09-06 18:35:18
    */
-  replaceCurrent() {
+  replaceCurrent () {
     let index = this.positions.findIndex(
       (i) =>
         this.currentResult ===
@@ -316,7 +313,7 @@ export default class FindAndReplace extends Vue {
    * @description: 替换所有
    * @Date: 2021-09-06 18:36:11
    */
-  replaceAll() {
+  replaceAll () {
     this.$emit('handleReplace', this.positions)
   }
 
@@ -325,7 +322,7 @@ export default class FindAndReplace extends Vue {
    * @param {*} e 改变后的值
    * @Date: 2021-09-07 13:41:54
    */
-  handleFindKeyChanged(e) {
+  handleFindKeyChanged (e) {
     this.$emit('handleFindKeyChanged', e)
     this.$nextTick(() => {
       // 查找到结果，findResults不为空时再去获取每一个值
@@ -338,12 +335,12 @@ export default class FindAndReplace extends Vue {
    * @param {*} 改变后的值
    * @Date: 2021-09-07 13:42:14
    */
-  handleReplaceKeyChanged(e) {
+  handleReplaceKeyChanged (e) {
     this.$emit('handleReplaceKeyChanged', e)
   }
 
   @Watch('showMsg')
-  showMsgHandler(newValue) {
+  showMsgHandler (newValue) {
     this.$nextTick(() => {
       if (newValue) {
         // 打开对话框之后自动聚焦在查找文本中

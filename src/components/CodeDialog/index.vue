@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <el-dialog
@@ -81,7 +78,7 @@ export default class CodeModal extends Vue {
   }
 
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
 }
 </script>

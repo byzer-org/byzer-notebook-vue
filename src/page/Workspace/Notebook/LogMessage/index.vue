@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="log-message">
@@ -39,7 +36,7 @@ export default class ExcuteDetail extends Vue {
     }
   }
   @Watch('jobId')
-  onJobIdChange (newVal) {
+  onJobIdChange () {
     this.getLogs()
   }
 

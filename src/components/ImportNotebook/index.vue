@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <el-dialog
     width="400px"

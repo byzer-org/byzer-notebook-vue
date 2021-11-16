@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div ref="notebookListRef" class="notebook-list">
@@ -255,12 +252,11 @@ export default class WorkspaceList extends Vue {
       this.$emit('moveComplete')
     }
   }
-  handleDragEnter() {
+  handleDragEnter () {
     this.originalList = _.cloneDeep(this.renderList)
   }
   getPath (node) {
     if (node.parent && !Array.isArray(node.parent.data)) {
-      const newPath = this.getPath(node.parent) + node.parent.data.label + '.' + node.data.label
       return this.getPath(node.parent) + node.parent.data.label + '.' + node.data.label
     } else {
       return node.data.label
@@ -283,8 +279,8 @@ export default class WorkspaceList extends Vue {
       centerButton: true
     })
   }
-  async handleDrop(draggingNode, dropNode, dropType, event) {
-    if(event.x > this.$refs['notebookListRef'].offsetWidth + 30) {
+  async handleDrop (draggingNode, dropNode, dropType, event) {
+    if (event.x > this.$refs['notebookListRef'].offsetWidth + 30) {
       this.renderList = _.cloneDeep(this.originalList)
       return
     }

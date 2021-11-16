@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="input-to-tag">

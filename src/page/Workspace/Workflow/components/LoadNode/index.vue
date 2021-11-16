@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="node-container load" :class="type === 'add' && 'extra-style'">
     <div class="node-container-form">
@@ -218,7 +215,7 @@ export default class LoadNodeForm extends Vue {
   parameters = {}
   originParamter = []
   showAdvancedParams = true
-    
+
   @Watch('initRuleForm')
   onInitRuleFormChange () {
     this.initData()
@@ -237,7 +234,7 @@ export default class LoadNodeForm extends Vue {
       return this.allDataSourceList
     }
   }
-  
+
   get connectedMlsql () {
     const { datasource_type, source } = this.ruleForm
     const source1 = datasource_type !== 'hdfs' ? source : (source?.length ? source[source.length - 1] : '')
@@ -314,7 +311,7 @@ export default class LoadNodeForm extends Vue {
       source1 = this.getSourceFileValue(source)
     }
     const connectionItem = this.connectionList.find(v => v.id === connection)
-    this.ruleForm = { 
+    this.ruleForm = {
       datasource_type: datasource_type || '',
       connection: connectionItem ? connection : '',
       data_type: data_type || '',
@@ -360,8 +357,10 @@ export default class LoadNodeForm extends Vue {
       }
       const res = await this.getLoadParams(params)
       this.originParamter = res.data.bind_params
-      this.getParamsAndInitSql(parameter) 
-    } catch {}
+      this.getParamsAndInitSql(parameter)
+    } catch (e) {
+      console.log(e)
+    }
   }
   validateTarget (rule, value, callback) {
     if (!value) {
@@ -377,7 +376,7 @@ export default class LoadNodeForm extends Vue {
   getSourceFileValue (path) {
     const arr = path.split('/').slice(1)
     const temp = []
-    for(var i = 0; i < arr.length; i++) {
+    for (var i = 0; i < arr.length; i++) {
       if (i >= 1) {
         temp.push(temp[i - 1] + '/' + arr[i])
       } else {
@@ -386,13 +385,13 @@ export default class LoadNodeForm extends Vue {
     }
     return temp
   }
-  
+
   async getFileListByFolder (node, resolve) {
     const path = node.level === 0 ? '' : node.data.path
     try {
       const res = await this.getFileList(path)
       const list = res.data?.list ?? []
-      const fileList = list.map((v, i) => {
+      const fileList = list.map(v => {
         return {
           label: v.name,
           value: v.path,
@@ -440,14 +439,18 @@ export default class LoadNodeForm extends Vue {
     try {
       const res = await this.getExistingTable()
       this.existingTableList = res.data?.output ?? []
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
   async getConnections () {
     try {
       const res = await this.getConnectionList()
       this.connectionList = res.data?.connection_list ?? []
       this.initData()
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
   // source table name hive-table
   // existing table name output-table
@@ -459,11 +462,13 @@ export default class LoadNodeForm extends Vue {
     try {
       const res = await this.getConnectionTable(this.ruleForm.connection)
       this.connectionTableList = res.data || []
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   changeDatasourceType (value) {
-    const { target } = this.ruleForm 
+    const { target } = this.ruleForm
     this.ruleForm = {
       datasource_type: value,
       database: '',
@@ -517,7 +522,7 @@ export default class LoadNodeForm extends Vue {
     }
   }
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
 }
 </script>

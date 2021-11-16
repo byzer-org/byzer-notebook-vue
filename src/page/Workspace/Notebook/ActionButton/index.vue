@@ -1,7 +1,3 @@
-<!--
-
--->
-
 <template>
   <div class="action-button">
     <span class="action-element" v-for="(item, index) in iconActions" :key="index">

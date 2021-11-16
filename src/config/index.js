@@ -1,6 +1,4 @@
-/*
 
-*/
 export const JOB_STATUS = {
   '-1': 'NEW',
   '0': 'RUNNING',

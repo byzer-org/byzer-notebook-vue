@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="cellListPage" v-loading="isLoading || isLoadingResult">
@@ -146,7 +143,7 @@ import { PythonTag } from '../../../../config'
 
 export default {
   name: 'cellList',
-  data() {
+  data () {
     return {
       oldCellList: [], // 保存后作为保存的newCellList的备份,保存editType
       selectCell: {},
@@ -173,7 +170,7 @@ export default {
       editType: '', // 当前选中cell的类型
       findKey: '',
       replaceKey: '',
-      results: [], // 查找的结果
+      results: [] // 查找的结果
     }
   },
   props: ['currentNotebook', 'activeNotebookId'],
@@ -210,10 +207,10 @@ export default {
       this.reloadCellList(false, true)
     }
   },
-  mounted() {
+  mounted () {
     document.addEventListener('click', this.listenFun)
   },
-  destroyed() {
+  destroyed () {
     document.removeEventListener('click', this.listenFun)
   },
   mixins: [cellCommand],
@@ -245,7 +242,7 @@ export default {
             ]
             mdEditorInstance.mdMode = 'preview'
           }
-          if(this.mode === 'edit') {
+          if (this.mode === 'edit') {
             this.handleCodeFocus(id)
           }
         }
@@ -274,9 +271,9 @@ export default {
      * @description: 运行下一个
      * @Date: 2021-11-05 13:41:46
      */
-    handleRunNext() {
+    handleRunNext () {
       const index = this.newCellList.findIndex(
-        (v) => v.id === this.selectCell.id
+        v => v.id === this.selectCell.id
       )
       const maxIndex = this.newCellList.length - 1
       if (index !== -1 && index < maxIndex) {
@@ -297,17 +294,17 @@ export default {
      * @param {*} e
      * @Date: 2021-09-07 13:46:01
      */
-    handleFindKeyChanged(e) {
+    handleFindKeyChanged (e) {
       this.findKey = e
       const temp = []
-      if(!e) {
+      if (!e) {
         return
       } else {
         this.newCellList.forEach((i, cellIndex) => {
-          if(i.content) {
+          if (i.content) {
             // 按行分割
             i.content.split('\n').forEach((it, lineIndex) => {
-              if(it.indexOf(e) > -1) {
+              if (it.indexOf(e) > -1) {
                 temp.push({
                   cellIndex, // 当前是哪个cell，展示在查询结果最左侧
                   lineIndex, // 行号
@@ -327,7 +324,7 @@ export default {
      * @return {*}
      * @Date: 2021-09-07 13:46:28
      */
-    handleReplaceKeyChanged(e) {
+    handleReplaceKeyChanged (e) {
       this.replaceKey = e;
     },
     /**
@@ -335,15 +332,15 @@ export default {
      * @param {param} cellId + '-' + cellIndex + '-' + lineIndex + '-' + pos
      * @Date: 2021-09-07 14:38:28
      */
-    doReplace(param) {
+    doReplace (param) {
       const [cellId = '', cellIndex = '', lineIndex = '', pos = ''] = param.split('-')
       this.newCellList = this.newCellList.map((item, index) => {
-        if(item.content && item.id === cellId) {
+        if (item.content && item.id === cellId) {
           // 按行分割
           const lineList = item.content.split('\n')
           // 按行根据param替换原文本
           lineList.forEach((it, idx, arr) => {
-            if(item.id === cellId && (index + '' === cellIndex) && (idx + '' === lineIndex)) {
+            if (item.id === cellId && (index + '' === cellIndex) && (idx + '' === lineIndex)) {
               arr[idx] = arr[idx].slice(0, pos) + this.replaceKey + arr[idx].slice(parseInt(pos, 10) + this.findKey.length)
             }
           })
@@ -368,15 +365,15 @@ export default {
      * @param {param} '' || [],需要替换的一项或者全部
      * @Date: 2021-09-07 13:31:02
      */
-    handleReplace(param) {
-      if(!this.findKey) {
+    handleReplace (param) {
+      if (!this.findKey) {
         return
       }
       const type = Object.prototype.toString.call(param).slice(8, -1);
-      if(type === 'String') {
+      if (type === 'String') {
         // 单个替换
         this.doReplace(param)
-      } else if(type === 'Array') {
+      } else if (type === 'Array') {
         // 全部替换
         param.reverse().forEach(({cellId = '', cellIndex = '', lineIndex = '', pos = ''}) => {
           this.doReplace(cellId + '-' + cellIndex + '-' + lineIndex + '-' + pos)
@@ -389,7 +386,7 @@ export default {
      * @param {event} mouseEvent
      * @Date: 2021-09-07 13:30:15
      */
-    listenFun(event) {
+    listenFun (event) {
       (this.newCellList || []).forEach(item => {
         // editor元素
         const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
@@ -401,20 +398,20 @@ export default {
         const runBtnNode = this.$refs['cell' + item.id][0].$refs['cellHover' + item.id]
         // 点击的位置不在包裹editor的li中
         if (!containerNode.contains(event.target)) {
-          if(item.editType === 'Markdown') {
+          if (item.editType === 'Markdown') {
             // markdown变为预览模式
             node.mdMode = 'preview'
           }
         } else {
           // 点击区域在单个运行和折叠代码内
-          if(runBtnNode.contains(event.target)) {
+          if (runBtnNode.contains(event.target)) {
             node.mdMode = 'preview'
           } else {
             // 点击的位置在包裹editor的li中切不在拖拽和添加按钮中
-            if(!btnNode.contains(event.target)) {
+            if (!btnNode.contains(event.target)) {
               // 模式变为编辑模式
               this.changeMode('edit')
-              if(item.editType === 'Markdown') {
+              if (item.editType === 'Markdown') {
                 // markdown变为编辑模式并聚焦
                 node.mdMode = 'edit'
                 node.handleFocus();
@@ -429,7 +426,7 @@ export default {
      * @param {e} new editType
      * @Date: 2021-08-27 10:22:54
      */
-    handleChanged(e) {
+    handleChanged (e) {
       this.editType = e;
       this.refreshSelectCell()
       let newValue = this.selectCell?.content || '';
@@ -461,7 +458,7 @@ export default {
       }
       this.refreshSelectCell()
     },
-    setEditorValue(value) {
+    setEditorValue (value) {
       const { id } = this.selectCell
       this.$nextTick(() => {
         const node = this.$refs['cell' + id][0].$refs['cellEditor' + id]
@@ -473,14 +470,14 @@ export default {
      * @description: 刷新选中selectCell的数据
      * @Date: 2021-08-27 10:56:49
      */
-    refreshSelectCell() {
+    refreshSelectCell () {
       this.selectCell = this.newCellList.find(i => i.id === this.selectCell.id) || {};
     },
     /**
      * @description: ace editor失焦
      * @Date: 2021-09-01 11:05:44
      */
-    handleCodeBlur() {
+    handleCodeBlur () {
       this.$nextTick(() => {
         const cellRef = this.$refs['cell' + this.selectCell.id] && (this.$refs['cell' + this.selectCell.id][0])
         const codeEditor = cellRef?.$refs['cellEditor' + this.selectCell.id]?.$refs['codeEditor'+this.selectCell.id]
@@ -492,7 +489,7 @@ export default {
      * @param {id} cell.id
      * @Date: 2021-09-01 11:41:50
      */
-    handleCodeFocus(id) {
+    handleCodeFocus (id) {
       this.$nextTick(() => {
         const cellRef = this.$refs['cell' + id] && (this.$refs['cell' + id][0])
         this.selectCellStatus = cellRef.status
@@ -527,18 +524,18 @@ export default {
     scrollCell: debounce(function () {
       this.setScrollTopToLocal()
     }, 200),
-    handleDragStart (evt) {
+    handleDragStart () {
     },
-    handleDragEnd (evt) {
+    handleDragEnd () {
       this.handleSave()
       this.showDragStyle = false
       this.draggedIndex = -1
     },
-    changeMove ({ moved }) {
+    changeMove () {
       this.showDragStyle = false
     },
     moveCell ({ draggedContext }) {
-      const { futureIndex, index } = draggedContext
+      const { futureIndex } = draggedContext
       this.showDragStyle = true
       this.draggedIndex = futureIndex + 1
     },
@@ -573,7 +570,7 @@ export default {
     },
     handleNotebook (type) {
       let handleName = ''
-      switch(type) {
+      switch (type) {
         case 'add':
           handleName = 'handleCreate'
           break
@@ -596,9 +593,9 @@ export default {
      * @param {cellList} res.data.cell_list
      * @Date: 2021-08-31 13:28:05
      */
-    dataProcess(cellList = []) {
+    dataProcess (cellList = []) {
       return cellList.map(item => {
-        if(item.content && item.content.startsWith(MarkdownTag)) {
+        if (item.content && item.content.startsWith(MarkdownTag)) {
           item.content = item.content.replace(MarkdownTag, '')
           // ！！！从备份中取保存前编辑器的模式
           const temp = this.oldCellList.find(i => i.id === item.id) || {};
@@ -651,7 +648,9 @@ export default {
       try {
         await this.clearResult(this.activeNotebookId)
         this.reloadCellList()
-      } catch {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     /**
      * @description: 保存
@@ -665,8 +664,8 @@ export default {
         // 处理content并保存
         this.oldCellList = cloneDeep(this.newCellList).map(item => {
           item.content = item.content || '';
-          if(item.editType === 'Markdown') {
-            if(!(item.content || '').startsWith(MarkdownTag)) {
+          if (item.editType === 'Markdown') {
+            if (!(item.content || '').startsWith(MarkdownTag)) {
               item.content = MarkdownTag + item.content;
             }
           }
@@ -679,6 +678,7 @@ export default {
           }
         }
         this.saveNotebook(params).then(res => {
+          console.log(res, 'res')
             this.loadingSave = false
             if (showMessage) {
               this.$message.success('Successfully Saved!')
@@ -703,7 +703,7 @@ export default {
     },
     async hanldeExcuteAll (type) {
       try {
-        const res = await this.autoSaveCell()
+        await this.autoSaveCell()
         this.exuteType = type
         if (this.exuteType === 'stop') {
           this.$confirm(this.$t('notebook.discardAllJob'), this.$t('notebook.discardTitle'), {
@@ -717,7 +717,9 @@ export default {
         } else {
           this.confirmExcuteAll(true)
         }
-      } catch {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     confirmExcuteAll (isFirst) {
       this.changeRunAll(true)
@@ -727,7 +729,7 @@ export default {
         this.confirmStopAll(isFirst)
       }
     },
-    confirmRunAll (isFirst) {
+    confirmRunAll () {
       this.runningIndex++
       const ids = this.newCellList.map(v => v.id)
       const id = ids[this.runningIndex]
@@ -795,7 +797,7 @@ export default {
       )
       this.handleSave()
     }, 300),
-    handleMove(type) {
+    handleMove (type) {
       const index = this.newCellList.findIndex(v => v.id === this.selectCell.id)
       const moveItem = this.newCellList[index]
       const cloneList = cloneDeep(this.newCellList)
@@ -808,7 +810,7 @@ export default {
     async handleDeleteCell (item) {
       const params = {
         id: this.activeNotebookId,
-        cell_id: item.id,
+        cell_id: item.id
       }
       try {
         await this.deleteCell(params)
@@ -817,11 +819,13 @@ export default {
           cellIndex: this.newCellList.findIndex(i => i.id === this.selectCell.id)
         })
         this.reloadCellList()
-      } catch {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     async handleAddCell (data, cell) {
       const { type } = data
-      const index = this.newCellList.findIndex((v) => v.id === cell.id);
+      const index = this.newCellList.findIndex(v => v.id === cell.id);
       const insertIndex = type === 'below' ? index + 1 : index;
       if (this.activeNotebookId !== this.currentNotebook.id) {
         return
@@ -856,9 +860,6 @@ export default {
         const scrollHeight = type === 'below' ? plusHeight : minusHeight
         this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop = scrollHeight
       })
-      // this.$nextTick(() => {
-      //   this.$refs['cellLi' + this.selectCell.id][0].scrollIntoView()
-      // })
     },
     setScrollTopToLocal () {
       const scrollList = JSON.parse(localStorage.getItem('scrollList')) || []

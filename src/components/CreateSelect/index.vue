@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <el-dialog
@@ -95,7 +92,7 @@ export default class CreateSelectModal extends Vue {
         content: { ...this.$refs.ruleForm.ruleForm },
         position: {
           left,
-          top,
+          top
         }
       }
       const res = await this.createWorkflowNode(params)

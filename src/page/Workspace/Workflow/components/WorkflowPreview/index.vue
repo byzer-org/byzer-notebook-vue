@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="workflow-preview" v-loading="isLoading">

@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="node-container train" :class="type === 'add' && 'extra-style'">
     <div class="node-container-form">
@@ -145,7 +142,7 @@ export default class TrainNodeForm extends Vue {
   initSql = ''
 
   @Watch('initRuleForm')
-  onInitRuleFormChange (newVal) {
+  onInitRuleFormChange () {
     this.initData()
   }
 
@@ -190,7 +187,9 @@ export default class TrainNodeForm extends Vue {
     try {
       const res = await this.getExistingModel()
       this.modelList = res.data?.models ?? []
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   getCompleteModel ({ target, save_path }) {
@@ -238,13 +237,17 @@ export default class TrainNodeForm extends Vue {
       const res = await this.getAlgorithmList()
       this.algorithmList = res.data.def_list || []
       this.initData()
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
   async getExistTables () {
     try {
       const res = await this.getExistingList()
       this.tableList = res.data?.output ?? []
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
   changeAlgorithm () {
     this.originParamter = []

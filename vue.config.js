@@ -2,10 +2,10 @@ const path = require('path')
 const fs = require('fs');
 const FileManagerPlugin = require('filemanager-webpack-plugin')
 
-function resolvePath(dir) {
+function resolvePath (dir) {
   return path.resolve(__dirname, '.', dir)
 }
-function getCompressionName() {
+function getCompressionName () {
   try {
     const projectName = JSON.parse(fs.readFileSync('package.json')).name;
     const projectVersion = JSON.parse(fs.readFileSync('package.json')).version;
@@ -17,7 +17,7 @@ function getCompressionName() {
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  lintOnSave: false,
+  lintOnSave: true,
   publicPath: process.env.BASE_URL,
   assetsDir: 'static', // 配置js、css静态资源二级目录的位置
   devServer: {
@@ -27,7 +27,7 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        'vue$': 'vue/dist/vue.common.js',
+        'vue$': 'vue/dist/vue.common.js'
       }
     }
   },

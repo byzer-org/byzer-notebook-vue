@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="node-container" :class="type === 'add' && 'extra-style'">
     <div class="node-container-form">
@@ -88,8 +85,7 @@ import CodeEditor from '../CodeEditor'
           { required: false, validator: this.validateValue, trigger: 'change'}
         ]
       }
-    },
-    
+    }
   },
   methods: {
     ...mapActions({
@@ -120,7 +116,7 @@ export default class SaveNodeForm extends Vue {
   initSql = ''
 
   @Watch('initRuleForm')
-  onInitRuleFormChange (newVal) {
+  onInitRuleFormChange () {
     this.initData()
   }
 
@@ -234,7 +230,8 @@ export default class SaveNodeForm extends Vue {
       const list = res.data?.models ?? []
       this.modelList = list.map(item => ({model: `${item.algorithm}.\`${item.path}\``, group_size: item.group_size}))
       this.initData()
-    } catch {
+    } catch (e) {
+      console.log(e)
     }
   }
   
@@ -246,7 +243,7 @@ export default class SaveNodeForm extends Vue {
     return this.$refs.form.validate()
   }
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
 }
 </script>

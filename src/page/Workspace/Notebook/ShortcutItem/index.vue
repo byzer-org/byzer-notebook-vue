@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="shortcut-item">
@@ -56,7 +53,7 @@ export default class ShortcutItem extends Vue {
   /* 按键次数 */
   frequency = 1
 
-  mounted() {
+  mounted () {
     this.checkParams()
   }
 
@@ -64,7 +61,7 @@ export default class ShortcutItem extends Vue {
    * @description: 解析参数
    * @Date: 2021-09-03 10:58:00
    */
-  checkParams() {
+  checkParams () {
     this.content = this.item?.content
     this.shortcutList = this.item?.shortcut.split('-')
     this.subShortcutList = this.item?.subShortcut.split('-').filter((i) => i)

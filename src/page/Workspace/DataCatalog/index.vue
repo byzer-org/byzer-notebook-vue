@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="dataCatalog">
     <div class="header">Data Catalog</div>
@@ -241,7 +238,7 @@ export default class DataCataLog extends Vue {
   }
 
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
 }
 </script>

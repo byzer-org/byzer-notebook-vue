@@ -1,6 +1,4 @@
-/*
 
-*/
 
 
 const routes = [
@@ -55,7 +53,7 @@ const routes = [
     meta: {
       needLogin: true
     }
-  },
+  }
   // {
   //   name: '*',
   //   redirect: {name: 'result'}

@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="form-select" ref="selectForm">
     <div class="form-select-sql">
@@ -59,7 +56,7 @@ export default class SelectNodeForm extends Vue {
     return initFormSql !== originFormSql
   }
   @Watch('initRuleForm')
-  onInitRuleFormChange (newVal) {
+  onInitRuleFormChange () {
     this.initData()
   }
   mounted () {
@@ -98,7 +95,7 @@ export default class SelectNodeForm extends Vue {
         centerButton: true
       })
     } else {
-      return new Promise(function(resolve) {
+      return new Promise(function (resolve) {
         resolve(true)
       })
     }

@@ -1,16 +1,13 @@
-<!--
-
--->
-
 <template>
+  <div></div>
 </template>
 <script>
-import { debounce, cloneDeep } from 'lodash'
+import { debounce } from 'lodash'
 import { PythonTag } from '../../../../config'
 
 export default {
   name: 'cellList',
-  data() {
+  data () {
     return {
       timer: undefined,
       doublePressD: false, // 是否双击D
@@ -23,9 +20,9 @@ export default {
   watch: {
     currentNotebook: {
       // 每次切换tab后重新绑定快捷键，否则快捷键仅绑定在最初的notebook上
-      handler(newValue, oldValue) {
-        if(newValue.active === oldValue?.active) return;
-        if(newValue?.active === 'true') {
+      handler (newValue, oldValue) {
+        if (newValue.active === oldValue?.active) return;
+        if (newValue?.active === 'true') {
           // 放在异步任务中延迟绑定，避免后面的解绑将该绑定解除
           this.$nextTick(() => {
             this.bindAllKey()
@@ -36,7 +33,7 @@ export default {
       },
       deep: true,
       immediate: true
-    },
+    }
   },
   mounted () {
     this.shortcutPromptInstance = this.$refs['shortcutPrompt']
@@ -158,7 +155,7 @@ export default {
      * @param {tag} markdown标题标记
      * @Date: 2021-09-01 17:09:13
      */
-    checkAndChangeTitleLevel(tag) {
+    checkAndChangeTitleLevel (tag) {
       if ((this.currentNotebook.id === this.activeNotebookId) && this.selectCell?.editType === 'Markdown') {
         const {id} = this.selectCell
         // editor元素
@@ -169,7 +166,7 @@ export default {
         const firstLine = node.cmInstance.getLine(0) || ''
         const spaceIndex = firstLine.lastIndexOf('# ')
         const startIndex = firstLine.indexOf('#')
-        if(spaceIndex > -1) {
+        if (spaceIndex > -1) {
           newLine = firstLine.replace(firstLine.slice(startIndex, spaceIndex + 1), tag)
         } else {
           newLine = tag + ' ' + firstLine;
@@ -181,35 +178,35 @@ export default {
      * @description: markdown第一行改为1级标题
      * @Date: 2021-09-01 15:59:55
      */
-    changMdTittle1() {
+    changMdTittle1 () {
       this.checkAndChangeTitleLevel('#')
     },
     /**
      * @description: markdown第一行改为2级标题
      * @Date: 2021-09-01 15:59:55
      */
-    changMdTittle2() {
+    changMdTittle2 () {
       this.checkAndChangeTitleLevel('##')
     },
     /**
      * @description: markdown第一行改为3级标题
      * @Date: 2021-09-01 15:59:55
      */
-    changMdTittle3() {
+    changMdTittle3 () {
       this.checkAndChangeTitleLevel('###')
     },
     /**
      * @description: markdown第一行改为4级标题
      * @Date: 2021-09-01 15:59:55
      */
-    changMdTittle4() {
+    changMdTittle4 () {
       this.checkAndChangeTitleLevel('####')
     },
     /**
      * @description: 显示快捷键帮助
      * @Date: 2021-09-01 15:06:43
      */
-    showShortcutHelp() {
+    showShortcutHelp () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         this.$refs['shortcutPrompt'].isShow = !this.$refs['shortcutPrompt'].isShow;
       }
@@ -218,7 +215,7 @@ export default {
      * @description: 保存
      * @Date: 2021-09-01 15:02:58
      */
-    handlesaveAll() {
+    handlesaveAll () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         this.handleSave(true);
       }
@@ -227,10 +224,10 @@ export default {
      * @description: 撤销删除单元格
      * @Date: 2021-09-01 14:35:44
      */
-    undoDelete() {
+    undoDelete () {
       if ((this.currentNotebook.id === this.activeNotebookId) && this.deletedCellList.length > 0) {
         const {cell, cellIndex} = this.deletedCellList.shift();
-        if(cellIndex > this.newCellList.length - 1) {
+        if (cellIndex > this.newCellList.length - 1) {
           this.newCellList.push(cell)
         } else {
           this.newCellList.splice(cellIndex, 0, cell)
@@ -242,12 +239,12 @@ export default {
      * @description: 将operateContent的内容粘贴到下方单元格
      * @Date: 2021-09-01 14:27:03
      */
-    pasteToBelowCell() {
+    pasteToBelowCell () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         let index = this.newCellList.findIndex(i => i.id === this.selectCell.id)
         index = index + 1 > this.newCellList.length - 1 ? this.newCellList.length - 1 : index + 1
         this.newCellList = this.newCellList.map((i, idx) => {
-          if(index === idx) {
+          if (index === idx) {
             i.content = (i.content || '') + this.operateContent
           }
           return i
@@ -260,12 +257,12 @@ export default {
      * @description: 将operateContent的内容粘贴到上方单元格
      * @Date: 2021-09-01 13:10:24
      */
-    pasteToUpperCell() {
+    pasteToUpperCell () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         let index = this.newCellList.findIndex(i => i.id === this.selectCell.id)
         index = index - 1 > -1 ? index - 1 : 0
         this.newCellList = this.newCellList.map((i, idx) => {
-          if(index === idx) {
+          if (index === idx) {
             i.content = (i.content || '') + this.operateContent
           }
           return i
@@ -278,7 +275,7 @@ export default {
      * @description: 复制当前单元格的内容
      * @Date: 2021-09-01 11:17:04
      */
-    copyCurrentContent() {
+    copyCurrentContent () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         const index = this.newCellList.findIndex(i => i.id === this.selectCell.id)
         this.operateContent = this.newCellList[index].content || '';
@@ -288,10 +285,10 @@ export default {
      * @description: 剪切当前单元格的内容
      * @Date: 2021-08-31 17:22:16
      */
-    cutCurrentContent() {
+    cutCurrentContent () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         this.newCellList = this.newCellList.map(i => {
-          if(i.id === this.selectCell.id) {
+          if (i.id === this.selectCell.id) {
             this.operateContent = i.content;
             i.content = '';
           }
@@ -304,7 +301,7 @@ export default {
      * @description: 查找和替换
      * @Date: 2021-09-02 09:58:09
      */
-    findAndReplace() {
+    findAndReplace () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         this.findAndReplaceInstance.showMsg = true
         this.handleFindKeyChanged(this.findKey)
@@ -313,11 +310,11 @@ export default {
     /**
      * @description: D(连续按两次)  删除本单元格
      * @Date: 2021-08-31 17:15:28
-     */    
-    handleKeyBoardDeleteCell() {
+     */
+    handleKeyBoardDeleteCell () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         // 一下还没按为false
-        if(!this.doublePressD) {
+        if (!this.doublePressD) {
           // 按了一下之后变为true
           this.doublePressD = true;
           this.timer = setTimeout(() => {
@@ -334,15 +331,15 @@ export default {
     /**
      * @description: 切换当前选中editor的模式
      * @Date: 2021-08-30 14:28:38
-     */    
-    changeCurrentEditType() {
+     */
+    changeCurrentEditType () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         let editType = '';
-        if(this.selectCell.editType === 'MLSQL' || this.selectCell.editType === 'Python') {
+        if (this.selectCell.editType === 'MLSQL' || this.selectCell.editType === 'Python') {
           editType = 'Markdown';
         } else {
           editType = 'MLSQL';
-          if(this.selectCell.content.split('\n').map(i => i.trim()).indexOf(PythonTag) > -1) {
+          if (this.selectCell.content.split('\n').map(i => i.trim()).indexOf(PythonTag) > -1) {
             editType = 'Python'
           }
         }
@@ -365,12 +362,7 @@ export default {
     },
     handleRunAndNext () {
       if ((this.currentNotebook.id === this.activeNotebookId) && this.selectCell.id) {
-        const index = this.newCellList.findIndex(v => v.id === this.selectCell.id)
         this.$refs[`cell${this.selectCell.id}`][0].handleRun()
-        // if (index < this.newCellList.length - 1) {
-        //   this.selectCell = this.newCellList[index + 1]
-        //   this.scrollToSelectCell()
-        // }
       }
     },
     scrollToSelectCell () {
@@ -399,7 +391,7 @@ export default {
         return
       }
       const index = this.newCellList.findIndex(v => v.id === this.selectCell.id)
-      const maxIndex = this.newCellList.length - 1 
+      const maxIndex = this.newCellList.length - 1
       if (index !== -1 && (index < maxIndex)) {
         this.selectCell = this.newCellList[index + 1]
         this.scrollToSelectCell(index + 1)

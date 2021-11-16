@@ -1,6 +1,4 @@
-/*
 
-*/
 
 import global from './module/global'
 import notebook from './module/notebook'

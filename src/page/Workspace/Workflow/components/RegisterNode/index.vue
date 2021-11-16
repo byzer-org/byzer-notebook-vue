@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="node-container register" :class="type === 'add' && 'extra-style'">
     <div class="node-container-form">
@@ -73,7 +70,7 @@ import CodeEditor from '../CodeEditor'
           { required: false, validator: this.validateToken, trigger: 'blur' }
         ]
       }
-    },
+    }
     
   },
   methods: {
@@ -189,7 +186,9 @@ export default class SaveNodeForm extends Vue {
     try {
       const res = await this.getExistingTable()
       this.tableList = res.data?.output ?? []
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
   async getExistModels () {
     try {
@@ -221,7 +220,7 @@ export default class SaveNodeForm extends Vue {
     return this.$refs.form.validate()
   }
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
 }
 </script>
@@ -239,8 +238,5 @@ export default class SaveNodeForm extends Vue {
 </i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
-.node-container.register {
-}
 </style>
 

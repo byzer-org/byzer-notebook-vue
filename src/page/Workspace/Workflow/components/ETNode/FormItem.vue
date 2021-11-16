@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="form-item-com">
     <el-select :multiple="formItem['value_type'] === 'MULTI_ENUM'" v-if="formItem['value_type'].includes('ENUM')" v-model="ruleForm[formItem.name]" style="width: 100%;" :placeholder="formItem.default_value">
@@ -67,7 +64,7 @@ export default class FormItem extends Vue {
     try {
       const res = await this.getFileList(path)
       const list = res.data?.list ?? []
-      const fileList = list.map((v, i) => {
+      const fileList = list.map(v => {
         return {
           label: v.name,
           value: v.path,

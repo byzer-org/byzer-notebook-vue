@@ -1,6 +1,4 @@
-/*
 
-*/
 
 import { actionsTypes } from '../../store'
 
@@ -16,7 +14,7 @@ export function getInitState () {
       password: '',
       parameter: [
         { name: '', value: '', key: String(Date.now()) }
-      ],
+      ]
     },
     id: -1,
     type: 'add',

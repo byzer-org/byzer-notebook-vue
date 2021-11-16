@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="notebookPage">
@@ -359,7 +356,9 @@ export default {
       try {
         await this.saveOpenedNotebook({list: newTabList})
         this.fetchNotebookList()
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     async getNotebookTab () {
       try {
@@ -369,7 +368,7 @@ export default {
         this.setOpenedNotebook(this.notebookTab)
         let activeTab = null
         if (this.notebookTab.length) {
-          activeTab = this.notebookTab.find(v => v.active === 'true' &&  v.id) || this.notebookTab[0]
+          activeTab = this.notebookTab.find(v => v.active === 'true' && v.id) || this.notebookTab[0]
         }
         if (activeTab) {
           this.changeRouteParams(activeTab)
@@ -377,14 +376,16 @@ export default {
         this.setActiveNotebook(activeTab)
         // 获取到tab之后挂载拖拽
         this.$nextTick(() => {
-          this.rowDrop();
-        });
-      } catch (e) {}
+          this.rowDrop()
+        })
+      } catch (e) {
+        console.log(e)
+      }
     },
     /**
      * @description 给el-tab增加拖拽功能
      */
-    rowDrop() {
+    rowDrop () {
       // 拖拽元素的父级dom
       const el = document.querySelector('.el-tabs__nav')
       if (!el) {
@@ -392,15 +393,15 @@ export default {
       }
       Sortable.create(el, {
         onEnd: ({ newIndex, oldIndex }) => {
-          //oldIIndex拖放前的位置， newIndex拖放后的位置
-          const currRow = this.notebookTab.splice(oldIndex, 1)[0]; //鼠标拖拽当前的el-tabs-pane
-          this.notebookTab.splice(newIndex, 0, currRow); //notebookTab 是存放所以el-tabs-pane的数组
+          // oldIIndex拖放前的位置， newIndex拖放后的位置
+          const currRow = this.notebookTab.splice(oldIndex, 1)[0]; // 鼠标拖拽当前的el-tabs-pane
+          this.notebookTab.splice(newIndex, 0, currRow); // notebookTab 是存放所以el-tabs-pane的数组
           // 拖拽完成后保存当前顺序
           this.saveOpenedNotebook({ list: this.setOpenedList() });
-        },
-      });
+        }
+      })
     },
-    changeRouteParams(item) {
+    changeRouteParams (item) {
       this.curNotebookTab = item ? `${item.type}_${item.id}` : ''
       const params = item ? { id: item.id, type: item.type } : {}
       this.$router.push({name: 'notebook', params})
@@ -411,7 +412,7 @@ export default {
     async changeTabList (activeNotebook, notNeedGet, tabClicked) { // 向当前打开的notebook 中新增一个notebook 或者重新打开
       try {
         const temp = _.cloneDeep(this.notebookTab)
-        if(!tabClicked) {
+        if (!tabClicked) {
           temp.unshift(activeNotebook)
         }
         const openedList = []
@@ -423,7 +424,7 @@ export default {
         const toSaveList = openedList.map(v => {
           return {
             ...v,
-            active: v.id === activeNotebook.id,
+            active: v.id === activeNotebook.id
           }
         })
         await this.saveOpenedNotebook({list: toSaveList})
@@ -484,7 +485,7 @@ export default {
       resizeData.leftStartWidth = this.$refs['$layout-left'].clientWidth
       resizeData.rightStartWidth = this.$refs['$layout-right'].clientWidth
     },
-    handleStopResize (e) {
+    handleStopResize () {
       const { resizeData } = this
 
       if (resizeData.isStartResize) {

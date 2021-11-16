@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <el-dialog
@@ -120,7 +117,7 @@ export default class CreateFolderModal extends Vue {
             name: this.form.name,
             target_folder_id: this.targetfolderId
           }
-          const res = await this.createFolder(params)
+          await this.createFolder(params)
           this.callback({ isSubmit: true })
 
           this.hideModal()

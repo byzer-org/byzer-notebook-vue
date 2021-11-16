@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="shortcut-detail">
@@ -31,11 +28,11 @@ export default class ShortcutDetail extends Vue {
 
   platform = 'win'
 
-  mounted() {
+  mounted () {
     this.checkDetail()
   }
 
-  checkDetail() {
+  checkDetail () {
     this.platform = this.checkUserAgent()
     this.title = this.type === 'global' ? 'Global' : 'Markdown'
     this.list = cloneDeep(ShortcutPromptList)[this.mode][this.type].map((i) => {
@@ -49,7 +46,7 @@ export default class ShortcutDetail extends Vue {
    * @description: 根据mac/windows返回快捷键
    * @Date: 2021-09-03 13:35:22
    */
-  chooseBtn(shortcut) {
+  chooseBtn (shortcut) {
     let result = shortcut
       .split(',')
       .filter((i) => i)
@@ -65,12 +62,12 @@ export default class ShortcutDetail extends Vue {
    * @description: windows || mac
    * @Date: 2021-09-03 10:58:20
    */
-  checkUserAgent() {
-    /*** 判断mac系统(含iphone手机) ***/
+  checkUserAgent () {
+    /** * 判断mac系统(含iphone手机) ***/
     if (/macintosh|mac os x/i.test(navigator.userAgent)) {
       return 'mac'
     }
-    /*** 判断windows系统 ***/
+    /** * 判断windows系统 ***/
     if (/windows|win32/i.test(navigator.userAgent)) {
       return 'win'
     }

@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="cell-box" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" >
@@ -158,7 +155,7 @@ export default {
         this.handleRun()
       }
     },
-    async handleRun (e) {
+    async handleRun () {
       if (this.editType === 'Markdown') {
         // markdown
         this.changeStatus('1')

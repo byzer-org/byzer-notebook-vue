@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="user-info-wrapper">
@@ -52,7 +49,7 @@ export default class UserInfo extends Vue {
       this.clearUserInfo(null)
       this.$router.push({name: 'login'})
     } catch (e) {
-
+      console.log(e)
     }
   }
 }

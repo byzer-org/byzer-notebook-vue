@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="collapse-code">

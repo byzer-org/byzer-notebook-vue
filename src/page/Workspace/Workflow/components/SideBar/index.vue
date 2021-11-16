@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="workflow-side">
@@ -42,7 +39,6 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex'
 import { Component, Vue } from 'vue-property-decorator'
-import _ from 'lodash'
 
 @Component({
   methods: {
@@ -68,12 +64,12 @@ export default class WorkflowSide extends Vue {
       type: 'Basic',
       showNode: true,
       nodeList: [
-        { type: 'load', name: 'Load', id: 'load', name: 'Load' },
-        { type: 'select', name: 'Select', id: 'select', name: 'Select' },
-        { type: 'save', name: 'Save', id: 'save', name: 'Save' },
-        { type: 'train', name: 'Train', id: 'train', name: 'Train' },
-        { type: 'predict', name: 'Predict', id: 'predict', name: 'Predict' },
-        { type: 'register', name: 'Register', id: 'register', name: 'Register' },
+        { type: 'load', name: 'Load', id: 'load' },
+        { type: 'select', name: 'Select', id: 'select' },
+        { type: 'save', name: 'Save', id: 'save' },
+        { type: 'train', name: 'Train', id: 'train' },
+        { type: 'predict', name: 'Predict', id: 'predict' },
+        { type: 'register', name: 'Register', id: 'register' }
       ]
     }
   ]
@@ -108,7 +104,7 @@ export default class WorkflowSide extends Vue {
       { type: 'Algorithm', showNode: true, nodeList: algorithm },
       { type: 'Feature Engineering', showNode: true, nodeList: feature },
       { type: 'Data Processing', showNode: true, nodeList: processing },
-      { type: 'Tool', showNode: true, nodeList: tool },
+      { type: 'Tool', showNode: true, nodeList: tool }
     ]
     this.allNodeList = this.allNodeList.concat(allNode)
   }

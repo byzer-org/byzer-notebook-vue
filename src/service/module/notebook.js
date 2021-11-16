@@ -1,6 +1,4 @@
-/*
 
-*/
 
 
 import axios from '../handleService'
@@ -10,12 +8,12 @@ export default {
   renameNotebook: (params) => axios.put('/api/file', params),
   cloneNotebook: (params) => axios.post('/api/file/clone', params),
   delNotebook: ({ id, type }) => axios.delete(`/api/file/${id}?type=${type}`),
-  saveOpenedNotebook: (list) => axios.put(`/api/files/opened`, list),
-  getOpenedNotebook: () => axios.get(`/api/files/opened`),
-  importNotebook: (data) => axios.post(`/api/file/import`, data, { headers: {
+  saveOpenedNotebook: (list) => axios.put('/api/files/opened', list),
+  getOpenedNotebook: () => axios.get('/api/files/opened'),
+  importNotebook: (data) => axios.post('/api/file/import', data, { headers: {
     'Content-Type': 'multipart/form-data'
   }}),
-  moveNotebook: (data) => axios.post(`/api/file/move`, data),
+  moveNotebook: (data) => axios.post('/api/file/move', data),
   getNotebookList: () => axios.get('/api/files'),
   excuteCode: (params) => axios.post('/api/script/execution', params),
   getJobStatus: (id) => axios.get(`/api/job/${id}`),
@@ -26,12 +24,12 @@ export default {
   getCurrentScript: (id) => axios.get(`/api/job/${id}/current_script`),
   createCell: ({id, data}) => axios.post(`/api/notebook/${id}/cell`, data),
   deleteCell: ({id, cell_id}) => axios.delete(`/api/notebook/${id}/cell/${cell_id}`),
-  getDefaultNotebook: () => axios.get(`/api/notebook/default`),
+  getDefaultNotebook: () => axios.get('/api/notebook/default'),
   clearAllResults: (notebookId) => axios.delete(`/api/notebook/${notebookId}/result`),
-  createFolder: (data) => axios.post(`/api/folder`, data),
-  moveFolder: (data) => axios.post(`/api/folder/move`, data),
-  renameFolder: (data) => axios.put(`/api/folder`, data),
-  cloneFolder: (data) => axios.post(`/api/folder/clone`, data),
+  createFolder: (data) => axios.post('/api/folder', data),
+  moveFolder: (data) => axios.post('/api/folder/move', data),
+  renameFolder: (data) => axios.put('/api/folder', data),
+  cloneFolder: (data) => axios.post('/api/folder/clone', data),
   deleteFolder: (id) => axios.delete(`/api/folder/${id}`),
-  autoComplete: (params) => axios.post(`/api/notebook/code/suggestion`, params)
+  autoComplete: (params) => axios.post('/api/notebook/code/suggestion', params)
 }
