@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="notebook-workflow">
     <div class="notebook-workflow-actions">
@@ -163,7 +160,7 @@ export default class WorkflowWrapper extends Vue {
   }
   handleNotebook (type) {
     let handleName = ''
-    switch(type) {
+    switch (type) {
       case 'add':
         handleName = 'handleCreate'
         break

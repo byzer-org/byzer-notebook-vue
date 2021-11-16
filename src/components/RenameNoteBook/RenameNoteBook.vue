@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <el-dialog
@@ -76,17 +73,6 @@ export default class RenameNoteBookModal extends Vue {
       name: [
         { required: true, validator: this.validateName, trigger: 'blur' }
       ]
-    }
-  }
-
-  get title () {
-    const { type } = this.form
-    if (type === 'notebook') {
-      return this.$t('renameNotebook')
-    } else if (type === 'folder') {
-      return this.$t('renameFolder')
-    } else if (type === 'workflow') {
-      return this.$t('renameWkflw')
     }
   }
 

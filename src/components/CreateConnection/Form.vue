@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="connect-form">
     <el-form size="small" ref="form" :model="form" :rules="rules">
@@ -66,7 +63,7 @@
 
 <script>
 import Vue from 'vue'
-import { Component, Watch } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { actionsTypes } from '../../store'
 import { encryptData } from '@/util'
@@ -113,14 +110,14 @@ import { encryptData } from '@/util'
 
 export default class CreateConnectionForm extends Vue {
   dataSourceList = [
-    { label: 'JDBC', value: 'jdbc'},
+    { label: 'JDBC', value: 'jdbc'}
   ]
   connectionResult = ''
 
   validateName (rule, value, callback) {
     if (!value) {
       return callback(new Error(this.$t('pleaseInput')))
-    }else if (!/^[0-9a-zA-Z][0-9a-zA-Z_]*$/.test(value)) {
+    } else if (!/^[0-9a-zA-Z][0-9a-zA-Z_]*$/.test(value)) {
       return callback(new Error(this.$t('validator1')))
     } else if (value.length > 50) {
       return callback(new Error(this.$t('validator2')))
@@ -132,11 +129,11 @@ export default class CreateConnectionForm extends Vue {
   handleInput (key, value) {
     this.setModalForm({ [key]: value })
   }
-  removeParams(item) {
+  removeParams (item) {
     const paramsList = this.form.parameter.filter(v => v.key !== item.key)
     this.handleInput('parameter', paramsList)
   }
-  addParams() {
+  addParams () {
     const paramsList = [...this.form.parameter]
     paramsList.push({
       value: '',

@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="excute-detail font-12">
@@ -52,7 +49,6 @@
   </div>
 </template>
 <script>
-import _ from 'lodash'
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 import { timeToStr } from '@/util'
@@ -128,7 +124,7 @@ export default class ExcuteDetail extends Vue {
   }
 
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
 }
 </script>

@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="global-help" v-show="isTrial">
@@ -30,7 +27,7 @@ import { findChildren } from '../../util'
   },
   watch: {
     $route: {
-      handler(to) {
+      handler (to) {
         // 在页面渲染完成后再进行判断，否则初次加载时cellList为undefined
         this.$nextTick(() => {
           // 是否在notebook路由中
@@ -55,7 +52,7 @@ export default class GlobalHelp extends Vue {
    * @param {*} e 下拉项名
    * @Date: 2021-09-13 17:02:44
    */
-  handleCommand(e) {
+  handleCommand (e) {
     if (e) {
       this[e]()
     }
@@ -65,7 +62,7 @@ export default class GlobalHelp extends Vue {
    * @description: 展开快捷键帮助面板
    * @Date: 2021-09-13 17:03:14
    */
-  handleShowShortcutHelp() {
+  handleShowShortcutHelp () {
     // 当前notebook容器
     const refNode = findChildren(this.$root, 'cellList' + this.activedNotebook?.id)
     const node = refNode && refNode[0] && refNode[0][0] ? refNode[0][0] : {}

@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <el-dialog
     width="400px"
@@ -151,7 +148,7 @@ export default class FileUploadModal extends Vue {
     try {
       await this.$refs.$form.validate()
       const formData = new FormData()
-      this.fileList.forEach((v, i) => {
+      this.fileList.forEach(v => {
         formData.append('file', v.raw)
       })
       this.loadingSubmit = true

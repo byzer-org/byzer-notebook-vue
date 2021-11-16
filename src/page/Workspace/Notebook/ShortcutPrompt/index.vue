@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <transition name="el-fade-in-linear">
@@ -26,7 +23,7 @@
 
 <script>
 import Vue from 'vue'
-import { Component, Watch } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import ShortcutDetail from '../ShortcutDetail'
 
 @Component({
@@ -37,7 +34,7 @@ import ShortcutDetail from '../ShortcutDetail'
 export default class ShortcutPrompt extends Vue {
   isShow = false
 
-  handleClose() {
+  handleClose () {
     this.isShow = false
   }
 }

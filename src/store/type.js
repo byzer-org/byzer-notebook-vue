@@ -1,6 +1,4 @@
-/*
 
-*/
 
 // global
 export const HIDE_ALL_MODALS = 'HIDE_ALL_MODALS'

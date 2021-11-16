@@ -1,6 +1,4 @@
-/*
 
-*/
 
 
 import Vue from 'vue'

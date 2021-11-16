@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <el-button 
     class="node-item node-icon-item"

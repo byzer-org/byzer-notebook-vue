@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div id="loginPage">
@@ -55,7 +52,7 @@ export default class Login extends Vue {
   }
   showSignUp = true
   @Watch('$route')
-  onRouteParamChange (val) {
+  onRouteParamChange () {
     this.setUsernameToForm()
   }
 

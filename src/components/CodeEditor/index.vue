@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div
@@ -49,7 +46,7 @@ export default {
       type: Array
     }
   },
-  data() {
+  data () {
     return {
       lang: '',
       content: this.value,
@@ -78,12 +75,12 @@ export default {
     readOnly () {
       this.setReadOnly()
     },
-    isSelected (newVal) {
+    isSelected () {
       const codeEditor = this.$refs['cellEditor' + this.cellId]
       codeEditor?.editor.textInput.focus()
     }
   },
-  created() {
+  created () {
     this.checkLang()
   },
   mounted () {
@@ -93,7 +90,7 @@ export default {
     ...mapActions({
       autoComplete: 'AUTO_COMPLETE'
     }),
-    checkLang() {
+    checkLang () {
       let lang = ''
       if (this.content.split('\n').map(i => i.trim()).indexOf(PythonTag) > -1) {
         lang = 'python'
@@ -110,7 +107,7 @@ export default {
      * @description: 获取代码补全
      * @Date: 2021-11-04 15:42:38
      */
-    queryCompleters() {
+    queryCompleters () {
       const lnTools = ace.acequire('ace/ext/language_tools')
       // 覆盖默认代码提示
       lnTools?.setCompleters([
@@ -156,7 +153,7 @@ export default {
      * @description: 获取所有除markdown以外的代码
      * @Date: 2021-11-05 15:42:24
      */
-    getAllContent() {
+    getAllContent () {
       let editor = null
       if (this.$refs['codeEditor' + this.cellId]) {
         editor = this.$refs['codeEditor' + this.cellId].editor
@@ -227,7 +224,7 @@ export default {
      * @description: tab键弹出代码提示
      * @Date: 2021-11-12 14:31:00
      */
-    startAutoCompleter() {
+    startAutoCompleter () {
       let editor = null
       if (this.$refs['codeEditor'+ this.cellId]) {
         editor = this.$refs['codeEditor'+ this.cellId].editor
@@ -235,7 +232,7 @@ export default {
           name: 'myCommand-handle-show-completer',
           bindKey: { win: 'Tab',  mac: 'Tab' },
           exec: (editor) => {
-            editor.execCommand("startAutocomplete");
+            editor.execCommand('startAutocomplete');
           }
         })
       }
@@ -244,7 +241,7 @@ export default {
      * @description: 为了防止查找和替换后的undo和redo会自动添加selection
      * @Date: 2021-09-09 15:29:18
      */
-    bindUndoAndRedo() {
+    bindUndoAndRedo () {
       let editor = null
       if (this.$refs['codeEditor'+ this.cellId]) {
         editor = this.$refs['codeEditor'+ this.cellId].editor
@@ -274,21 +271,21 @@ export default {
      * @description: 禁止ace-editor拖放文本
      * @Date: 2021-08-24 18:44:07
      */
-    disableDragDropText() {
+    disableDragDropText () {
       let editor = null;
       if (this.$refs['codeEditor'+ this.cellId]) {
         editor = this.$refs['codeEditor'+ this.cellId].editor;
         // "dragenter", "dragover", "dragend", "dragstart", "dragleave", "drop"
-        !["drop"].forEach(eventName => {
+        !['drop'].forEach(eventName => {
           editor.container.addEventListener(
             eventName,
-            function(e) {
+            function (e) {
               e.stopPropagation()
             },
             true
           )
         });
-        editor.setOption("dragEnabled", false)
+        editor.setOption('dragEnabled', false)
       }
     },
     bindEnter () {
@@ -335,8 +332,6 @@ export default {
           name: 'myCommand-lineup',
           bindKey: { win: 'Up',  mac: 'Up' },
           exec: (editor, args) => {
-            const { row } = this.getCurrentRowText(editor)
-            // if (row === 0) {
             if (this.readOnly) {
               this.$emit('gotoNextCell', 'prev')
             } else {

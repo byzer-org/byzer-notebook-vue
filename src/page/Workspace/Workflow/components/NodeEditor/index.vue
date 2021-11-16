@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="node-wrapper">
     <div class="node-wrapper-header">
@@ -89,7 +86,7 @@ export default class NodeEditor extends Vue {
     this.nodeType = this.nodeInfo.type
     this.getNodeDetail(this.nodeInfo.id)
   }
-  async getNodeDetail(node_id) {
+  async getNodeDetail (node_id) {
     const params = {
       node_id
     }
@@ -102,10 +99,11 @@ export default class NodeEditor extends Vue {
       this.$nextTick(() => {
         this.$refs[`${this.nodeType}Node`] && this.$refs[`${this.nodeType}Node`].clearResult()
       })
-    } catch(e) {
+    } catch (e) {
+      console.log(e)
     }
   }
-  async submitForm() {
+  async submitForm () {
     try {
       const { type } = this.nodeInfo
       const isSubmit = await this.$refs[`${type}Node`].checkForm()
@@ -122,11 +120,11 @@ export default class NodeEditor extends Vue {
         }
         this.confirmSubmit(params)
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e)
     }
   }
-  async confirmSubmit(params) {
+  async confirmSubmit (params) {
     try {
       const data = {
         node_id: this.nodeInfo.id,
@@ -135,7 +133,9 @@ export default class NodeEditor extends Vue {
       await this.updateNode(data)
       this.cancelEdit(true)
       
-    } catch{}
+    } catch (e) {
+      console.log(e)
+    }
   }
   cancelEdit (refresh) {
     this.$emit('cancelEdit', refresh)

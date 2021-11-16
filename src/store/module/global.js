@@ -1,6 +1,4 @@
-/*
 
-*/
 import * as types from '../type'
 import { global } from '../../service'
 export default {

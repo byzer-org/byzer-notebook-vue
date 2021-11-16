@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <el-dialog
@@ -124,7 +121,7 @@ export default class CreateNodeModal extends Vue {
         content: { ...formParams },
         position: {
           left,
-          top,
+          top
         }
       }
       const res = await this.createWorkflowNode(params)

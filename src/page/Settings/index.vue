@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="settings-page page-outer-padding">
     <div class="page-inner-header">Settings</div>
@@ -134,12 +131,14 @@ export default class SettingsPage extends Vue {
       const res = await this.getDefaultConfig()
       if (type === 'timeout') {
         this.initData({ timeout: res.data.timeout})
-      } else if(type === 'engine') {
+      } else if (type === 'engine') {
         this.initData({ engine: res.data.engine})
       } else {
         this.initData(res.data)
       }
-    } catch (e) {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   async getEngineList () {
@@ -147,7 +146,9 @@ export default class SettingsPage extends Vue {
       const res = await this.getEngins()
       this.engineList = res.data?.list || []
       this.engineRuleForm.name = this.engineList.length ? this.engineList[0] : ''
-    } catch (e) {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   validateTime (rule, value, callback) {
@@ -184,7 +185,9 @@ export default class SettingsPage extends Vue {
         }
         await this.saveConfiguration(params)
         this.getConfig(type)
-      } catch (e) {}
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
   async resetForm (type) {
@@ -194,13 +197,17 @@ export default class SettingsPage extends Vue {
       if (type === 'timeout') {
         this.$refs.timeoutForm.resetFields()
       }
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
   async getConnections () {
     try {
       const res = await this.getConnectionList()
       this.connectionList = res.data?.connection_list ?? []
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   async handleCreateConnection (item) {

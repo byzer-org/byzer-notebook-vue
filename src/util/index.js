@@ -1,9 +1,5 @@
-/*
 
-*/
 import axios from '../service/handleService'
-import { JSEncrypt } from 'jsencrypt'
-import { Base64 } from 'js-base64'
 import CryptoJS from 'crypto-js'
 
 export function Base64Encode (input) {
@@ -102,7 +98,7 @@ export function setIdinTreeArr (treeArr, pathIdArr) {
   })
 }
 
-export function getCasAndTree (list, ) { // 对于指定结构转化成 tree 和 cascader都可以用的结构
+export function getCasAndTree (list ) { // 对于指定结构转化成 tree 和 cascader都可以用的结构
   return list.map(v => {
     if (v.name) {
       v.label = v.name
@@ -124,8 +120,8 @@ export function getCasAndTree (list, ) { // 对于指定结构转化成 tree 和
     }
   })
 }
-//生成指定长度的唯一ID
-export function GenNonDuplicateID(randomLength) {
+// 生成指定长度的唯一ID
+export function GenNonDuplicateID (randomLength) {
   return Number(
     Math.random()
     .toString()
@@ -134,14 +130,14 @@ export function GenNonDuplicateID(randomLength) {
 }
 
 export function stringtoHex (str) {
-  var val = "";
+  var val = '';
   for (var i = 0; i < str.length; i++) {
-    if (val == "")
+    if (val === '')
       val = str.charCodeAt(i).toString(16);
     else
       val += str.charCodeAt(i).toString(16);
   }
-  val += "0a"
+  val += '0a'
   return val
 }
 
@@ -175,13 +171,13 @@ export function cryptoDecrypt (word) {
  * @return {result} 找到的FindAndReplace组件
  * @Date: 2021-09-06 17:59:50
  */
-export function findChildren(list = {}, refName = '') {
+export function findChildren (list = {}, refName = '') {
   let result = [];
-  if(!list.$children) {
+  if (!list.$children) {
     return result;
   }
-  for(let item of list.$children) {
-    if(item.$refs[refName]) {
+  for (let item of list.$children) {
+    if (item.$refs[refName]) {
       result.push(item.$refs[refName])
     } else {
       result.push(...findChildren(item, refName))

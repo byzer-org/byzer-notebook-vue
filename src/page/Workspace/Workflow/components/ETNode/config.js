@@ -1,6 +1,4 @@
-/*
 
-*/
 export const outputValueTypeList = ['OUTPUT/MODEL_NAME', 'OUTPUT/MODEL_PATH', 'OUTPUT/TABLE']
 export const paramType = {
   KEY: 'Key',

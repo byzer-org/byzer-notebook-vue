@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="node-container" :class="type === 'add' && 'extra-style'">
     <div class="node-container-form">
@@ -179,7 +176,7 @@ import CodeEditor from '../CodeEditor'
           { required: true, validator: this.validateTarget, trigger: this.ruleForm.datasource_type !== 'hdfs' && this.targetMode === 'select' ? 'change' : 'blur'  }
         ]
       }
-    },
+    }
     
   },
   methods: {
@@ -320,7 +317,8 @@ export default class SaveNodeForm extends Vue {
       const res = await this.getConnectionList()
       this.connectionList = res.data?.connection_list ?? []
       this.initData()
-    } catch {
+    } catch (e) {
+      console.log(e)
     } finally {
       this.loadingConnection = false
     }
@@ -330,7 +328,9 @@ export default class SaveNodeForm extends Vue {
       this.loadingSource = true
       const res = await this.getExistingTable()
       this.existingTableList = res.data?.output ?? []
-    } catch {} finally {
+    } catch (e) {
+      console.log(e)
+    } finally {
       this.loadingSource = false
     }
   }
@@ -349,7 +349,9 @@ export default class SaveNodeForm extends Vue {
       this.loadingDatabase = true
       let res = await this.getDBList(datasource_type)
       this.outputDBList = res.data?.list ?? []
-    } catch (e) {} finally {
+    }  catch (e) {
+      console.log(e)
+    } finally {
       this.loadingDatabase = false
     }
   }
@@ -366,7 +368,9 @@ export default class SaveNodeForm extends Vue {
       this.loadingTarget = true
       const res = await this.getTables(params)
       this.outputTabLleist = res.data?.list ?? []
-    } catch (e) {} finally {
+    } catch (e) {
+      console.log(e)
+    } finally {
       this.loadingTarget = false
     }
   }
@@ -375,7 +379,7 @@ export default class SaveNodeForm extends Vue {
     try {
       const res = await this.getFileList(path)
       const list = res.data?.list ?? []
-      const fileList = list.map((v, i) => {
+      const fileList = list.map(v => {
         return {
           label: v.name,
           value: v.path,
@@ -421,12 +425,14 @@ export default class SaveNodeForm extends Vue {
       this.loadingTarget = true
       const res = await this.getConnectionTable(this.ruleForm.connection)
       this.connectionTableList = res.data || []
-    } catch {} finally {
+    } catch (e) {
+      console.log(e)
+    } finally {
       this.loadingTarget = false
     }
   }
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
   
   async validateDatabase (rule, value, callback) {
@@ -495,7 +501,8 @@ export default class SaveNodeForm extends Vue {
           return callback()
         } else {
           res = await this.getConnectionTable(this.ruleForm.connection)
-          resCb = this.isInclude(value, res.data, callback)
+          newCb = this.isInclude(value, res.data, callback)
+          return newCb
         }
       } else if (datasource_type === 'hdfs') {
         return callback()

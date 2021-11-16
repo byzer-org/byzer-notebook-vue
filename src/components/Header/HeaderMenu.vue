@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <el-menu :default-active="activeIndex" class="el-menu-header" mode="horizontal" @select="handleSelect">
@@ -45,7 +42,7 @@ export default {
     }
   },
   methods: {
-    handleSelect(key) {
+    handleSelect (key) {
       this.$router.push({name: key})
     }
   }

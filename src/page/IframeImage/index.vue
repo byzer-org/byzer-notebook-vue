@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="cell-result-page">
     <iframe
@@ -37,10 +34,7 @@ export default class IframePage extends Vue {
     this.$router.push({name: 'result', params: window.opener.filter})
     this.getStatus(window.opener.filter.id)
   }
-  // getHtmlSrc () {
-  //   let parsedResult = this.excuteResult ? JSON.parse(this.excuteResult.result) : ''
-  //   this.htmlStr = parsedResult.length && parsedResult[0].html
-  // }
+  
   async getStatus (id) {
     if (!id) {
       return
@@ -54,7 +48,7 @@ export default class IframePage extends Vue {
         this.detailType = 'table'
         if (length === 1) {
           const details = parsedResult[0]
-          if (details.hasOwnProperty('mime') && details.hasOwnProperty('content')) {
+          if (Object.prototype.hasOwnProperty.call(details, 'mime') && Object.prototype.hasOwnProperty.call(details, 'content')) {
             this.detailType = details.mime
             this.detailContent = details.content
           }

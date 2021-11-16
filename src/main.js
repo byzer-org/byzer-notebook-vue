@@ -1,7 +1,3 @@
-/*
-
-*/
-
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -18,7 +14,7 @@ import Contextmenu from 'vue-contextmenujs'
 Vue.use(Contextmenu);
 // import directive from './directives'
 import { findChildren } from './util'
-import "@/icons/index.js";
+import '@/icons/index.js'
 import IconBtn from './components/IconBtn'
 Vue.component('icon-btn', IconBtn)
 
@@ -32,7 +28,7 @@ keymaster.filter = (event) => {
   var tagName = (event.target || event.srcElement).tagName
 
   // 所有的FindAndReplace组件
-  const result = findChildren(NotebookVue, 'findAndReplace')
+  const result = findChildren(window.NotebookVue, 'findAndReplace')
   // 是否没有打开的
   const workStatus = result && result.every(i => !i.showMsg)
 

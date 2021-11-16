@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="home-page">
     <div class="home-page-container">
@@ -26,6 +23,7 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { mapActions } from 'vuex'
+import { cloneDeep } from 'lodash'
 
 @Component({
   methods: {
@@ -40,7 +38,7 @@ import { mapActions } from 'vuex'
       saveOpenedNotebook: 'SAVE_OPEND_NOTEBOOK',
       getOpenedNotebook: 'GET_OPENED_NOTEBOOK',
       getDefaultNotebook: 'GET_DEFAULT_NOTEBOOK'
-    }),
+    })
   }
 })
 export default class HomePage extends Vue {
@@ -75,7 +73,7 @@ export default class HomePage extends Vue {
   }
 
   getToSavedList (newFile) {
-    const temp = _.cloneDeep(this.openedList)
+    const temp = cloneDeep(this.openedList)
     temp.unshift(newFile)
     const temp1 = []
     temp.forEach(v => {
@@ -86,7 +84,7 @@ export default class HomePage extends Vue {
     const toSaveList = temp1.map(v => {
       return {
         ...v,
-        active: String((v.id === newFile.id) && (v.type === newFile.type)),
+        active: String((v.id === newFile.id) && (v.type === newFile.type))
       }
     })
     return toSaveList

@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div class="jobs-page page-outer-padding">
     <div class="page-inner-header">Job History</div>
@@ -168,13 +165,13 @@ export default class JobPage extends Vue {
       { text: this.$t('jobs.RUNNING'), value: '0', type: '' },
       { text: this.$t('jobs.COMPLETED'), value: '1', type: 'success' },
       { text: this.$t('jobs.ERROR'), value: '2', type: 'danger' },
-      { text: this.$t('jobs.DISCARDED'), value: '3', type: 'info' },
+      { text: this.$t('jobs.DISCARDED'), value: '3', type: 'info' }
     ]
   }
 
   get engineFiltersList () {
     return [
-      { text: this.$t('engine1'), value: 'engine1' },
+      { text: this.$t('engine1'), value: 'engine1' }
     ]
   }
 
@@ -232,20 +229,21 @@ export default class JobPage extends Vue {
       ids = item ? item.job_id : this.selectedList.map(v => v.job_id).join(',')
       await this.deleteJobs(ids)
       this.fetchData()
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
-  handleSizeChange(val) {
+  handleSizeChange (val) {
     this.filterData.page_size = val
     this.fetchData()
   }
 
-  handleCurrentChange(val) {
+  handleCurrentChange (val) {
     this.filterData.page_offset = val - 1
     this.fetchData()
   }
-
-  handleSortChange ({ column, prop, order}) {
+  handleSortChange ({ prop, order }) {
     if (prop && order) {
       this.filterData.sort_by = prop 
       this.filterData.reverse = order === 'descending' // ascending
@@ -300,6 +298,7 @@ export default class JobPage extends Vue {
       await this.cancelAll(ids)
       this.fetchData(this.jobId)
     } catch (e) {
+      console.log(e)
     }
   }
   async cancelAll (ids) {
@@ -308,14 +307,13 @@ export default class JobPage extends Vue {
     }))
   }
   onCopy () {
-    this.$message.success(`Successfully Copied`)
+    this.$message.success('Successfully Copied')
   }
 }
 </script>
 <style lang="scss">
 @import '../../assets/css/config.scss';
 .jobs-page {
-  // job_id列增加copy按钮
   .job-id-wrap {
     display: flex;
     justify-content: space-between;

@@ -1,6 +1,4 @@
-/*
 
-*/
 
 import { actionsTypes } from '../../store'
 
@@ -8,7 +6,7 @@ export function getInitState () {
   return {
     isShow: false,
     form: {
-      folder: [],
+      folder: []
     },
     callback: () => {},
     fileInfo: null,

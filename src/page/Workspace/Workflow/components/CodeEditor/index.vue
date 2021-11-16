@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="mlsql-editor" :class="{ 'active-editor': isSelected && !readOnly }" >
@@ -42,7 +39,7 @@ import ace from 'brace'
   methods: {
     ...mapActions({
       autoComplete: 'AUTO_COMPLETE'
-    }),
+    })
   }
 })
 export default class NodeCodeEditor extends Vue {
@@ -59,13 +56,13 @@ export default class NodeCodeEditor extends Vue {
     fontSize: 14,
     newLineMode: 'auto'
   }
-   
+
   @Watch('value')
   onValueChange (newVal) {
     this.content = newVal
   }
   @Watch('readOnly')
-  onReadOnlyChange (newVal) {
+  onReadOnlyChange () {
     this.setReadOnly()
   }
   @Watch('showGutter')
@@ -75,7 +72,7 @@ export default class NodeCodeEditor extends Vue {
   mounted () {
     this.bindEnter()
   }
-  
+
   changeOptions (option, value) {
     this.$refs.nodeEditor.editor.setOption(option, value)
   }
@@ -99,7 +96,7 @@ export default class NodeCodeEditor extends Vue {
    * @param {value} 当前文本
    * @Date: 2021-11-11 18:45:42
    */
-  getAllContent(value) {
+  getAllContent (value) {
     let editor = null
     if (this.$refs['nodeEditor']) {
       editor = this.$refs['nodeEditor'].editor
@@ -133,7 +130,7 @@ export default class NodeCodeEditor extends Vue {
    * @description: 代码补全
    * @Date: 2021-11-11 18:41:28
    */
-  queryCompleters(value) {
+  queryCompleters (value) {
     const lnTools = ace.acequire('ace/ext/language_tools')
     // 覆盖默认代码提示
     lnTools?.setCompleters([

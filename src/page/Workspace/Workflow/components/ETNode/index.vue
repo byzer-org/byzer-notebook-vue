@@ -10,8 +10,8 @@
           :ref="`${formItem.name}`"
           :rules="[
             { required: formItem.required === 'true',
-              validator: (rule, value, callback) => validateParameter(rule, value, callback, formItem), 
-              trigger: changeTriggerValueType.includes(formItem.value_type) ? 'change' : 'blur' 
+              validator: (rule, value, callback) => validateParameter(rule, value, callback, formItem),
+              trigger: changeTriggerValueType.includes(formItem.value_type) ? 'change' : 'blur'
             }
           ]">
           <span slot="label">
@@ -51,7 +51,7 @@
                 :rules="[
                   { required: formItem.required === 'true',
                     validator: (rule, value, callback) => validateParameter(rule, value, callback, formItem),
-                    trigger: changeTriggerValueType.includes(formItem.value_type) ? 'change' : 'blur' 
+                    trigger: changeTriggerValueType.includes(formItem.value_type) ? 'change' : 'blur'
                   }
                 ]">
                 <span slot="label">
@@ -72,10 +72,10 @@
             :key="formItem.name"
             :prop="formItem.name"
             :ref="`${formItem.name}Item`"
-            :rules="[{ 
+            :rules="[{
               required: formItem.required === 'true',
-              validator: (rule, value, callback) => validateParameter(rule, value, callback, formItem), 
-              trigger: changeTriggerValueType.includes(formItem.value_type) ? 'change' : 'blur' 
+              validator: (rule, value, callback) => validateParameter(rule, value, callback, formItem),
+              trigger: changeTriggerValueType.includes(formItem.value_type) ? 'change' : 'blur'
             }]">
             <span slot="label">
               <el-tooltip placement="top" :content="formItem.description" :disabled="!formItem.description" >
@@ -152,7 +152,7 @@ export default class ETNodeForm extends Vue {
   groupVisibleList = [{ isShow: true }]
 
   // 分组的参数里不会存在互相依赖的关系  分组可能会依赖不分组的 不分组的不会依赖分组的
- 
+
   @Watch('initRuleForm', { deep: true })
   onInitRuleFormChange (newVal) {
     if (newVal && this.type === 'edit') {
@@ -161,7 +161,7 @@ export default class ETNodeForm extends Vue {
   }
 
   @Watch('nodeInfo.id')
-  onNodeInfoChange (newVal) {
+  onNodeInfoChange () {
     this.initData()
     this.getNodeParams(true)
   }
@@ -207,7 +207,7 @@ export default class ETNodeForm extends Vue {
   getSourceFileValue (path) {
     const arr = path.split('/').slice(1)
     const temp = []
-    for(var i = 0; i < arr.length; i++) {
+    for (var i = 0; i < arr.length; i++) {
       if (i >= 1) {
         temp.push(temp[i - 1] + '/' + arr[i])
       } else {
@@ -273,7 +273,7 @@ export default class ETNodeForm extends Vue {
       if (groupForm.length === 1) {
         this.groupRuleForm.groupList = groupForm.map(v => ({ ...singleGroupForm, ...v }))
       } else {
-        this.groupRuleForm.groupList = groupForm.map((v, i) => {
+        this.groupRuleForm.groupList = groupForm.map(v => {
           return { ...singleGroupForm, ...v }
         })
       }
@@ -308,7 +308,7 @@ export default class ETNodeForm extends Vue {
       let defaultValue = this.getDefaultValue(v)
       this.$set(this.outputForm, v.name, defaultValue)
     })
-    
+
     const shouldGetTables = this.allParamsList.some(v => v.value_type === 'INPUT/TABLE')
     const shouldGetModels = this.allParamsList.some(v => v.value_type === 'INPUT/MODEL')
     if (shouldGetTables) {
@@ -368,7 +368,7 @@ export default class ETNodeForm extends Vue {
   handleAddGroupParams (index) {
     let temp = cloneDeep(this.groupRuleForm.groupList[index])
     let param = {}
-    for(let key in temp) {
+    for (let key in temp) {
       const para = this.allParamsList.find(v => v.name === key)
       if (para.type === paramType['GROUP_A']) {
         this.$set(param, key, temp[key])
@@ -419,7 +419,7 @@ export default class ETNodeForm extends Vue {
     this.getDynamicOverride(params)
   }
 
-  
+
   async getDynamicOverride (params) {
     try {
       // 获取覆盖列表后处理
@@ -436,7 +436,9 @@ export default class ETNodeForm extends Vue {
         })
       }
       this.getAllParamsList()
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   overrideStaticBind (item, form) { // 静态依赖参数覆盖
@@ -460,7 +462,7 @@ export default class ETNodeForm extends Vue {
       let objectProperty = cloneDeep(this.allParamsList[index])
       objectProperty = { ...objectProperty, ...overrideProperty, overrideProperty}
       this.allParamsList[index] = objectProperty
-    } else { 
+    } else {
       // 无覆盖属性
       // 1 值绑定 overrideProperty 找回原属性值  无（不做修改）
       const index = this.allParamsList.findIndex(v => v.name === currentName)
@@ -492,7 +494,9 @@ export default class ETNodeForm extends Vue {
     try {
       const res = await this.getExistingModel()
       this.allModelList = res.data?.models ?? []
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   async getExistModels () {
@@ -501,7 +505,9 @@ export default class ETNodeForm extends Vue {
       const res = await this.getExistingModel(id)
       const temp = res.data?.models ?? []
       this.modelList = temp.map(v => `${v.algorithm}.\`${v.path}\``)
-    } catch {}
+    } catch (e) {
+      console.log(e)
+    }
   }
   async getExistTables () {
     try {
@@ -519,8 +525,8 @@ export default class ETNodeForm extends Vue {
       } else {
         this.tableList = this.allTables
       }
-    } catch (e){
-      console.log(e, 'e')
+    } catch (e) {
+      console.log(e)
     }
   }
   changeSqlEdtorValue (formItem, formType, value) {
@@ -562,7 +568,7 @@ export default class ETNodeForm extends Vue {
   getNormalParamsSql () {
     const paramsList = this.notGroupParamsList.filter(v => v.type === 'Normal' && this.ruleForm[v.name])
     let arr = []
-    paramsList.forEach((param, index) => {
+    paramsList.forEach(param => {
       const value = this.getCompleteValue(this.ruleForm, param.name)
       let formatValue = this.getQuote(value)
       if (value) {

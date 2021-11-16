@@ -1,6 +1,3 @@
-<!--
-
--->
 
 <template>
   <div class="cell-excute-result">
@@ -128,10 +125,10 @@ export default class ExcuteResult extends Vue {
   root_cause = ''
   detailType = 'table'
   detailContent = ''
-  
+
   get headerList () {
     let keys = []
-    this.tableList.forEach((v, i) => {
+    this.tableList.forEach(v => {
       keys = keys.concat(Object.keys(v))
     })
     const list = _.uniq(keys)
@@ -143,7 +140,7 @@ export default class ExcuteResult extends Vue {
   }
 
   @Watch('result')
-  onResultChange (newVal) {
+  onResultChange () {
     this.initData()
   }
 
@@ -161,7 +158,7 @@ export default class ExcuteResult extends Vue {
     const allHeight = this.$refs.resultContainer && this.$refs.resultContainer.offsetHeight
     this.showBtn = allHeight && allHeight > 200
   }
-  
+
   initData () {
     if (this.status === 'ERROR' || this.status === 'DISCARDED') {
       this.root_cause = this.result.root_cause
@@ -175,19 +172,17 @@ export default class ExcuteResult extends Vue {
         this.detailType = 'table'
         if (length === 1) {
           const details = parsedResult[0]
-          if (details.hasOwnProperty('mime') && details.hasOwnProperty('content')) {
+          if (Object.prototype.hasOwnProperty.call(details, 'mime') && Object.prototype.hasOwnProperty.call(details, 'content')) {
             this.detailType = details.mime
             this.detailContent = details.content
           }
-        } 
-        // this.showHtml = parsedResult.length && parsedResult[0].hasOwnProperty('dash') && parsedResult[0].hasOwnProperty('html') && parsedResult[0].html.startsWith('<html>')
-        // this.htmlStr = this.showHtml && parsedResult[0].html
+        }
         this.tableList = parsedResult
         this.getRenderList()
       }
     }
   }
-  
+
   drawPng () {
     const location = this.$router.resolve({ name: 'result' })
     window.filter = {
@@ -202,11 +197,11 @@ export default class ExcuteResult extends Vue {
       return cellValue
     }
   }
-  handleSizeChange(val) {
+  handleSizeChange (val) {
     this.pageInfo.size = val
     this.getRenderList()
   }
-  handleCurrentChange(val) {
+  handleCurrentChange (val) {
     this.pageInfo.page = val
     this.getRenderList()
   }
@@ -217,7 +212,7 @@ export default class ExcuteResult extends Vue {
     this.renderTableList = this.tableList.slice(startIndex, endIndex)
   }
 
-  exportCSV() {
+  exportCSV () {
     const filename = `result-${moment(Date.now()).format('yyyy-MM-DD HH:mm:ss')}.csv`
     const parser = new Parser()
     const csvData = parser.parse(this.tableList)

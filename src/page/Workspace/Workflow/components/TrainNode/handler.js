@@ -1,6 +1,4 @@
-/*
 
-*/
 const splitCharacter = '_'
 export function getParamGroup (allArr, parametersObj) { // 获取所有的参数组合
   const result = getParamsGroupObj(allArr, parametersObj)
@@ -71,7 +69,7 @@ export function getAllGroup (origin) { // 获取所有的排列组合
     let len2 = origin[1].length
     let newArr = new Array(len1 * len2)
     let index = 0
-    for(let i = 0; i < len1; i++) {
+    for (let i = 0; i < len1; i++) {
       for (let j = 0; j < len2; j++) {
         newArr[index] = origin[0][i] + splitCharacter + origin[1][j]
         index++

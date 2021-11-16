@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <div ref="flowWrap" class="flow-region" @drop="drop($event)" @dragover="allowDrop($event)">
     <div :id="`flow${currentNotebook.id}`" class="flow-region-flow" :class="showNodeEditor && needTranformToLeft && 'transform-left'" @drop="drop($event)" @dragover="allowDrop($event)">
@@ -31,7 +28,7 @@ export default {
   components: {
     FlowNode
   },
-  data() {
+  data () {
     return {
       jsPlumb: null,
       data: {
@@ -42,9 +39,9 @@ export default {
       jsplumbConnectOptions: jsplumbConnectOptions,
       jsplumbSourceOptions: jsplumbSourceOptions,
       jsplumbTargetOptions: jsplumbTargetOptions,
-      auxiliaryLine: { isShowXLine: true, isShowYLine: true},  //对齐辅助线是否显示
+      auxiliaryLine: { isShowXLine: true, isShowYLine: true},  // 对齐辅助线是否显示
       auxiliaryLinePos: { width: '100%', height: '100%', offsetX: 0, offsetY: 0, x: 20, y: 20 },
-      commonGrid: [5, 5], //节点移动最小距离
+      commonGrid: [5, 5], // 节点移动最小距离
       nodeList: [],
       nodeInfo: null
     }
@@ -66,7 +63,7 @@ export default {
       currentItem: state => state.workflow.currentDragNode
     })
   },
-  mounted() {
+  mounted () {
     this.jsPlumbReady()
   },
   methods: {
@@ -100,7 +97,7 @@ export default {
           this.initNode()
           this.connectLine()
         }
-        } catch(e){
+        } catch (e){
           console.log(e)
         }
     },
@@ -118,7 +115,7 @@ export default {
         }
         await this.updateNodePosition(params)
         this.getWorkflowNodeList(true) // 避免缩放之后移动位置会重新初始化图标变大
-      } catch(e){
+      } catch (e){
         console.log(e)
       }
     },
@@ -149,7 +146,9 @@ export default {
         await this.deleteWorkflowNode(node.id)
         this.$emit('openNodeEditor', null)
         this.getWorkflowNodeList()
-      } catch {}
+      } catch (e) {
+        console.log(e)
+      }
     },
     getAllLines () {
       let list = []
@@ -160,7 +159,7 @@ export default {
     },
     getLineList (id, toList) {
       let list = []
-      for(let i = 0; i < toList.length; i++) {
+      for (let i = 0; i < toList.length; i++) {
         const item = toList[i]
         list.push({ 
           from: id, 
@@ -172,7 +171,7 @@ export default {
       }
       return list
     },
-    initNode() {
+    initNode () {
       const lineList = this.getAllLines()
       const nodeList = this.nodeList.map(v => {
         return {

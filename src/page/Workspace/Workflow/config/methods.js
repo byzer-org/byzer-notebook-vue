@@ -2,13 +2,13 @@
 import panzoom from 'panzoom'
 
 const methods = {
-  init() {
+  init () {
     this.jsPlumb.ready(() => {
       // 导入默认配置
       this.jsPlumb.importDefaults(this.jsplumbSetting)
-      //完成连线前的校验
-      this.jsPlumb.bind('beforeDrop', evt => {
-        let res = () => { } //此处可以添加是否创建连接的校验， 返回 false 则不添加； 
+      // 完成连线前的校验
+      this.jsPlumb.bind('beforeDrop', () => {
+        let res = () => { } // 此处可以添加是否创建连接的校验， 返回 false 则不添加； 
         return res
       })
       this.jsPlumb.reset() // 取消连接事件
@@ -19,7 +19,7 @@ const methods = {
     this.initPanZoom()
   },
   // 加载流程图
-  loadEasyFlow() {
+  loadEasyFlow () {
     // 初始化节点
     for (let i = 0; i < this.data.nodeList.length; i++) {
       let node = this.data.nodeList[i]
@@ -44,14 +44,14 @@ const methods = {
       )
     }
   },
-  draggableNode(nodeId) {
+  draggableNode (nodeId) {
     this.jsPlumb.draggable(nodeId, {
       grid: this.commonGrid,
-      drag: (params) => {
+      drag: params => {
         this.alignForLine(nodeId, params.pos)
       },
       start: () => {},
-      stop: (params) => {
+      stop: params => {
         this.auxiliaryLine.isShowXLine = false
         this.auxiliaryLine.isShowYLine = false
         this.changeNodePosition(nodeId, params.pos)
@@ -59,15 +59,15 @@ const methods = {
       containment: false
     })
   },
-  //移动节点时，动态显示对齐线
-  alignForLine(nodeId, position) {
+  // 移动节点时，动态显示对齐线
+  alignForLine (nodeId, position) {
     let showXLine = false, showYLine = false
     this.data.nodeList.some(el => {
-      if(el.id !== nodeId && el.left === position[0] + 'px') {
+      if (el.id !== nodeId && el.left === position[0] + 'px') {
         this.auxiliaryLinePos.x = position[0] + 20
         showYLine = true
       }
-      if(el.id !== nodeId && el.top === position[1] + 'px') {
+      if (el.id !== nodeId && el.top === position[1] + 'px') {
         this.auxiliaryLinePos.y = position[1] + 20
         showXLine = true
       }
@@ -75,10 +75,10 @@ const methods = {
     this.auxiliaryLine.isShowYLine = showYLine
     this.auxiliaryLine.isShowXLine = showXLine
   },
-  changeNodePosition(nodeId, pos) {
+  changeNodePosition (nodeId, pos) {
     // 更新节点位置
     this.data.nodeList.some(v => {
-      if(nodeId == v.id) {
+      if (nodeId === v.id) {
         v.left = pos[0] +'px'
         v.top = pos[1] + 'px'
         return true
@@ -104,10 +104,10 @@ const methods = {
     this.addNode(temp)
   },
   // dragover默认事件就是不触发drag事件，取消默认事件后，才会触发drag事件
-  allowDrop(event) {
+  allowDrop (event) {
     event.preventDefault()
   },
-  getScale() {
+  getScale () {
     let scale1
     if (this.jsPlumb.pan) {
       const { scale } = this.jsPlumb.pan.getTransform()
@@ -133,7 +133,7 @@ const methods = {
       })
     }
   },
-  initPanZoom() {
+  initPanZoom () {
     const mainContainer = this.jsPlumb.getContainer()
     if (!mainContainer) {
       return
@@ -146,12 +146,12 @@ const methods = {
       zoomDoubleClickSpeed: 1,
       minZoom: 0.5,
       maxZoom: 2,
-      //设置滚动缩放的组合键，默认不需要组合键
-      beforeWheel: (e) => {
+      // 设置滚动缩放的组合键，默认不需要组合键
+      beforeWheel: () => {
         // let shouldIgnore = !e.ctrlKey
         // return shouldIgnore
       },
-      beforeMouseDown: function(e) {
+      beforeMouseDown: function (e) {
         // allow mouse-down panning only if altKey is down. Otherwise - ignore
         var shouldIgnore = e.ctrlKey
         return shouldIgnore
@@ -163,13 +163,13 @@ const methods = {
     pan.on('zoom', e => {
       const { x, y, scale } = e.getTransform()
       this.jsPlumb.setZoom(scale)
-      //根据缩放比例，缩放对齐辅助线长度和位置
+      // 根据缩放比例，缩放对齐辅助线长度和位置
       this.auxiliaryLinePos.width = (1/scale) * 100 + '%'
       this.auxiliaryLinePos.height = (1/scale) * 100 + '%'
       this.auxiliaryLinePos.offsetX = -(x/scale)
       this.auxiliaryLinePos.offsetY = -(y/scale)
     })
-    pan.on('panend', (e) => {
+    pan.on('panend', e => {
       const {x, y, scale} = e.getTransform()
       this.auxiliaryLinePos.width = (1/scale) * 100 + '%'
       this.auxiliaryLinePos.height = (1/scale) * 100 + '%'
@@ -179,58 +179,58 @@ const methods = {
 
     // 平移时设置鼠标样式
     mainContainerWrap.style.cursor = 'grab'
-    mainContainerWrap.addEventListener('mousedown', function wrapMousedown() {
+    mainContainerWrap.addEventListener('mousedown', function wrapMousedown () {
       this.style.cursor = 'grabbing'
-      mainContainerWrap.addEventListener('mouseout', function wrapMouseout() {
+      mainContainerWrap.addEventListener('mouseout', function wrapMouseout () {
         this.style.cursor = 'grab'
       })
     })
-    mainContainerWrap.addEventListener('mouseup', function wrapMouseup() {
+    mainContainerWrap.addEventListener('mouseup', function wrapMouseup () {
       this.style.cursor = 'grab'
     })
   }, 
 
-  setNodeName(nodeId, name) {
-    this.data.nodeList.some((v) => {
-      if(v.id === nodeId) {
+  setNodeName (nodeId, name) {
+    this.data.nodeList.some(v => {
+      if (v.id === nodeId) {
         v.nodeName = name
         return true
-      }else {
+      } else {
         return false
       }
     })
   },
 
-  //删除节点
-  deleteNode(node) {
+  // 删除节点
+  deleteNode (node) {
     this.data.nodeList.some((v,index) => {
-      if(v.id === node.id) {
+      if (v.id === node.id) {
         this.data.nodeList.splice(index, 1)
         this.jsPlumb.remove(v.id)
         return true
-      }else {
+      } else {
         return false
       }
     })
   },
 
-  //更改连线状态
-  changeLineState(nodeId, val) {
+  // 更改连线状态
+  changeLineState (nodeId, val) {
     let lines = this.jsPlumb.getAllConnections()
     lines.forEach(line => {
-      if(line.targetId === nodeId || line.sourceId === nodeId) {
-        if(val) {
+      if (line.targetId === nodeId || line.sourceId === nodeId) {
+        if (val) {
           line.canvas.classList.add('active')
-        }else {
+        } else {
           line.canvas.classList.remove('active')
         }
       }
     })
   },
 
-  //初始化节点位置  （以便对齐,居中）
-  fixNodesPosition() {
-    if(this.data.nodeList && this.$refs.flowWrap) {
+  // 初始化节点位置  （以便对齐,居中）
+  fixNodesPosition () {
+    if (this.data.nodeList && this.$refs.flowWrap) {
       const nodeWidth = 48
       const nodeHeight = 40
       let wrapInfo = this.$refs.flowWrap.getBoundingClientRect()
@@ -265,7 +265,7 @@ const methods = {
         el.left = (Math.round(left/20)) * 20 + 'px'
       })
     }
-  }, 
+  } 
 }
 
 export default methods

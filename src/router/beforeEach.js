@@ -1,6 +1,4 @@
-/*
 
-*/
 
 
 import store, { actionsTypes } from '../store'

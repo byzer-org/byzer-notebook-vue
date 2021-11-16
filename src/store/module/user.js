@@ -1,7 +1,3 @@
-/*
-
-*/
-
 import * as types from '../type'
 import { user } from '../../service'
 export default {
@@ -15,13 +11,13 @@ export default {
     [types.CLEAR_USER_INFO]: (state) => {
       state.userInfo = null
       localStorage.clear()
-    },
+    }
   },
   actions: {
-    [types.HANDLE_LOGIN]: ({}, payload) => {
+    [types.HANDLE_LOGIN]: (_, payload) => {
       return user.submitLogin(payload)
     },
-    [types.HANDLE_SIGN_UP]: ({}, payload) => { // 注册完成之后的动作与登录保持一致
+    [types.HANDLE_SIGN_UP]: (_, payload) => { // 注册完成之后的动作与登录保持一致
       return user.submitSignUp(payload)
     },
     [types.HANDLE_LOGOUT]: () => {
@@ -29,6 +25,6 @@ export default {
     },
     [types.GET_USER_INFO]: () => {
       return user.getUserInfo()
-    },
+    }
   }
 }

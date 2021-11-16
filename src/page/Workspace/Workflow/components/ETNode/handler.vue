@@ -1,7 +1,5 @@
-<!--
-
--->
 <template>
+  <div></div>
 </template>
 
 <script>
@@ -79,7 +77,7 @@ export default class ParameterValid extends Vue {
   }
 
   // model 校验开始
-  validateModel (value, callback, item) { // 校验model
+  validateModel (value, callback) { // 校验model
     return this.checkPathIsDuplicate(value, callback)
   }
 
@@ -127,7 +125,7 @@ export default class ParameterValid extends Vue {
         return callback(new Error(this.$t('maxLength', { size: max_length })))
       }
       return callback()
-    } else if (value_type === 'STRING' && max_length && (value.length > max_length)) { // 
+    } else if (value_type === 'STRING' && max_length && (value.length > max_length)) {
       return callback(new Error(this.$t('maxLength', { size: max_length })))
     } else if (value_type === 'MULTI_ENUM' && max_length && (value.length > max_length)) {
       return callback(new Error(this.$t('maxSize', { size: max_length })))
@@ -139,7 +137,7 @@ export default class ParameterValid extends Vue {
       return callback(new Error(this.$t('maxValue', { max })))
       // else if (!this.checkFloatCount(value, value_type)) { // 校验小数位数
       //   return callback(new Error(this.$t('floatValid')))
-      // } 
+      // }
     } else {
       return callback()
     }

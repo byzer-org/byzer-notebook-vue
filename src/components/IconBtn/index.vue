@@ -1,6 +1,3 @@
-<!--
-
--->
 <template>
   <el-tooltip placement="top" :content="text" :disabled="!text">
     <i :class="[icon, hasbg && 'has-bg', disabled ? 'is-disabled' : 'hasEvent']" @click="handler"></i>

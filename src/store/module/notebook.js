@@ -1,7 +1,3 @@
-/*
-
-*/
-
 import * as types from '../type'
 import { notebook } from '../../service'
 import _ from 'lodash'
@@ -38,97 +34,97 @@ export default {
     }
   },
   actions: {
-    [types.HANDLE_EXCUTE_CELL]: ({}, payload) => {
+    [types.HANDLE_EXCUTE_CELL]: (_, payload) => {
       return notebook.excuteCode(payload)
     },
-    [types.CANCEL_EXCUTE_CELL]: ({}, payload) => {
+    [types.CANCEL_EXCUTE_CELL]: (_, payload) => {
       return notebook.cancelExcuteCell(payload)
     },
-    [types.GET_JOB_STATUS]: ({}, payload) => {
+    [types.GET_JOB_STATUS]: (_, payload) => {
       return notebook.getJobStatus(payload)
     },
     [types.HADNLE_DELETE_CELL]: ({state, commit}, payload) => {
-      const newList = state.cellList.filter((v) => v.id !== payload.id);
+      const newList = state.cellList.filter(v => v.id !== payload.id)
       commit('CHANGE_CELL_LIST', newList)
     },
     [types.HANDLE_ADD_CELL]: ({state, commit}, payload) => {
       let newList = [];
       const { id, type } = payload;
-      const index = state.cellList.findIndex((v) => v.id === id);
-      const insertIndex = type === 'add-below' ? index + 1 : index;
+      const index = state.cellList.findIndex(v => v.id === id)
+      const insertIndex = type === 'add-below' ? index + 1 : index
       newList = _.cloneDeep(state.cellList);
-      newList.splice(insertIndex, 0, { key: Date.now(), value: '' });
+      newList.splice(insertIndex, 0, { key: Date.now(), value: '' })
       commit('CHANGE_CELL_LIST', newList)
     },
-    [types.GET_NOTEBOOK_LIST]: ({ commit }, payload) => {
+    [types.GET_NOTEBOOK_LIST]: (_, payload) => {
       return notebook.getNotebookList(payload)
     },
-    [types.CREATE_NOTEBOOK_LIST]: ({ commit }, payload) => {
+    [types.CREATE_NOTEBOOK_LIST]: (_, payload) => {
       return notebook.createNotebook(payload)
     },
-    [types.RENAME_NOTEBOOK]: ({ commit }, payload) => {
+    [types.RENAME_NOTEBOOK]: (_, payload) => {
       return notebook.renameNotebook(payload)
     },
-    [types.CLONE_NOTEBOOK]: ({ commit }, payload) => {
+    [types.CLONE_NOTEBOOK]: (_, payload) => {
       return notebook.cloneNotebook(payload)
     },
-    [types.DEL_NOTEBOOK]: ({ commit }, payload) => {
+    [types.DEL_NOTEBOOK]: (_, payload) => {
       return notebook.delNotebook(payload)
     },
-    [types.SAVE_NOTEBOOK]: ({ commit }, payload) => {
+    [types.SAVE_NOTEBOOK]: (_, payload) => {
       return notebook.saveNotebookById(payload)
     },
-    [types.GET_NOTEBOOK_BY_ID]: ({ commit }, { id }) => {
+    [types.GET_NOTEBOOK_BY_ID]: (_, { id }) => {
       return notebook.getNotebookById(id)
     },
-    [types.GET_CURRENT_SCRIPT]: ({ commit }, id) => {
+    [types.GET_CURRENT_SCRIPT]: (_, id) => {
       return notebook.getCurrentScript(id)
     },
-    [types.CREATE_CELL]: ({ commit }, payload) => {
+    [types.CREATE_CELL]: (_, payload) => {
       return notebook.createCell(payload)
     },
-    [types.DELETE_CELL]: ({ commit }, payload) => {
+    [types.DELETE_CELL]: (_, payload) => {
       return notebook.deleteCell(payload)
     },
-    [types.SAVE_OPEND_NOTEBOOK]: ({ commit }, payload) => {
+    [types.SAVE_OPEND_NOTEBOOK]: (_, payload) => {
       return notebook.saveOpenedNotebook(payload)
     },
     [types.GET_OPENED_NOTEBOOK]: () => {
       return notebook.getOpenedNotebook()
     },
-    [types.MOVE_NOTEBOOK]: ({ commit }, payload) => {
+    [types.MOVE_NOTEBOOK]: (_, payload) => {
       return notebook.moveNotebook(payload)
     },
-    [types.CREATE_FOLDER]: ({}, payload) => {
+    [types.CREATE_FOLDER]: (_, payload) => {
       return notebook.createFolder(payload)
     },
-    [types.MOVE_FOLDER]: ({}, payload) => {
+    [types.MOVE_FOLDER]: (_, payload) => {
       return notebook.moveFolder(payload)
     },
-    [types.DELETE_FOLDER]: ({}, id) => {
+    [types.DELETE_FOLDER]: (_, id) => {
       return notebook.deleteFolder(id)
     },
-    [types.RENAME_FOLDER]: ({}, payload) => {
+    [types.RENAME_FOLDER]: (_, payload) => {
       return notebook.renameFolder(payload)
     },
-    [types.CLONE_FOLDER]: ({}, payload) => {
+    [types.CLONE_FOLDER]: (_, payload) => {
       return notebook.cloneFolder(payload)
     },
-    [types.IMPORT_NOTEBOOK]: ({}, payload) => {
+    [types.IMPORT_NOTEBOOK]: (_, payload) => {
       return notebook.importNotebook(payload)
     },
-    [types.EXPORT_NOTEBOOK]: ({}, payload) => {
+    [types.EXPORT_NOTEBOOK]: (_, payload) => {
       return notebook.exportNotebook(payload)
     },
     [types.GET_DEFAULT_NOTEBOOK]: () => {
       return notebook.getDefaultNotebook()
     },
-    [types.CLEAR_RESULT]: ({}, id) => {
+    [types.CLEAR_RESULT]: (_, id) => {
       return notebook.clearAllResults(id)
     },
-    [types.AUTO_COMPLETE]: ({}, payload) => {
+    [types.AUTO_COMPLETE]: (_, payload) => {
       return notebook.autoComplete(payload)
-    },
+    }
   }
 }
 
