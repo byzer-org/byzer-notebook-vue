@@ -69,6 +69,7 @@
             <el-dropdown-item command="Markdown">Markdown</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <el-button type="text" size="medium" @click="handleShowShortcutHelp">{{ $t('showShortcutHelp') }}</el-button>
       </div>
     </div>
     <div class="cellListPage-container">
@@ -172,7 +173,7 @@ export default {
       editType: '', // 当前选中cell的类型
       findKey: '',
       replaceKey: '',
-      results: [] // 查找的结果
+      results: [], // 查找的结果
     }
   },
   props: ['currentNotebook', 'activeNotebookId'],
@@ -283,6 +284,13 @@ export default {
         this.scrollToSelectCell(index + 1)
       }
       this.hanldeExcuteSelectCell('run')
+    },
+    handleShowShortcutHelp () {
+      const isShow = this.$refs.shortcutPrompt.isShow
+      // 切换为command模式 打开快捷键帮助面板
+      const mode = isShow ? 'edit' : 'command'
+      this.changeMode(mode)
+      this.$refs.shortcutPrompt.isShow = !isShow
     },
     /**
      * @description: 查找内容改变
@@ -889,6 +897,16 @@ export default {
   }
 }
 </script>
+<i18n>
+  {
+    "zh": {
+      "showShortcutHelp": "Show Shortcut Help"
+    },
+    "en": {
+      "showShortcutHelp": "Show Shortcut Help"
+    }
+  }
+</i18n>
 <style lang="scss">
 @import '../../../../assets/css/config.scss';
 .cellListPage {

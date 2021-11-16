@@ -23,6 +23,7 @@
               v-model="ruleForm.source"
               filterable
               :separator="'/'"
+              clearable
             ></el-cascader>
           </el-form-item>
         </div>

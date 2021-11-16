@@ -25,6 +25,7 @@
             :value="form.folder"
             change-on-select
             :separator="'/'"
+            clearable
             @change="value => handleInput('folder', value)">
           </el-cascader>
         </el-form-item>
