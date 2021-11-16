@@ -103,8 +103,8 @@ export default class SelectNodeForm extends Vue {
       })
     }
   }
-  changeContent (value) {
-    this.ruleForm.sql = value.endsWith(';') ? value : (value + ';')
+  changeContent (value = '') {
+    this.ruleForm.sql = value.split('\n').map(i => i ? i.trim().endsWith(';') ? i : i + ';' : i).join('\n')
   }
   clearResult () {
     this.checkResult = ''
