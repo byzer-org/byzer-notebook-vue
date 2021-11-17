@@ -91,7 +91,7 @@ export default {
   },
   actions: {
     [actionsTypes.CALL_MODAL] ({ commit }, { nodeInfo }) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         const { type } = nodeInfo
         commit(actionsTypes.SET_MODAL, { callback: resolve, form: `${type}Form` })
         // 初始化 form 中的数据

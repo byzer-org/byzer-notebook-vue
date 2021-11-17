@@ -61,8 +61,8 @@ export const jsplumbConnectOptions = {
 }
 
 export const jsplumbSourceOptions = {
-  filter: '.node-anchor', //触发连线的区域
-  /*'span'表示标签，'.className'表示类，'#id'表示元素id*/
+  filter: '.node-anchor', // 触发连线的区域
+  /* 'span'表示标签，'.className'表示类，'#id'表示元素id*/
   filterExclude: false,
   anchor: [
     'TopCenter',
@@ -75,7 +75,7 @@ export const jsplumbSourceOptions = {
 
 export const jsplumbTargetOptions = {
   filter: '.node-anchor',
-  /*'span'表示标签，'.className'表示类，'#id'表示元素id*/
+  /* 'span'表示标签，'.className'表示类，'#id'表示元素id*/
   filterExclude: false,
   anchor: [
     'TopCenter',

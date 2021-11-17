@@ -13,7 +13,7 @@ export default {
       }
     })
   },
-  submitSignUp: (params) => axios.post('/api/user/join', params),
+  submitSignUp: params => axios.post('/api/user/join', params),
   submitLogout: () => axios.delete('/api/user/authentication'),
   getUserInfo: () => axios.get('/api/user/me')
 }

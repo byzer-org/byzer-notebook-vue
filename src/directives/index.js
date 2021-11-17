@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 // 自定义增加tooltip指令，判断宽度（加偏移量）是否超过父盒子从而插入或移出tooltip
 let parentList = {}
 Vue.directive('custom-tooltip', {
-  bind: (el) => {
+  bind: el => {
     el.className += ' custom-tooltip-text'
     // el.style.cssText = 'white-space: nowrap'
   },
@@ -40,7 +40,7 @@ Vue.directive('custom-tooltip', {
       licenseDom(id)
     }, 500)
   },
-  update: (el, binding, oldVnode) => {
+  update: (el, binding) => {
     const content = binding.value.content || binding.value.text
     if ('content' in binding.value) {
       if (binding.value.content === binding.oldValue.content && binding.value.text === binding.oldValue.text && binding.value.w === binding.oldValue.w) return
@@ -56,7 +56,7 @@ Vue.directive('custom-tooltip', {
     textNode.textContent = content
     appendTipDom(textNode, currentWidth, 'value' in binding && typeof binding.value.w === 'number' ? binding.value.w : 0)
   },
-  unbind: (el) => {
+  unbind: el => {
     let id = el.getAttribute('data-id')
     if (!id || !(id in parentList)) return
     !('observer' in parentList[id]) && `resizeFn-${id}` in parentList[id] && window.removeEventListener('resize', parentList[id][`resizeFn-${id}`])
@@ -92,7 +92,7 @@ function licenseDom (id) {
 function createToolTipDom (el, binding, parentWidth) {
   const customLayout = document.createElement('span')
   const renderer = Vue.compile(createTextDom(el))
-  let createCommonTip = (propsData) => {
+  let createCommonTip = propsData => {
     let Dom = Vue.extend(ElementUI.Tooltip)
     // let Dom = Vue.extend(commonTip)
     return new Dom({

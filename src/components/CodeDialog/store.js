@@ -45,7 +45,7 @@ export default {
   },
   actions: {
     [actionsTypes.CALL_MODAL] ({ commit }, payload) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         commit(actionsTypes.SET_MODAL, { callback: resolve, ...payload })
         commit(actionsTypes.SHOW_MODAL)
       })

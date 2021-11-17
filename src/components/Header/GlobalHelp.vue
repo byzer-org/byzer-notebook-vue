@@ -20,8 +20,8 @@ import { findChildren } from '../../util'
   computed: {
     ...mapState({
       /* 当前打开的是notebook(true)或者是workflow(false) */
-      isNotebook: (state) => state.notebook?.activeNotebook?.type === 'notebook',
-      activedNotebook: (state) => state.notebook?.activeNotebook,
+      isNotebook: state => state.notebook?.activeNotebook?.type === 'notebook',
+      activedNotebook: state => state.notebook?.activeNotebook,
       isTrial: state => state.global.is_trial
     })
   },

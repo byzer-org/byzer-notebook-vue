@@ -132,7 +132,7 @@ export default class FindAndReplace extends Vue {
       return
     }
     this.positions = []
-    this.results.forEach((item) => {
+    this.results.forEach(item => {
       this.findPos(item, -1)
     })
     const { cellId = '', cellIndex = '', lineIndex = '', pos = '' } =
@@ -285,7 +285,7 @@ export default class FindAndReplace extends Vue {
    */
   replaceCurrent () {
     let index = this.positions.findIndex(
-      (i) =>
+      i =>
         this.currentResult ===
         i.cellId + '-' + i.cellIndex + '-' + i.lineIndex + '-' + i.pos
     )

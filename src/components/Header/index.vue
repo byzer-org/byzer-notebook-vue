@@ -3,7 +3,6 @@
   <div class="page-header">
     <div class="page-header-left">
       <img src="@/assets/images/MLSQL_LAB.svg" alt="" v-if="isTrial">
-      <!-- <img src="@/assets/images/logo.svg" alt="" v-else> -->
       <span class="page-header-left-logo" v-else>Byzer</span>
       <header-menu v-if="!isLoginPage"></header-menu>
     </div>

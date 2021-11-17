@@ -24,7 +24,7 @@ const bindKeyHandler = fn => {
     return false
   }
 }
-keymaster.filter = (event) => {
+keymaster.filter = event => {
   var tagName = (event.target || event.srcElement).tagName
 
   // 所有的FindAndReplace组件

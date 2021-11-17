@@ -47,7 +47,7 @@ export default {
   },
   actions: {
     [actionsTypes.CALL_MODAL] ({ commit }, payload) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         commit(actionsTypes.SET_MODAL, { callback: resolve })
         // 初始化 form 中的数据
         commit(actionsTypes.SET_MODAL_FORM, { ...payload })

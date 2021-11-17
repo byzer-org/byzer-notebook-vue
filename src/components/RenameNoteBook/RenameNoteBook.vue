@@ -108,7 +108,7 @@ export default class RenameNoteBookModal extends Vue {
     if (this.isSubmiting) {
       return false
     }
-    this.$refs.$form.validate(async (valid) => {
+    this.$refs.$form.validate(async valid => {
       if (valid) {
         this.isSubmiting = true
         try {

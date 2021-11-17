@@ -178,7 +178,7 @@ export default {
         let beforeCellValue = ''
         // 当前cell的index
         const cellIndex = this.newCellList.findIndex(
-          (i) => i.id === this.cellId
+          i => i.id === this.cellId
         )
         // 当前cell光标所在行
         let lineNum = 0
@@ -231,7 +231,7 @@ export default {
         editor.commands.addCommand({
           name: 'myCommand-handle-show-completer',
           bindKey: { win: 'Tab',  mac: 'Tab' },
-          exec: (editor) => {
+          exec: editor => {
             editor.execCommand('startAutocomplete');
           }
         })
@@ -248,7 +248,7 @@ export default {
         editor.commands.addCommand({
           name: 'myCommand-handle-undo',
           bindKey: { win: 'Ctrl-Z',  mac: 'Command-Z' },
-          exec: (editor) => {
+          exec: editor => {
             const cursorPos = editor.getCursorPosition()
             editor.undo()
             editor.clearSelection();
@@ -258,7 +258,7 @@ export default {
         editor.commands.addCommand({
           name: 'myCommand-handle-redo',
           bindKey: { win: 'Ctrl-Y',  mac: 'Command-Y' },
-          exec: (editor) => {
+          exec: editor => {
             const cursorPos = editor.getCursorPosition()
             editor.redo()
             editor.clearSelection();
@@ -295,7 +295,7 @@ export default {
         editor.commands.addCommand({
           name: 'myCommand-enter',
           bindKey: { win: 'enter',  mac: 'enter' },
-          exec: (editor) => {
+          exec: editor => {
             if (this.readOnly) {
               this.$emit('changeMode', 'edit')
             } else {
@@ -349,7 +349,7 @@ export default {
         editor.commands.addCommand({
           name: 'myCommand-indent',
           bindKey: { win: 'Ctrl-]',  mac: 'Command-]' },
-          exec: (editor) => {
+          exec: editor => {
             editor.commands.commands.indent.exec(editor)
           }
         })
@@ -362,7 +362,7 @@ export default {
         editor.commands.addCommand({
           name: 'myCommand-outdend',
           bindKey: { win: 'Ctrl-[',  mac: 'Command-[' },
-          exec: (editor) => {
+          exec: editor => {
             editor.commands.commands.outdent.exec(editor)
           }
         })

@@ -35,7 +35,7 @@ export default class ShortcutDetail extends Vue {
   checkDetail () {
     this.platform = this.checkUserAgent()
     this.title = this.type === 'global' ? 'Global' : 'Markdown'
-    this.list = cloneDeep(ShortcutPromptList)[this.mode][this.type].map((i) => {
+    this.list = cloneDeep(ShortcutPromptList)[this.mode][this.type].map(i => {
       i.shortcut = this.chooseBtn(i.shortcut)
       i.subShortcut = this.chooseBtn(i.subShortcut)
       return i
@@ -49,8 +49,8 @@ export default class ShortcutDetail extends Vue {
   chooseBtn (shortcut) {
     let result = shortcut
       .split(',')
-      .filter((i) => i)
-      .map((i) => i.trim())
+      .filter(i => i)
+      .map(i => i.trim())
     if (this.platform === 'mac' && result.length === 2) {
       return result[1]
     } else {
@@ -89,7 +89,7 @@ export default class ShortcutDetail extends Vue {
     font-weight: 500;
     font-size: 14px;
     color: $--color-text-primary;
-    border-bottom: 1px solid #ecf0f8;
+    border-bottom: 1px solid $--border-divider-color;
   }
 }
 </style>
