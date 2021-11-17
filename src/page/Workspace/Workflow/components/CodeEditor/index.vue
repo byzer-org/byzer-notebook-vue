@@ -172,7 +172,7 @@ export default class NodeCodeEditor extends Vue {
       editor.commands.addCommand({
         name: 'enter',
         bindKey: { win: 'enter',  mac: 'enter' },
-        exec: (editor) => {
+        exec: editor => {
           if (!this.readOnly) {
             editor.insert('\n' + '')
           }

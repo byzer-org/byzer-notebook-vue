@@ -6,7 +6,7 @@ export default {
   state: {
   },
   mutations: {
-    [types.HIDE_ALL_MODALS]: (state) => {
+    [types.HIDE_ALL_MODALS]: state => {
       for (const [, modalState] of Object.entries(state)) {
         if (modalState.isShow) {
           modalState.isShow = false

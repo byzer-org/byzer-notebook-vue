@@ -8,7 +8,7 @@ export default {
     [types.SET_USER_INFO]: (state, payload) => {
       state.userInfo = payload
     },
-    [types.CLEAR_USER_INFO]: (state) => {
+    [types.CLEAR_USER_INFO]: state => {
       state.userInfo = null
       localStorage.clear()
     }

@@ -64,7 +64,7 @@ export default class ShortcutItem extends Vue {
   checkParams () {
     this.content = this.item?.content
     this.shortcutList = this.item?.shortcut.split('-')
-    this.subShortcutList = this.item?.subShortcut.split('-').filter((i) => i)
+    this.subShortcutList = this.item?.subShortcut.split('-').filter(i => i)
     this.frequency = this.item?.frequency || 1
   }
 }

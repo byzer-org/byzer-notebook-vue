@@ -2,7 +2,6 @@
 <template>
   <div class="cell-box" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" >
     <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode ? 'block' : 'none'}">
-    <!-- <div :ref="'cellBtn' + cellId" class="cell-box-add-left" style="'display:block;'"> -->
       <el-button type="text" size="medium" icon="el-ksd-icon-grab_dots_22" :disabled="isRunningAll" class="move-cell"></el-button><br />
       <el-button type="text" size="medium" icon="el-ksd-icon-add_22" @click="handleAddBelow"></el-button>
     </div>

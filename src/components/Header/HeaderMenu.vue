@@ -55,15 +55,15 @@ export default {
     .el-menu-item:not(.is-disabled):focus, .el-menu-item:not(.is-disabled):hover, .el-submenu .el-submenu__title:hover {
       background-color: rgb(8, 69, 125);
       outline: 0;
-      color: #fff;
+      color: $--color-white;
     }
     > .el-menu-item {
       height: $page-header-height;
       line-height: $page-header-height;
       background-color: $--color-nav;
-      color: #fff;
+      color: $--color-white;
       &.is-active {
-        color: #fff;
+        color: $--color-white;
       }
       .menu-icon {
         font-size: 24px;

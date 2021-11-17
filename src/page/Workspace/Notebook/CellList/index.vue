@@ -677,8 +677,7 @@ export default {
             cell_list: this.oldCellList
           }
         }
-        this.saveNotebook(params).then(res => {
-          console.log(res, 'res')
+        this.saveNotebook(params).then(() => {
             this.loadingSave = false
             if (showMessage) {
               this.$message.success('Successfully Saved!')

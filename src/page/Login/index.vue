@@ -75,7 +75,7 @@ export default class Login extends Vue {
   }
 
   checkForm (type) {
-    this.$refs['loginForm'].validate((valid) => {
+    this.$refs['loginForm'].validate(valid => {
       if (valid) {
         if (type === 'login') {
           this.submitLogin()
