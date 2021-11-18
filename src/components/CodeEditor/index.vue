@@ -9,7 +9,6 @@
       :ref="'codeEditor' + cellId"
       v-model="content"
       :lang="lang"
-      @init="initEditor"
       :options="options"
       @input="changeContent"
     ></editor>
@@ -19,12 +18,9 @@
 <script>
 import ace from 'brace'
 import { mapActions } from 'vuex'
-import { PythonTag } from '../../config'
+import { PythonTag, SpecialCodeSuggestKey } from '../../config'
 
 export default {
-  components: {
-    editor: require('vue2-ace-editor')
-  },
   props: {
     value: {
       type: String,
@@ -66,17 +62,25 @@ export default {
     }
   },
   watch: {
-    value (newVal) {
+    value (newVal, oldVal) {
       if (this.readOnly) {
         this.content = newVal
       }
       this.checkLang()
+      
+      ;(oldVal || '').split('').forEach(i => {
+        newVal = newVal.replace(i, '')
+      })
+      if (SpecialCodeSuggestKey.includes(newVal)) {
+        const codeEditor = this.$refs['codeEditor' + this.cellId]
+        codeEditor?.editor.execCommand('startAutocomplete')
+      }
     },
     readOnly () {
       this.setReadOnly()
     },
     isSelected () {
-      const codeEditor = this.$refs['cellEditor' + this.cellId]
+      const codeEditor = this.$refs['codeEditor' + this.cellId]
       codeEditor?.editor.textInput.focus()
     }
   },
@@ -232,7 +236,9 @@ export default {
           name: 'myCommand-handle-show-completer',
           bindKey: { win: 'Tab',  mac: 'Tab' },
           exec: editor => {
-            editor.execCommand('startAutocomplete');
+            // 每次输入都要重新init代码提示，否则在getCompletions中都是上一次init时的数据
+            this.queryCompleters()
+            editor.execCommand('startAutocomplete')
           }
         })
       }
@@ -376,16 +382,6 @@ export default {
       const row = result.row
       const content = editor.selection.doc.$lines[row]
       return { content, ...result }
-    },
-    initEditor () {
-      require('brace/theme/chrome')
-      require('brace/mode/javascript')
-      require('brace/snippets/sql')
-      require('./mlsql')
-      require('brace/snippets/python')
-      require('brace/mode/python')
-      // 需要代码提示必须引入
-      require('brace/ext/language_tools')
     },
     changeContent () {
       this.$emit('changeContent', this.content)
