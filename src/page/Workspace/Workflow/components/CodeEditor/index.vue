@@ -87,7 +87,7 @@ export default class NodeCodeEditor extends Vue {
       ;(this.contentBackup || '').split('').forEach(i => {
         v = v.replace(i, '')
       })
-      if(SpecialCodeSuggestKey.includes(v)) {
+      if (SpecialCodeSuggestKey.includes(v)) {
         const codeEditor = this.$refs['nodeEditor']
         codeEditor?.editor.execCommand('startAutocomplete')
       }

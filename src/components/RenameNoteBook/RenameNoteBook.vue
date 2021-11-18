@@ -16,7 +16,7 @@
         ref="$form">
         <el-form-item prop="name" :label="$t(`${form.type}Name`)">
           <el-input
-            :value="form.name"
+            v-model="form.name"
             :placeholder="$t('notebook.notebookNameHolder')"
             @change="value => handleInput('name', value)"
           />
