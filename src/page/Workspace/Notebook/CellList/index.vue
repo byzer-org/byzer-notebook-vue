@@ -102,7 +102,6 @@
                 :ref="'cell' + cell.id"
                 :cellId="cell.id"
                 :newCellList="newCellList"
-                :activeNotebookId="activeNotebookId"
                 @changeCellContent="changeCellContent"
                 :cellInfo="cell"
                 :currentNotebook="currentNotebook"

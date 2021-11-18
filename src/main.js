@@ -16,6 +16,16 @@ Vue.use(Contextmenu);
 import { findChildren } from './util'
 import '@/icons/index.js'
 import IconBtn from './components/IconBtn'
+import editor from 'vue2-ace-editor'
+import 'brace/theme/chrome'
+import 'brace/mode/javascript'
+import 'brace/snippets/sql'
+import 'brace/snippets/python'
+import 'brace/mode/python'
+import 'brace/ext/language_tools'
+import './config/editor_highlight'
+
+Vue.component('editor', editor)
 Vue.component('icon-btn', IconBtn)
 
 const bindKeyHandler = fn => {

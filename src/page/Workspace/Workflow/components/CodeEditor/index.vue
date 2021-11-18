@@ -2,7 +2,7 @@
 <template>
   <div class="mlsql-editor" :class="{ 'active-editor': isSelected && !readOnly }" >
     <!-- 光标移动原因：编辑器接收值后会重新渲染编辑器，会导致光标移动到最开头。 -->
-    <editor :value="content" ref="nodeEditor" :height="height" lang="sql" @init="initEditor" :options="options" @input="changeContent"></editor>
+    <editor :value="content" ref="nodeEditor" :height="height" lang="sql" :options="options" @input="changeContent"></editor>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { mapActions } from 'vuex'
 import ace from 'brace'
+import { SpecialCodeSuggestKey } from '../../../../../config'
 @Component({
   props: {
     height: {
@@ -33,9 +34,6 @@ import ace from 'brace'
       default: true
     }
   },
-  components: {
-    editor: require('vue2-ace-editor')
-  },
   methods: {
     ...mapActions({
       autoComplete: 'AUTO_COMPLETE'
@@ -44,6 +42,7 @@ import ace from 'brace'
 })
 export default class NodeCodeEditor extends Vue {
   content = this.value
+  contentBackup = ''
   options = {
     wrap: 'free',
     enableBasicAutocompletion: true,
@@ -70,7 +69,7 @@ export default class NodeCodeEditor extends Vue {
     this.changeOptions('showGutter', newVal)
   }
   mounted () {
-    this.bindEnter()
+    this.codeSuggest()
   }
 
   changeOptions (option, value) {
@@ -79,17 +78,21 @@ export default class NodeCodeEditor extends Vue {
   setReadOnly () {
     this.$refs.nodeEditor.editor.setReadOnly(this.readOnly)
   }
-  initEditor () {
-    require('brace/theme/chrome')
-    require('brace/snippets/sql')
-    require('brace/mode/javascript')
-    require('../../../../../components/CodeEditor/mlsql')
-    // 需要代码提示必须引入
-    require('brace/ext/language_tools')
-  }
   changeContent (value) {
     this.$emit('changeContent', value)
     this.queryCompleters(value)
+    
+    this.$nextTick(() => {
+      let v = value
+      ;(this.contentBackup || '').split('').forEach(i => {
+        v = v.replace(i, '')
+      })
+      if(SpecialCodeSuggestKey.includes(v)) {
+        const codeEditor = this.$refs['nodeEditor']
+        codeEditor?.editor.execCommand('startAutocomplete')
+      }
+      this.contentBackup = value;
+    })
   }
   /**
    * @description: 获取文本
@@ -178,6 +181,19 @@ export default class NodeCodeEditor extends Vue {
           }
         },
         readOnly: true
+      })
+    }
+  }
+  codeSuggest () {
+    let editor = null
+    if (this.$refs['nodeEditor']) {
+      editor = this.$refs['nodeEditor'].editor
+      editor.commands.addCommand({
+        name: 'enter',
+        bindKey: { win: 'Tab',  mac: 'Tab' },
+        exec: editor => {
+          editor.execCommand('startAutocomplete')
+        }
       })
     }
   }
