@@ -105,23 +105,8 @@ export default class NodeCodeEditor extends Vue {
       editor = this.$refs['nodeEditor'].editor
       const { column, row } = editor.getCursorPosition()
 
-      // 当前cell光标前的内容
-      let lastCellValue = ''
-      const contentBeforeCursor = value.split('\n')
-      for (let index in contentBeforeCursor) {
-        index = index * 1
-        const curLineValue =
-          row === index
-            ? contentBeforeCursor[index].slice(0, column)
-            : contentBeforeCursor[index]
-        if (row >= index) {
-          lastCellValue =
-            (index === 0 ? lastCellValue : lastCellValue + '\n') +
-            curLineValue
-        }
-      }
       return {
-        sql: lastCellValue, // sql脚本内容
+        sql: value, // sql脚本内容
         lineNum: row + 1, // pos所在行数,1开始
         columnNum: column // pos所在列数,1开始，如果光标在列开头,则为0
       }

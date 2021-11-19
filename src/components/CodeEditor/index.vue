@@ -162,22 +162,6 @@ export default {
       if (this.$refs['codeEditor' + this.cellId]) {
         editor = this.$refs['codeEditor' + this.cellId].editor
         const { column, row } = editor.getCursorPosition()
-
-        // 当前cell光标前的内容
-        let lastCellValue = ''
-        const contentBeforeCursor = this.content.split('\n')
-        for (let index in contentBeforeCursor) {
-          index = index * 1
-          const curLineValue =
-            row === index
-              ? contentBeforeCursor[index].slice(0, column)
-              : contentBeforeCursor[index]
-          if (row >= index) {
-            lastCellValue =
-              (index === 0 ? lastCellValue : lastCellValue + '\n') +
-              curLineValue
-          }
-        }
         // 除markdown和当前cell外其余cell的内容
         let beforeCellValue = ''
         // 当前cell的index
@@ -202,7 +186,7 @@ export default {
           }
         }
         return {
-          sql: beforeCellValue + lastCellValue, // sql脚本内容
+          sql: beforeCellValue + this.content, // sql脚本内容
           lineNum: lineNum + row + 1, // pos所在行数,1开始
           columnNum: column // pos所在列数,1开始，如果光标在列开头,则为0
         }
