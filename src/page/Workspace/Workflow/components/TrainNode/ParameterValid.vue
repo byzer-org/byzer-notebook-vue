@@ -94,15 +94,15 @@ export default class ParameterValid extends Vue {
     const { value_type, value_interval = null } = item
     // 值类型 STRING BOOL INT FLOAT
     if (!this.checkValueType(value, value_type)) { // 校验值类型
-      return callback(new Error(this.$t('valueType', { type: value_type.toLowerCase()})))
+      return callback(new Error(this.$t('workflow.valueType', { type: value_type.toLowerCase()})))
     } else if (!this.checkMinValue(value, value_type, value_interval)) { // 校验值范围
       const { min } = value_interval
-      return callback(new Error(this.$t('minValue', { min })))
+      return callback(new Error(this.$t('workflow.minValue', { min })))
     } else if (!this.checkMaxValue(value, value_type, value_interval)) { // 校验值范围
       const { max } = value_interval
-      return callback(new Error(this.$t('maxValue', { max })))
+      return callback(new Error(this.$t('workflow.maxValue', { max })))
     } else if (!this.checkFloatCount(value, value_type)) { // 校验小数位数
-      return callback(new Error(this.$t('floatValid')))
+      return callback(new Error(this.$t('workflow.floatValid')))
     } else {
       return callback()
     }
@@ -116,29 +116,29 @@ export default class ParameterValid extends Vue {
       }
       const { value_type: valueType, value_interval: valueInterval } = array_value_type
       if (length > 9) {
-        return callback(new Error(this.$t('maxGroup')))
+        return callback(new Error(this.$t('workflow.maxGroup')))
       } else if (!value.length) {
-        return callback(new Error(this.$t('common.pleaseInput')))
+        return callback(new Error(this.$t('pleaseInput')))
       } else if (value.length > array_max_size) {
-        return callback(new Error(this.$t('maxSize', {size: array_max_size})))
+        return callback(new Error(this.$t('workflow.maxSize', {size: array_max_size})))
       } else if (!value.every(v => this.checkValueType(v, valueType))) { // 校验值类型
-        return callback(new Error(this.$t('valueType', { type: valueType.toLowerCase()})))
+        return callback(new Error(this.$t('workflow.valueType', { type: valueType.toLowerCase()})))
       } else if (valueType === 'INT') { // 整数校验
         if (!value.every(v => this.checkMinValue(v, valueType, valueInterval))) { // 校验值范围
           const { min } = valueInterval
-          return callback(new Error(this.$t('minValue', { min })))
+          return callback(new Error(this.$t('workflow.minValue', { min })))
         } else if (!value.every(v => this.checkMaxValue(v, valueType, valueInterval))) { // 校验值范围
           const { max } = valueInterval
-          return callback(new Error(this.$t('maxValue', { max })))
+          return callback(new Error(this.$t('workflow.maxValue', { max })))
         } else {
           return callback()
         }
       } else if (valueType === 'FLOAT') { // 校验值范围
         if (!value.every(v => this.checkValueRange(v, valueType, valueInterval))) { // 校验值范围
           const { max, min } = valueInterval
-          return callback(new Error(this.$t('valueRange', { max, min })))
+          return callback(new Error(this.$t('workflow.valueRange', { max, min })))
         } else if (!value.every(v => this.checkFloatCount(v, valueType))) { // 校验小数位数
-          return callback(new Error(this.$t('floatValid')))
+          return callback(new Error(this.$t('workflow.floatValid')))
         } else {
           return callback()
         }
@@ -149,7 +149,7 @@ export default class ParameterValid extends Vue {
       if (!required && !value) { // 非必填没有值
         return callback()
       } else if (required && !value) { // 必填 没有值
-        const msg = value_type === 'ENUM' ? this.$t('common.pleaseSelect') : this.$t('common.pleaseInput')
+        const msg = value_type === 'ENUM' ? this.$t('pleaseSelect') : this.$t('pleaseInput')
         return callback(new Error(msg))
       }
       return this.validSimpleParam(value, callback, item)
@@ -158,36 +158,6 @@ export default class ParameterValid extends Vue {
 
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "maxGroup": "当前参数组超过上限，参数组合最多 9 组。",
-      "maxSize": "当前参数最多输入 3 个值。",
-      "valueType": "输入值类型错误，应该为 {type}。",
-      "valueRange": "输入值应在 [{min},{max}] 之间。",
-      "floatValid": "float 最多两位小数。",
-      "copySuccess": "复制成功!" ,
-      "pathValid": "path 必须以 / 开头。",
-      "minValue": "最小值是 {min}.",
-      "maxValue": "最大值是 {max}.",
-      "modelExist": "当前路径下已存在同名模型，请重命名。"
-    },
-    "en": {
-      "maxGroup": "Parameter groups exceed the upper limit. Maximum of nine groups.",
-      "maxSize": "Maximum of {size} values are allowed.",
-      "valueType": "Wrong data type, should be {type}",
-      "valueRange": "Input value should be in [{min},{max}]",
-      "floatValid": "At most two decimal places.",
-      "copySuccess": "Successfully Copied!" ,
-      "pathValid": "Path must start with /.",
-      "minValue": "Minimum value is {min}.",
-      "maxValue": "Maximum value is {max}.",
-      "modelExist": "Model with the same name already exists in the current path, please rename it.",
-      "noTableTip": "No table is available."
-    }
-  }
-</i18n>
-
 <style lang="scss">
 </style>
 

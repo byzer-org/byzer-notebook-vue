@@ -1,37 +1,37 @@
 <template>
   <div class="settings-page page-outer-padding">
-    <div class="page-inner-header">Settings</div>
+    <div class="page-inner-header">{{$t('menu.settings')}}</div>
     <div class="container">
       <div class="setting-item">
         <el-form ref="timeoutForm" label-position="top" :model="timeoutRuleForm" :rules="timeoutRules">
-          <el-form-item label="Timeout Settings" prop="time">
-            All jobs run over
+          <el-form-item :label="$t('settings.timeoutSetting')" prop="time">
+            {{$t('settings.timeoutDesc1')}}
             <el-input style="width: 85px;" v-model.trim="timeoutRuleForm.time"></el-input>
-            minutes will be terminated.
+            {{$t('settings.timeoutDesc2')}}
           </el-form-item>
           <div class="btns">
-            <el-button type="primary" size="small" @click="saveConfig('timeout')" :disabled="timeoutRuleForm.time === defaultTime">Save</el-button>
-            <el-button size="small" @click="resetForm('timeout')">Reset</el-button>
+            <el-button type="primary" size="mini" @click="saveConfig('timeout')" :disabled="timeoutRuleForm.time === defaultTime">{{$t('save')}}</el-button>
+            <el-button size="small" @click="resetForm('timeout')">{{$t('reset')}}</el-button>
           </div>
         </el-form>
       </div>
       <div class="setting-item">
         <el-form ref="engineForm" label-position="top" :model="engineRuleForm" :rules="engineRules">
-          <el-form-item label="Default Engine" prop="name">
-            <p class="tip">Set the default engine to run your notebooks</p>
-            <el-select style="width: 240px;" v-model="engineRuleForm.name" placeholder="Please select engine">
+          <el-form-item :label="$t('settings.defaultEngine')" prop="name">
+            <p class="tip">{{$t('settings.defaultEngineDesc')}}</p>
+            <el-select style="width: 240px;" v-model="engineRuleForm.name" :placeholder="$t('settings.engineSelectTip')">
               <el-option :label="engine" :value="engine" v-for="engine in engineList" :key="engine"></el-option>
             </el-select>
           </el-form-item>
           <div class="btns">
-            <el-button type="primary" size="small" @click="saveConfig('engine')" :disabled="engineRuleForm.name === defaultEngine">Save</el-button>
+            <el-button type="primary" size="small" @click="saveConfig('engine')" :disabled="engineRuleForm.name === defaultEngine">{{$t('save')}}</el-button>
           </div>
         </el-form>
       </div>
       <div class="setting-item">
-        <div class="setting-item-title">External Data Source</div>
+        <div class="setting-item-title">{{$t('settings.externalDatasource')}}</div>
         <div class="setting-item-btn">
-          <el-button size="medium" @click="handleCreateConnection()">Add</el-button>
+          <el-button size="medium" @click="handleCreateConnection()">{{$t('add')}}</el-button>
         </div>
         <el-table
           :data="connectionList"
@@ -47,19 +47,19 @@
           </el-table-column>
           <el-table-column
             prop="name"
-            label="Connection Name"
+            :label="$t('settings.connectionName')"
             width="180">
           </el-table-column>
           <el-table-column
             prop="datasource"
-            label="Data Source"
+            :label="$t('settings.dataSource')"
             width="180">
           </el-table-column>
           <el-table-column
-            label="Action">
+            :label="$t('settings.action')">
             <template slot-scope="scope">
-              <el-button class="nobg-text" type="text" size="medium" @click="handleCreateConnection(scope.row)" icon="el-ksd-icon-edit_22" />
-              <el-button class="nobg-text" type="text" size="medium" @click="handleDeleteConnection(scope.row)" icon="el-ksd-icon-delete_22" />
+              <icon-btn icon="el-ksd-icon-edit_22" :text="$t('copy')" :handler="() => handleCreateConnection(scope.row)" />
+              <icon-btn icon="el-ksd-icon-delete_22" :text="$t('copy')" :handler="() => handleDeleteConnection(scope.row)" />
             </template>
           </el-table-column>
         </el-table>
@@ -153,18 +153,18 @@ export default class SettingsPage extends Vue {
 
   validateTime (rule, value, callback) {
     if (!value) {
-      return callback(new Error('Please enter a valid number'))
+      return callback(new Error(this.$t('settings.validTimout1')))
     } else if (!/^[0-9]+$/.test(value)) {
-      return callback(new Error('Please re-enter using digit number'))
+      return callback(new Error(this.$t('settings.validTimout1')))
     } else if (Number(value) < 1) {
-      return callback(new Error('Please enter a value greater than 1'))
+      return callback(new Error(this.$t('settings.validTimout1')))
     } else {
       return callback()
     }
   }
   validateEngine (rule, value, callback) {
     if (!value) {
-      return callback(new Error('Please select an engine'))
+      return callback(new Error(this.$t('settings.engineSelectTip')))
     } else {
       return callback()
     }
@@ -222,18 +222,18 @@ export default class SettingsPage extends Vue {
     }
   }
   deleteConnectionConfirm () {
-    return this.$confirm(this.$t('deleteText'), this.$t('deleteTitle'), {
-      confirmButtonText: this.$t('common.ok'),
-      cancelButtonText: this.$t('common.cancel'),
+    return this.$confirm(this.$t('settings.deleteText'), this.$t('settings.deleteTitle'), {
+      confirmButtonText: this.$t('ok'),
+      cancelButtonText: this.$t('cancel'),
       type: 'warning',
-      centerButton: true
+      customClass: 'centerButton'
     })
   }
   async handleDeleteConnection (item) {
     try {
       await this.deleteConnectionConfirm()
       await this.deleteConnection(item.id)
-      this.$message.success(this.$t('common.actionSuccess'))
+      this.$message.success(this.$t('actionSuccess'))
       this.getConnections()
     } catch (e) {
       console.log(e)
@@ -242,15 +242,7 @@ export default class SettingsPage extends Vue {
   }
 }
 </script>
-<i18n>
-{
-  "zh":{},
-  "en":{
-    "deleteTitle": "Delete Connection",
-    "deleteText": "Are you sure you want to delete this connection? Please note this action can’t be reverted."
-  }
-}
-</i18n>
+
 <style lang="scss">
 .settings-page {
   .setting-item {

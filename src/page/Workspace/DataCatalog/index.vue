@@ -1,6 +1,6 @@
 <template>
   <div class="dataCatalog">
-    <div class="header">Data Catalog</div>
+    <div class="header">{{$t('catalog.dataCatalog')}}</div>
     <div class="catalog-wrapper" ref="catalogWrapper" @scroll="scrollTree">
       <el-tree
         class="catalog-tree"
@@ -18,18 +18,18 @@
             <span :title="node.label">{{ node.label }}</span>
           </div>
           <div class="node-actions" :style="{'left': (treeOffsetWidth - (node.data.upload ? 40 : 0)) + 'px'}">
-            <el-tooltip placement="top" :content="$t('common.copy')" v-if="data.id && data.id.includes('Table')">
-              <el-button icon="el-ksd-icon-dup_16" size="small" v-clipboard:success="onCopy" v-clipboard:copy="node.label"></el-button>
+            <el-tooltip placement="top" :content="$t('copy')" v-if="data.id && data.id.includes('Table')">
+              <el-button class="icon-bg" icon="el-ksd-icon-dup_16" type="text" size="small" v-clipboard:success="onCopy" v-clipboard:copy="node.label"></el-button>
             </el-tooltip>
-            <el-tooltip effect="dark" v-else-if="data.id === 'file'" :content="$t('common.upload')" placement="top">
-              <el-button icon="el-ksd-icon-add_16" size="mini" @click.stop="uploadFile"></el-button>
+            <el-tooltip effect="dark" v-else-if="data.id === 'file'" :content="$t('upload')" placement="top">
+              <el-button class="icon-bg" icon="el-ksd-icon-add_16" type="text" size="mini" @click.stop="uploadFile"></el-button>
             </el-tooltip>
             <span v-else-if="node.data.isLeaf && node.data.id.startsWith('file')">
-              <el-tooltip effect="dark" v-if="node.data.upload" :content="$t('common.delete')" placement="top">
-                <el-button icon="el-ksd-icon-delete_16" size="mini" @click.stop="deleteFile(node.data)"></el-button>
+              <el-tooltip effect="dark" v-if="node.data.upload" :content="$t('delete')" placement="top">
+                <el-button class="icon-bg" icon="el-ksd-icon-delete_16" type="text" size="mini" @click.stop="deleteFile(node.data)"></el-button>
               </el-tooltip>
               <el-tooltip placement="top" :content="$t('catalog.copyPath')" >
-                <el-button icon="el-ksd-icon-dup_16" size="mini" v-clipboard:success="onCopy" v-clipboard:copy="data.path"></el-button>
+                <el-button class="icon-bg" icon="el-ksd-icon-dup_16" type="text" size="mini" v-clipboard:success="onCopy" v-clipboard:copy="data.path"></el-button>
               </el-tooltip>
             </span>
           </div>
@@ -154,11 +154,11 @@ export default class DataCataLog extends Vue {
   }
   async deleteFile (data) {
     try {
-      await this.$confirm(this.$t('deleteText'), this.$t('deleteTitle'), {
-        confirmButtonText: this.$t('common.ok'),
-        cancelButtonText: this.$t('common.cancel'),
+      await this.$confirm(this.$t('catalog.deleteText'), this.$t('catalog.deleteTitle'), {
+        confirmButtonText: this.$t('ok'),
+        cancelButtonText: this.$t('cancel'),
         type: 'warning',
-        centerButton: true
+        customClass: 'centerButton'
       })
       await this.deleteUploadFile(data.label)
       this.requestNewData()
@@ -231,28 +231,18 @@ export default class DataCataLog extends Vue {
         }
       })
       resolve(tableList)
-      // this.$refs.tableTree && this.$refs.tableTree.setCurrentKey(`${data.label}_Table0`)
     } catch (e) {
       resolve([])
     }
   }
 
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
 }
 </script>
-<i18n>
-{
-  "zh":{},
-  "en":{
-    "deleteTitle": "Delete File",
-    "deleteText": "Are you sure you want to delete this file? Please note this action can’t be reverted."
-  }
-}
-</i18n>
 <style lang="scss">
-@import '../../../assets/css/config.scss';
+@import '../../../assets/css/variable.scss';
 .dataCatalog {
   width: 100%;
   height: 100%;
@@ -275,7 +265,7 @@ export default class DataCataLog extends Vue {
     background-color: $--background-color-secondary;
     position: relative;
     .btn-gray {
-      color: $--color-text-disabled;
+      color: $--font-color-disabled-base;
       margin-right: 2px;
     }
     .el-tree {
@@ -301,7 +291,7 @@ export default class DataCataLog extends Vue {
           .node-actions {
             display: none;
             position: absolute;
-            top: 7px;
+            top: 5px;
           }
         }
       }

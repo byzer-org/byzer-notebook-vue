@@ -3,7 +3,7 @@
   <div class="cell-excute-result">
     <div class="cell-excute-result-wrapper" :class="{ 'hide-detail': showBtn && !showDetail, 'pb-48': showBtn }" ref="resultContainer">
       <div class="container" v-if="status === 'RUNNING'">
-        <div class="empty-table">No Data</div>
+        <div class="empty-table">{{$t('nodata')}}</div>
       </div>
       <div class="container" v-else-if="excuteSuccess">
         <div class="wrapper" v-if="detailType === 'html'">
@@ -39,8 +39,9 @@
             class="render-list"
             v-else
             :data="renderTableList"
-            style="width: 100%;">
+            style="min-width: 100%;">
             <el-table-column
+              min-width="200px"
               v-for="col in headerList"
               :key="col.label"
               :formatter="formatterValue"
@@ -66,15 +67,13 @@
             </el-pagination>
           </div>
         </div>
-        <div class="empty-table" v-else>
-          No Data
-        </div>
+        <div class="empty-table" v-else>{{$t('nodata')}}</div>
       </div>
       <div class="container failed" v-else>
         <div class="log-item">{{root_cause}}</div>
         <div class="failed-btns">
           <el-button type="text" size="small" :icon="showDetail ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'" @click="showDetail = !showDetail">
-          {{showDetail ? 'Hide Details' : 'View All'}}
+          {{showDetail ? $t('hideDetails') : $t('viewAll')}}
           </el-button>
         </div>
         <div class="failed-details" v-if="showDetail">
@@ -85,13 +84,13 @@
       </div>
       <div class="btn" v-if="excuteSuccess && showBtn && detailType === 'table'" :class="showDetail ? '' : 'hide-detail'">
         <el-button type="text" size="small" :icon="showDetail ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'" @click="showDetail = !showDetail">
-        {{showDetail ? 'Hide Details' : 'View All'}}
+        {{showDetail ? $t('hideDetails') : $t('viewAll')}}
         </el-button>
       </div>
     </div>
     <div class="download-btn" v-if="excuteSuccess && (detailType === 'html' || tableList.length)">
-      <el-button v-if="detailType !== 'table'" type="text" icon="el-ksd-icon-view_22" text @click="drawPng">View larger image</el-button>
-      <el-tooltip v-if="detailType === 'table'" placement="top" :content="$t('common.download')">
+      <el-button v-if="detailType !== 'table'" type="text" icon="el-ksd-icon-view_22" text @click="drawPng">{{$t('notebook.viewLargerImage')}}</el-button>
+      <el-tooltip v-if="detailType === 'table'" placement="top" :content="$t('download')">
         <el-button type="text" icon="el-ksd-icon-download_22" @click="exportCSV"></el-button>
       </el-tooltip>
     </div>
@@ -223,7 +222,7 @@ export default class ExcuteResult extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 .cell-excute-result {
   &-wrapper {
     position: relative;
@@ -278,11 +277,11 @@ export default class ExcuteResult extends Vue {
     height: 32px;
     padding-top: 8px;
     padding-left: 12px;
-    border-top: 1px solid $--border-secondary;
+    border-top: 1px solid $--border-color-light;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 8.21%, rgba(255, 255, 255, 0.96) 51.88%, #FFFFFF 91.78%);
     &.hide-detail {
       height: 48px;
-      padding-top: 24px;
+      padding-top: 15px;
       border: none;
     }
   }

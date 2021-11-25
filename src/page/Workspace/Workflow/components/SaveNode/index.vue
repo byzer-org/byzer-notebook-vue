@@ -2,125 +2,125 @@
   <div class="node-container" :class="type === 'add' && 'extra-style'">
     <div class="node-container-form">
       <el-form ref="form" label-position="top" :model="ruleForm" :rules="rules">
-        <el-form-item label="Select Table to Be Saved" prop="source" key="source">
-          <el-select filterable v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+        <el-form-item :label="$t('workflow.tableToSaved')" prop="source" key="source">
+          <el-select filterable v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :loading="loadingSource" :label="item" :value="item" v-for="item in existingTableList" :key="item"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="Save Into" prop="datasource_type">
-          <el-select v-model="ruleForm.datasource_type" @change="changeDatasourceType" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+        <el-form-item :label="$t('workflow.saveInto')" prop="datasource_type">
+          <el-select v-model="ruleForm.datasource_type" @change="changeDatasourceType" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item.label" :value="item.value" v-for="item in dataSourceList" :key="item.value"></el-option>
           </el-select>
         </el-form-item>
         <!-- jdbc -->
         <div class="form-save-part" v-if="ruleForm.datasource_type === 'jdbc'">
-          <el-form-item label="JDBC Connection" prop="connection">
-            <el-select filterable :loading="loadingConnection" v-model="ruleForm.connection" @change="changeConnection" :disabled="!connectionList.length" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-form-item :label="$t('workflow.JDBCConnection')" prop="connection">
+            <el-select filterable :loading="loadingConnection" v-model="ruleForm.connection" @change="changeConnection" :disabled="!connectionList.length" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item.name" :value="item.id" v-for="item in connectionList.filter(v => v.datasource.toLowerCase() === ruleForm.datasource_type)" :key="item.id"></el-option>
             </el-select>
             <el-alert
-              class="form-alert-type"
+              class="hide-bg"
               v-if="!connectionList.length"
-              :title="$t('connectionTip')"
+              :title="$t('workflow.connectionTip')"
               icon="el-ksd-icon-info_border_16"
               :show-background="false"
               :closable="false"
               type="info">
             </el-alert>
           </el-form-item>
-          <el-form-item label="Mode" prop="mode">
+          <el-form-item :label="$t('workflow.mode')" prop="mode">
             <el-radio-group v-model="ruleForm.mode">
-              <el-radio label="overwrite">Overwrite</el-radio>
-              <el-radio label="append">Append</el-radio>
+              <el-radio label="overwrite">{{$t('workflow.overwrite')}}</el-radio>
+              <el-radio label="append">{{$t('workflow.append')}}</el-radio>
             </el-radio-group>
           </el-form-item>
           <template class="select-create">
-            <div class="select-create-label"><span class="star txt-danger">*</span> Output Table Name</div>
+            <div class="select-create-label"><span class="star txt-danger">*</span> {{$t('workflow.outputTable')}}</div>
             <el-radio-group class="select-create-mode" v-model="targetMode" @change="changeTargetType">
-              <el-radio label="select">{{$t('selectExistTable')}}</el-radio>
-              <el-radio label="create">{{$t('createNewTable')}}</el-radio>
+              <el-radio label="select">{{$t('workflow.selectExistTable')}}</el-radio>
+              <el-radio label="create">{{$t('workflow.createNewTable')}}</el-radio>
             </el-radio-group>
             <el-form-item prop="target" v-if="targetMode==='select'" key="jdbc-table-select">
-              <el-select :loading="loadingTarget" v-model="ruleForm.target" @visible-change="getTableByConnection" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+              <el-select :loading="loadingTarget" v-model="ruleForm.target" @visible-change="getTableByConnection" style="width: 100%;" :placeholder="$t('pleaseSelect')">
                 <el-option :label="item" :value="item" v-for="item in connectionTableList" :key="item"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item prop="target" v-if="targetMode==='create'" key="jdbc-table-create">
-              <el-input v-model.trim="ruleForm.target" :placeholder="$t('common.pleaseInput')" style="width: 100%;"></el-input>
+              <el-input v-model.trim="ruleForm.target" :placeholder="$t('pleaseInput')" style="width: 100%;"></el-input>
             </el-form-item>
           </template>
         </div>
         <!-- 非 jdbc mode -->
-        <el-form-item label="Mode" prop="mode" v-else>
+        <el-form-item :label="$t('workflow.mode')" prop="mode" v-else>
           <el-radio-group v-model="ruleForm.mode">
-            <el-radio label="overwrite">Overwrite</el-radio>
-            <el-radio label="append">Append</el-radio>
+            <el-radio label="overwrite">{{$t('workflow.overwrite')}}</el-radio>
+            <el-radio label="append">{{$t('workflow.append')}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <!-- hdfs -->
         <div class="form-save-part" v-if="ruleForm.datasource_type === 'hdfs'">
-          <el-form-item label="Format" prop="data_type" key="hdfs-data_type">
-            <el-select v-model="ruleForm.data_type" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-form-item :label="$t('workflow.format')" prop="data_type" key="hdfs-data_type">
+            <el-select v-model="ruleForm.data_type" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in dataTypeList" :key="item"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="Save Path" prop="target" key="hdfs-target">
-            <el-input v-model.trim="ruleForm.target" style="width: 100%;" :placeholder="$t('common.pleaseInput')" />
+          <el-form-item :label="$t('workflow.savePath')" prop="target" key="hdfs-target">
+            <el-input v-model.trim="ruleForm.target" style="width: 100%;" :placeholder="$t('pleaseInput')" />
           </el-form-item>
         </div>
         <!-- hive -->
         <div class="form-save-part" v-if="['hive'].includes(ruleForm.datasource_type)">
-          <el-form-item label="Output Database" prop="database" key="hive-database">
-            <el-select filterable v-model="ruleForm.database" :loading="loadingDatabase" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-form-item :label="$t('workflow.outputDatabase')" prop="database" key="hive-database">
+            <el-select filterable v-model="ruleForm.database" :loading="loadingDatabase" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in outputDBList" :key="item"></el-option>
             </el-select>
           </el-form-item>
           <template class="select-create">
-            <div class="select-create-label"><span class="star txt-danger">*</span> Output Table Name</div>
+            <div class="select-create-label"><span class="star txt-danger">*</span> {{$t('workflow.outputTable')}}</div>
             <el-radio-group class="select-create-mode" v-model="targetMode" @change="changeTargetType">
-              <el-radio label="select">{{$t('selectExistTable')}}</el-radio>
-              <el-radio label="create">{{$t('createNewTable')}}</el-radio>
+              <el-radio label="select">{{$t('workflow.selectExistTable')}}</el-radio>
+              <el-radio label="create">{{$t('workflow.createNewTable')}}</el-radio>
             </el-radio-group>
             <el-form-item prop="target" v-if="targetMode==='select'" key="hive-table-select">
-              <el-select filterable v-model="ruleForm.target" :loading="loadingTarget" @visible-change="getTableList" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+              <el-select filterable v-model="ruleForm.target" :loading="loadingTarget" @visible-change="getTableList" style="width: 100%;" :placeholder="$t('pleaseSelect')">
                 <el-option :label="item" :value="item" v-for="item in outputTabLleist" :key="item"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item prop="target" v-if="targetMode==='create'" key="hive-table-create">
-              <el-input v-model.trim="ruleForm.target" :placeholder="$t('common.pleaseInput')" style="width: 100%;"></el-input>
+              <el-input v-model.trim="ruleForm.target" :placeholder="$t('pleaseInput')" style="width: 100%;"></el-input>
             </el-form-item>
           </template>
         </div>
         <!-- deltalake -->
         <div class="form-save-part" v-if="['deltalake'].includes(ruleForm.datasource_type)">
           <template class="select-create">
-            <div class="select-create-label"><span class="star txt-danger">*</span> Output Database</div>
+            <div class="select-create-label"><span class="star txt-danger">*</span> {{$t('workflow.outputDatabase')}}</div>
             <el-radio-group class="select-create-mode" v-model="databaseMode" @change="changeDatabaseType">
-              <el-radio label="select">{{$t('selectExistDatabase')}}</el-radio>
-              <el-radio label="create">{{$t('createNewDatabase')}}</el-radio>
+              <el-radio label="select">{{$t('workflow.selectExistDatabase')}}</el-radio>
+              <el-radio label="create">{{$t('workflow.createNewDatabase')}}</el-radio>
             </el-radio-group>
             <el-form-item prop="database" v-if="databaseMode==='select'" key="deltalake-database-select">
-              <el-select filterable v-model="ruleForm.database" :loading="loadingDatabase" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+              <el-select filterable v-model="ruleForm.database" :loading="loadingDatabase" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('pleaseSelect')">
                 <el-option :label="item" :value="item" v-for="item in outputDBList" :key="item"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item prop="database" v-if="databaseMode==='create'" key="deltalake-database-create">
-              <el-input v-model.trim="ruleForm.database" :placeholder="$t('common.pleaseInput')" style="width: 100%;"></el-input>
+              <el-input v-model.trim="ruleForm.database" :placeholder="$t('pleaseInput')" style="width: 100%;"></el-input>
             </el-form-item>
           </template>
           <template class="select-create">
-            <div class="select-create-label"><span class="star txt-danger">*</span> Output Table Name</div>
+            <div class="select-create-label"><span class="star txt-danger">*</span> {{$t('workflow.outputTable')}}</div>
             <el-radio-group v-if="databaseMode === 'select'" class="select-create-mode" v-model="targetMode" @change="changeTargetType">
-              <el-radio label="select">{{$t('selectExistTable')}}</el-radio>
-              <el-radio label="create">{{$t('createNewTable')}}</el-radio>
+              <el-radio label="select">{{$t('workflow.selectExistTable')}}</el-radio>
+              <el-radio label="create">{{$t('workflow.createNewTable')}}</el-radio>
             </el-radio-group>
             <el-form-item prop="target" v-if="targetMode==='select'" key="deltalake-table-select">
-              <el-select filterable v-model="ruleForm.target" :loading="loadingTarget" @visible-change="getTableList" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+              <el-select filterable v-model="ruleForm.target" :loading="loadingTarget" @visible-change="getTableList" style="width: 100%;" :placeholder="$t('pleaseSelect')">
                 <el-option :label="item" :value="item" v-for="item in outputTabLleist" :key="item"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item prop="target" v-if="targetMode==='create'" key="deltalake-table-create">
-              <el-input v-model.trim="ruleForm.target" :placeholder="$t('common.pleaseInput')" style="width: 100%;"></el-input>
+              <el-input v-model.trim="ruleForm.target" :placeholder="$t('pleaseInput')" style="width: 100%;"></el-input>
             </el-form-item>
           </template>
         </div>
@@ -129,7 +129,7 @@
     <div class="view-sql">
       <div class="view-sql-label">
         MLSQL VIEWER
-        <el-tooltip placement="top" :content="$t('common.copy')">
+        <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
       </div>
@@ -158,16 +158,16 @@ import CodeEditor from '../CodeEditor'
           { required: true, trigger: 'change' }
         ],
         datasource_type: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         data_type: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         connection: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         source: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         database: [ // deltalake 的情况下需要校验
           { required: true, validator: this.validateDatabase, trigger: this.databaseMode === 'select' ? 'change' : 'blur' }
@@ -432,18 +432,18 @@ export default class SaveNodeForm extends Vue {
     }
   }
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
   
   async validateDatabase (rule, value, callback) {
     if (!value) {
-      const message = this.databaseMode === 'select' ? 'Please select' : 'Please input'
+      const message = this.databaseMode === 'select' ? this.$t('pleaseSelect') : this.$t('pleaseInput')
       return callback(new Error(message))
     } else if (this.databaseMode === 'create') {
       const res = await this.getDBList('delta')
       const list = res.data?.list ?? []
       if (list.map(v => v.toLowerCase()).includes(value.toLowerCase())) {
-        return callback(new Error('Please input another name.'))
+        return callback(new Error(this.$t('workflow.inputOtherName')))
       } else {
         return callback()
       }
@@ -454,7 +454,7 @@ export default class SaveNodeForm extends Vue {
   isInclude (value, list, callback) {
     const isInclude = list.map(v => v.toLowerCase()).includes(value.toLowerCase())
     if (isInclude) {
-      return callback(new Error('Please input another name.'))
+      return callback(new Error(this.$t('workflow.inputOtherName')))
     } else {
       return callback()
     }
@@ -464,7 +464,7 @@ export default class SaveNodeForm extends Vue {
     if (!value) {
       let message = 'Please input'
       if (this.ruleForm.datasource_type !== 'hdfs') {
-        message = this.targetMode === 'select' ? 'Please select' : 'Please input'
+        message = this.targetMode === 'select' ? this.$t('pleaseSelect') : this.$t('pleaseInput')
       }
       return callback(new Error(message))
     } else {
@@ -511,21 +511,9 @@ export default class SaveNodeForm extends Vue {
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {},
-    "en": {
-      "connectionTip": "Please connect JDBC data source from settings first.",
-      "createNewDatabase": "Create a New Database",
-      "selectExistDatabase": "Select a Database",
-      "createNewTable": "Create a New Table",
-      "selectExistTable": "Select a Table"
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .node-container {
   &.extra-style {
     .node-container-form {

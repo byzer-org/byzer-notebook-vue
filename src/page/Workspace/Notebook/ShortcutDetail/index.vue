@@ -76,7 +76,7 @@ export default class ShortcutDetail extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 .shortcut-detail {
   .shortcut-sub-title {
     display: flex;
@@ -89,7 +89,7 @@ export default class ShortcutDetail extends Vue {
     font-weight: 500;
     font-size: 14px;
     color: $--color-text-primary;
-    border-bottom: 1px solid $--border-divider-color;
+    border-bottom: 1px solid $--border-color-base;
   }
 }
 </style>

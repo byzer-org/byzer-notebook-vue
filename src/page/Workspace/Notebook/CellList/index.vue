@@ -5,60 +5,44 @@
       <div class="cellListPage-header-btns">
         <el-dropdown class="btn" @command="handleNotebook">
           <span class="el-dropdown-link">
-            <el-button type="text" size="medium" icon="el-ksd-icon-document_22"><i class="el-ksd-icon-arrow_down_22"></i></el-button>
+            <i class="el-ksd-icon-document_22 font-22"></i><i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="add">{{ $t('notebook.createNotebook') }}</el-dropdown-item>
-            <el-dropdown-item command="rename">{{ $t('common.rename') }}</el-dropdown-item>
-            <el-dropdown-item command="clone">{{ $t('common.clone') }}</el-dropdown-item>
+            <el-dropdown-item command="rename">{{ $t('rename') }}</el-dropdown-item>
+            <el-dropdown-item command="clone">{{ $t('clone') }}</el-dropdown-item>
             <el-dropdown-item command="delete"> <span class="txt-danger">{{ $t('notebook.deleteNotebook') }}</span></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div class="btn">
-          <el-tooltip placement="bottom" content="Save">
-            <el-button @click="handleSave(true)" type="text" size="medium" :disabled="isRunningAll" icon="el-ksd-icon-save_22" ></el-button>
-          </el-tooltip>
+          <icon-btn icon="el-ksd-icon-save_22" :disabled="isRunningAll" :text="$t('save')" :handler="() => handleSave(true)" />
+          <!-- <el-tooltip placement="bottom" content="Save">
+            <icon-btn @click="isRunningAll && handleSave(true)" type="text" size="medium" :disabled="isRunningAll" icon="el-ksd-icon-save_22" ></icon-btn>
+          </el-tooltip> -->
         </div>
         <div class="btn">
-          <el-tooltip placement="bottom" content="Add Cell">
-            <el-button @click="handleAddCell({ type: 'below' }, selectCell)" type="text" size="medium" icon="el-ksd-icon-add_22" ></el-button>
-          </el-tooltip>
+          <icon-btn icon="el-ksd-icon-add_22" :disabled="isRunningAll" :text="$t('notebook.addCell')" :handler="() => handleAddCell({ type: 'below' }, selectCell)" />
         </div>
         <div class="btn">
-          <el-tooltip placement="bottom" content="Run" v-if="selectCellStatus !== 'RUNNING' || isRunningAll" >
-            <el-button @click="hanldeExcuteSelectCell('run')" :disabled="isRunningAll" type="text" size="medium" icon="el-ksd-icon-play_outline_22"></el-button>
-          </el-tooltip>
-          <el-tooltip placement="bottom" content="Stop" v-else>
-            <el-button @click="hanldeExcuteSelectCell('stop')" :disabled="isRunningAll" type="text" size="medium" icon="el-ksd-icon-stop_with_border_22" ></el-button>
-          </el-tooltip>
+          <icon-btn v-if="selectCellStatus !== 'RUNNING' || isRunningAll" icon="el-ksd-icon-play_outline_22" :disabled="isRunningAll" :text="$t('run')" :handler="() => hanldeExcuteSelectCell('run')" />
+          <icon-btn v-else icon="el-ksd-icon-stop_with_border_22" :disabled="isRunningAll" :text="$t('notebook.stop')" :handler="() => hanldeExcuteSelectCell('stop')" />
         </div>
         <div class="btn">
-          <el-tooltip placement="bottom" content="Run Next">
-            <el-button @click="handleRunNext" type="text" size="medium" icon="el-ksd-icon-fast_forward_outline_22"></el-button>
-          </el-tooltip>
+          <icon-btn icon="el-ksd-icon-fast_forward_outline_22" :disabled="isRunningAll" :text="$t('notebook.runNext')" :handler="handleRunNext" />
         </div>
         <div class="btn">
-          <el-tooltip placement="bottom" content="Cancel All" v-if="isRunningAll">
-            <el-button @click="hanldeExcuteAll('stop')" type="text" size="medium" icon="el-ksd-icon-stop_with_border_22"></el-button>
-          </el-tooltip>
-          <el-tooltip placement="bottom" content="Run All" v-else>
-            <el-button :disabled="selectCellStatus === 'RUNNING'" @click="hanldeExcuteAll('run')" type="text" size="medium" icon="el-ksd-icon-play_all_outline_22" ></el-button>
-            <el-button :disabled="selectCellStatus === 'RUNNING'" @click="hanldeExcuteAll('run')" type="text" size="medium" icon="el-ksd-icon-play_all_outline_22"></el-button>
-          </el-tooltip>
+          <icon-btn v-if="isRunningAll" icon="el-ksd-icon-stop_with_border_22" :text="$t('notebook.cancelAll')" :handler="() => hanldeExcuteAll('stop')" />
+          <icon-btn v-else icon="el-ksd-icon-play_all_outline_22" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
         </div>
         <div class="btn">
-          <el-tooltip placement="bottom" content="Delete">
-            <el-button :disabled="newCellList.length === 1" @click="hanldeExcuteSelectCell('delete')" type="text" size="medium" icon="el-ksd-icon-delete_22"></el-button>
-          </el-tooltip>
+          <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
         </div>
         <div class="btn">
-          <el-tooltip placement="bottom" content="Clear All Results">
-            <el-button @click="clearAllResult" type="text" size="medium" :disabled="isRunningAll" icon="el-ksd-icon-clear_22"></el-button>
-          </el-tooltip>
+          <icon-btn icon="el-ksd-icon-clear_22" :disabled="isRunningAll" :text="$t('notebook.clearAllResult')" :handler="clearAllResult" />
         </div>
         <el-dropdown class="btn" trigger="hover" @command="handleChanged">
-          <span class="el-dropdown-link">
-            <el-button type="text" size="medium">{{ editType }}<i class="el-ksd-icon-arrow_down_22"></i></el-button>
+          <span class="drop-text">
+            {{ editType }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="MLSQL">MLSQL</el-dropdown-item>
@@ -66,7 +50,9 @@
             <el-dropdown-item command="Markdown">Markdown</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button type="text" size="medium" @click="handleShowShortcutHelp">{{ $t('showShortcutHelp') }}</el-button>
+        <div class="btn">
+          <span class="hasEvent" @click="handleShowShortcutHelp">{{ $t('notebook.showShortcutHelp') }}</span>
+        </div>
       </div>
     </div>
     <div class="cellListPage-container">
@@ -705,10 +691,10 @@ export default {
         this.exuteType = type
         if (this.exuteType === 'stop') {
           this.$confirm(this.$t('notebook.discardAllJob'), this.$t('notebook.discardTitle'), {
-              confirmButtonText: this.$t('common.discard'),
-              cancelButtonText: this.$t('common.cancel'),
+              confirmButtonText: this.$t('discard'),
+              cancelButtonText: this.$t('cancel'),
               type: 'warning',
-              centerButton: true
+              customClass: 'centerButton'
             }).then(() => {
             this.confirmExcuteAll(true)
           })
@@ -896,43 +882,30 @@ export default {
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "showShortcutHelp": "Show Shortcut Help"
-    },
-    "en": {
-      "showShortcutHelp": "Show Shortcut Help"
-    }
-  }
-</i18n>
+
 <style lang="scss">
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 .cellListPage {
   width: 100%;
   background-color: $--color-white;
   &-header {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid $--border-secondary;
+    border-bottom: 1px solid $--border-color-light;
     &-btns {
       flex: 1;
       width: 0;
-      padding: 6px 0;
+      padding: 13px 0;
       padding-left: 30px;
       display: flex;
       .btn {
-        // margin-right: 15px;
-      }
-      .drop-text {
+        height: 22px;
+        margin-right: 15px;
         line-height: 22px;
-        cursor: pointer;
-        &.is-disabled {
-          color: $--color-text-disabled;
-          cursor: not-allowed;
-        }
-        .icon {
-          vertical-align: top;
+        .drop-text {
+          i {
+            vertical-align: middle;
+          }
         }
       }
     }
@@ -981,7 +954,7 @@ export default {
           .cell-order {
             width: 100%;
             padding-left: 55px;
-            color: $--color-info-secondary;
+            color: $--color-info-lighter;
             padding-bottom: 4px;
             .text {
               display: inline-block;

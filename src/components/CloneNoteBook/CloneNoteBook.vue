@@ -3,7 +3,7 @@
   <el-dialog
     width="400px"
     append-to-body
-    :title="this.$t(`${this.form.type}Clone`)"
+    :title="this.$t(`workspace.${this.form.type}Clone`)"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :visible="isShow"
@@ -13,18 +13,18 @@
         :model="form"
         :rules="rules"
         ref="$form">
-        <el-form-item prop="name" :label="$t(`${form.type}Name`)">
+        <el-form-item prop="name" :label="$t(`workspace.${form.type}Name`)">
           <el-input
             v-model="form.name"
-            :placeholder="$t('nameHolder')"
+            :placeholder="$t('workspace.nameHolder')"
             @change="value => handleInput('name', value)"
           />
         </el-form-item>
       </el-form>
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal" size="medium">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('common.clone')}}</el-button>
+      <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('clone')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -86,9 +86,9 @@ export default class CloneNoteBookModal extends Vue {
   // 校验参数名称
   async validateName (rule, value, callback) {
     if (!value || value.trim() === '') {
-      return callback(new Error(`Please input ${this.form.type} name`))
+      return callback(new Error(this.$t('workspace.nameHolder')))
     } else if (!notebookNameReg.test(value)) {
-      return callback(new Error(this.$t('notebook.nameFormatValidTip')))
+      return callback(new Error(this.$t('workspace.nameFormatValidTip')))
     }
     return callback()
   }
@@ -139,23 +139,5 @@ export default class CloneNoteBookModal extends Vue {
   }
 }
 </script>
-<i18n>
-{
-  "zh": {
-    "notebookClone": "Clone Notebook",
-    "folderCloneFolder": "Clone Folder",
-    "workflowClone": "Clone Workflow"
-  },
-  "en": {
-    "notebookClone": "Clone Notebook",
-    "folderCloneFolder": "Clone Folder",
-    "workflowClone": "Clone Workflow",
-    "notebookName": "Notebook Name",
-    "workflowName": "Workflow Name",
-    "folderName": "Folder Name",
-    "nameHolder": "Please enter a name"
-  }
-}
-</i18n>
 <style lang="scss">
 </style>

@@ -2,8 +2,8 @@
 <template>
   <div class="cell-box" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" >
     <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode ? 'block' : 'none'}">
-      <el-button type="text" size="medium" icon="el-ksd-icon-grab_dots_22" :disabled="isRunningAll" class="move-cell"></el-button><br />
-      <el-button type="text" size="medium" icon="el-ksd-icon-add_22" @click="handleAddBelow"></el-button>
+      <div><icon-btn icon="el-ksd-icon-grab_dots_22" class="move-cell" :disabled="isRunningAll" /></div>
+      <div class="mt-5"><icon-btn icon="el-ksd-icon-add_22" :handler="handleAddBelow" /></div>
     </div>
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
       <!-- Code编辑器 & log -->
@@ -106,8 +106,8 @@ export default {
   computed: {
     actions () {
       return [
-        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('common.run'), iconClass: 'el-ksd-icon-play_outline_22', handler: this.handleRun },
-        { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('common.stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStop },
+        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('run'), iconClass: 'el-ksd-icon-play_outline_22', handler: this.handleRun },
+        { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStop },
         { disabled: this.isRunningAll, isShow: !this.showCode, label: this.$t('notebook.showCode'), iconClass: 'el-ksd-icon-arrow_down_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: this.showCode, label: this.$t('notebook.hideCode'), iconClass: 'el-ksd-icon-arrow_up_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: true, label: this.$t('notebook.addAbove'), iconClass: '', handler: this.handleAddAbove },
@@ -189,10 +189,10 @@ export default {
     async handleStop () {
       this.$emit('handleSave')
       this.$confirm(this.$t('notebook.discardJobText'), this.$t('notebook.discardTitle'), {
-          confirmButtonText: this.$t('common.discard'),
-          cancelButtonText: this.$t('common.cancel'),
+          confirmButtonText: this.$t('discard'),
+          cancelButtonText: this.$t('cancel'),
           type: 'warning',
-          centerButton: true
+          customClass: 'centerButton'
       }).then(() => {
         this.confirmStopJob()
       })
@@ -284,7 +284,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/variables.scss';
+@import '../../../../assets/css/variable.scss';
 .cell-box {
   width: 100%;
   position: relative;
@@ -318,7 +318,7 @@ export default {
     min-height: 60px;
     padding: 8px;
     padding-left: 15px;
-    border: 1px solid $--border-secondary;
+    border: 1px solid $--border-color-light;
     &:hover {
       box-shadow: 0px 1px 4px rgba(63, 89, 128, 0.16);
     }

@@ -6,7 +6,7 @@
         {{item}}
       </li>
     </ul>
-    <div class="log-message-nodata" v-else>No logs available</div>
+    <div class="log-message-nodata" v-else>{{$t('notebook.nologs')}}</div>
   </div>
 </template>
 <script>
@@ -79,7 +79,7 @@ export default class ExcuteDetail extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 .log-message {
   &-list {
     padding: 10px;

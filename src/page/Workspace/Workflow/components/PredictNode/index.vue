@@ -3,18 +3,18 @@
     <div class="node-container-form">
       <el-form ref="form" label-position="top" :model="ruleForm" :rules="rules">
         <el-form-item label="Select the Table to Be Predicted" prop="source">
-          <el-select v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-select v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item" :value="item" v-for="item in tableList" :key="item"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Select the Model" prop="model">
-          <el-select filterable v-model="ruleForm.model" @change="changeModel" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-select filterable v-model="ruleForm.model" @change="changeModel" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item.model" :value="item.model" v-for="item in modelList" :key="item.model"></el-option>
           </el-select>
           <el-alert
-            class="form-alert-type"
+            class="hide-bg"
             v-if="!modelList.length"
-            :title="$t('noModelTip')"
+            :title="$t('workflow.noModelTip')"
             icon="el-ksd-icon-info_border_16"
             :show-background="false"
             :closable="false"
@@ -28,24 +28,24 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="autoSelectByMetric" class="indent predict" key="auto" prop="predict_param.value" v-if="ruleForm.predict_param.auto">
-          <el-select v-model="ruleForm.predict_param.value" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-select v-model="ruleForm.predict_param.value" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item" :value="item" v-for="item in modelGroupList" :key="item"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Model Group Index" class="indent predict" prop="predict_param.value" key="custom" v-else>
-          <el-select v-model="ruleForm.predict_param.value" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-select v-model="ruleForm.predict_param.value" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item.label" :value="item.value" v-for="item in aigIndexList" :key="item.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="Output" prop="target">
-          <el-input v-model.trim="ruleForm.target" style="width: 100%;" :placeholder="$t('common.pleaseInput')" />
+          <el-input v-model.trim="ruleForm.target" style="width: 100%;" :placeholder="$t('pleaseInput')" />
         </el-form-item>
       </el-form>
     </div>
     <div class="view-sql">
       <div class="view-sql-label">
         MLSQL VIEWER
-        <el-tooltip placement="top" :content="$t('common.copy')">
+        <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
       </div>
@@ -70,16 +70,16 @@ import CodeEditor from '../CodeEditor'
     rules () {
       return {
         source: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         model: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         target: [
           { required: true, validator: this.validateTarget, trigger: 'blur' }
         ],
         'predict_param.auto': [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         'predict_param.value': [
           { required: false, validator: this.validateValue, trigger: 'change'}
@@ -153,7 +153,7 @@ export default class SaveNodeForm extends Vue {
 
   validateValue (rule, value, callback) {
     if (!value && value !== 0) {
-      return callback(new Error(this.$t('common.pleaseSelect')))
+      return callback(new Error(this.$t('pleaseSelect')))
     } else {
       return callback()
     }
@@ -161,18 +161,18 @@ export default class SaveNodeForm extends Vue {
 
   validateTarget (rule, value, callback) {
     if (!value) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('pleaseInput')))
     } else {
       const initOutput = this.initRuleForm?.target ?? ''
       const duplicateOutputCount = this.tableList.filter(v => v === value).length
       const isDuplicate = (duplicateOutputCount > 0) && (initOutput !== value)
-      return isDuplicate ? callback(new Error(this.$t('outputDuplicate'))) : callback()
+      return isDuplicate ? callback(new Error(this.$t('workflow.outputDuplicate'))) : callback()
     }
   }
 
   validateGroup (rule, value, callback) {
     if (!value) {
-      return callback(this.$t('common.pleaseSelect'))
+      return callback(this.$t('pleaseSelect'))
     }
   }
 
@@ -243,24 +243,11 @@ export default class SaveNodeForm extends Vue {
     return this.$refs.form.validate()
   }
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "outputDuplicate": "该 Output 已存在于 Workflow 中，请重新命名。"
-    },
-    "en": {
-      "outputDuplicate": "Output already exists in workflow, please rename it.",
-      "noModelTip": "No model is available. Please train a model first."
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
-.node-container {}
 </style>
 

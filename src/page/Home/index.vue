@@ -2,19 +2,19 @@
   <div class="home-page">
     <div class="home-page-container">
       <div class="home-page-container-item">
-        <div class="home-page-container-item-title">Quick Start</div>
-        <div class="home-page-container-item-text">Get started with a sample notebook</div>
-        <el-button class="mt-15" type="primary" @click="gotoNotebook">Explore</el-button>
+        <div class="home-page-container-item-title">{{$t('home.quick_start')}}</div>
+        <div class="home-page-container-item-text">{{$t('home.quick_start_desc')}}</div>
+        <el-button class="mt-15" type="primary" @click="gotoNotebook">{{$t('home.explore')}}</el-button>
       </div>
       <div class="home-page-container-item">
-        <div class="home-page-container-item-title">Import & Connect Data</div>
-        <div class="home-page-container-item-text">Quickly import and connect data</div>
-        <el-button class="mt-15" type="primary" @click="handleUploadFile">Upload</el-button>
+        <div class="home-page-container-item-title">{{$t('home.upload_data')}}</div>
+        <div class="home-page-container-item-text">{{$t('home.upload_data_desc')}}</div>
+        <el-button class="mt-15" type="primary" @click="handleUploadFile">{{$t('home.upload')}}</el-button>
       </div>
       <div class="home-page-container-item">
-        <div class="home-page-container-item-title">Create a New Notebook</div>
-        <div class="home-page-container-item-text">Create a notebook to start cleaning, processing, visualizing, and modeling your data.</div>
-        <el-button class="mt-15" type="primary" @click="handleCreateNotebook">Create</el-button>
+        <div class="home-page-container-item-title">{{$t('home.create_notebook')}}</div>
+        <div class="home-page-container-item-text">{{$t('home.create_notebook_desc')}}</div>
+        <el-button class="mt-15" type="primary" @click="handleCreateNotebook">{{$t('home.create')}}</el-button>
       </div>
     </div>
   </div>
@@ -122,7 +122,7 @@ export default class HomePage extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 .home-page {
   width: 100%;
   height: calc(100vh - $page-header-height);

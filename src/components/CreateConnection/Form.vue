@@ -1,31 +1,31 @@
 <template>
   <div class="connect-form">
     <el-form size="small" ref="form" :model="form" :rules="rules">
-      <el-form-item label="Connection Name" prop="name">
+      <el-form-item :label="$t('settings.connectionName')" prop="name">
         <el-input v-model.trim="form.name" :placeholder="$t('pleaseInput')" />
       </el-form-item>
-      <el-form-item label="Data Source" prop="datasource">
+      <el-form-item :label="$t('settings.dataSource')" prop="datasource">
         <el-select v-model="form.datasource" style="width: 100%;" @change="value => handleInput('datasource', value)"  :placeholder="$t('pleaseSelect')">
           <el-option :label="item.label" :value="item.value" v-for="item in dataSourceList" :key="item.value"></el-option>
         </el-select>
       </el-form-item>
       <div class="connection">
-        <el-form-item label="URL" prop="url">
+        <el-form-item :label="$t('settings.url')" prop="url">
           <el-input v-model.trim="form.url" :placeholder="$t('pleaseInput')" @change="value => handleInput('url', value)" />
         </el-form-item>
-        <el-form-item label="Driver" prop="driver">
+        <el-form-item :label="$t('settings.driver')" prop="driver">
           <el-input v-model.trim="form.driver" :placeholder="$t('pleaseInput')" @change="value => handleInput('driver', value)" />
         </el-form-item>
-        <el-form-item label="Username" prop="username">
+        <el-form-item :label="$t('settings.username')" prop="username">
           <el-input v-model.trim="form.username" :placeholder="$t('pleaseInput')" @change="value => handleInput('username', value)" />
         </el-form-item>
-        <el-form-item label="Password" prop="password">
+        <el-form-item :label="$t('settings.password')" prop="password">
           <el-input v-model.trim="form.password" type="password" :placeholder="$t('pleaseInput')"  @change="value => handleInput('password', value)"/>
         </el-form-item>
         <div class="connection-parameters">
           <div class="connection-parameters-container">
-            <div class="connection-parameters-container-key mr-12 el-form-item__label">Parameter Name</div>
-            <div class="connection-parameters-container-value el-form-item__label">Parameter Value</div>
+            <div class="connection-parameters-container-key mr-12 el-form-item__label">{{$t('settings.paramName')}}</div>
+            <div class="connection-parameters-container-value el-form-item__label">{{$t('settings.paramValue')}}</div>
           </div>
           <div class="connection-parameters-container" v-for="(item, index) in form.parameter" :key="index">
             <div class="connection-parameters-container-key mr-12">
@@ -53,8 +53,8 @@
           </div>
         </div>
         <div class="connection-connect">
-          <el-button size="small" type="primary" @click="testConnection">{{$t('common.connect')}}</el-button>
-          <span class="status" :class="connectionResult" v-if="connectionResult"><span class="icon"></span>{{$t(connectionResult)}}</span>
+          <el-button size="small" type="primary" @click="testConnection">{{$t('connect')}}</el-button>
+          <span class="status" :class="connectionResult" v-if="connectionResult"><span class="icon"></span>{{$t(`settings.${connectionResult}`)}}</span>
         </div>
       </div>
     </el-form>
@@ -118,9 +118,9 @@ export default class CreateConnectionForm extends Vue {
     if (!value) {
       return callback(new Error(this.$t('pleaseInput')))
     } else if (!/^[0-9a-zA-Z][0-9a-zA-Z_]*$/.test(value)) {
-      return callback(new Error(this.$t('validator1')))
+      return callback(new Error(this.$t('settings.validator1')))
     } else if (value.length > 50) {
-      return callback(new Error(this.$t('validator2')))
+      return callback(new Error(this.$t('settings.validator2')))
     } else {
       return callback()
     }
@@ -167,24 +167,9 @@ export default class CreateConnectionForm extends Vue {
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "pleaseInput": "Please input",
-      "pleaseSelect": "Please select",
-      "connecting": "connecting",
-      "error": "Connect Failed",
-      "success": "Connected",
-      "validator1": "Only supports letters, numbers and _, and can't starts with _",
-      "validator2": "Can't excced 50 characters"
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 .connect-form {
   height: 450px;
   overflow-y: auto;
@@ -246,15 +231,15 @@ export default class CreateConnectionForm extends Vue {
           }
         }
         &.error {
-          color: $--color-danger-hover;
+          color: $--color-danger-light;
           .icon {
-            background-color: $--color-danger-hover;
+            background-color: $--color-danger-light;
           }
         }
         &.connecting {
-          color: $--color-text-disabled;
+          color: $--font-color-disabled-base;
           .icon {
-            background-color: $--color-text-disabled;
+            background-color: $--font-color-disabled-base;
           }
         }
       }

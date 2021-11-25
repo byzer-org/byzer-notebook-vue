@@ -10,29 +10,29 @@
       :close-on-press-escape="false"
     >
       <div slot="title" class="dialog-title">
-        {{ $t('findAndReplaceTitle') }}
+        {{ $t('notebook.findAndReplaceTitle') }}
       </div>
       <!-- 查询文本 -->
       <div>
-        <span class="find-and-replace-sub-title">{{ $t('findKey') }}</span>
+        <span class="find-and-replace-sub-title">{{ $t('notebook.findKey') }}</span>
         <div class="find-and-replace-input">
           <el-input
             ref="findAndReplaceInputRef"
             v-model="findKey"
             @input="handleFindKeyChanged"
-            :placeholder="$t('inputPlaceholder')"
+            :placeholder="$t('notebook.inputPlaceholder')"
             auto-complete="off"
           ></el-input>
         </div>
       </div>
       <!-- 替换内容 -->
       <div>
-        <span class="find-and-replace-sub-title">{{ $t('replaceKey') }}</span>
+        <span class="find-and-replace-sub-title">{{ $t('notebook.replaceKey') }}</span>
         <div class="find-and-replace-input">
           <el-input
             v-model="replaceKey"
             @input="handleReplaceKeyChanged"
-            :placeholder="$t('inputPlaceholder')"
+            :placeholder="$t('notebook.inputPlaceholder')"
             auto-complete="off"
           ></el-input>
         </div>
@@ -40,21 +40,10 @@
       <!-- 查找结果 -->
       <div v-if="results && results.length > 0">
         <div>
-          <span class="find-and-replace-sub-title">{{ $t('findResult') }}</span>
+          <span class="find-and-replace-sub-title">{{ $t('notebook.findResult') }}</span>
           <el-button-group size="small">
-            <el-button
-              @click="selectPrevious"
-              plain
-              size="mini"
-              icon="el-ksd-icon-arrow_left_22"
-              >{{ $t('previous') }}</el-button
-            >
-            <el-button
-              @click="selectNext"
-              plain
-              size="mini"
-              >{{ $t('next') }}<i class="el-ksd-icon-arrow_right_22"></i></el-button
-            >
+            <el-button @click="selectPrevious" plain size="mini" icon="el-ksd-icon-arrow_left_22" >{{ $t('notebook.previous') }}</el-button>
+            <el-button @click="selectNext" plain size="mini" >{{ $t('notebook.next') }}<i class="el-ksd-icon-arrow_right_22"></i></el-button>
           </el-button-group>
         </div>
         <div class="find-result-list-container">
@@ -63,21 +52,14 @@
             v-for="cell in results"
             :key="cell.cellInfo.id + cell.cellIndex + cell.lineIndex"
           >
-            <div class="find-result-list-index">
-              {{ 'Cell ' + (cell.cellIndex + 1) }}
-            </div>
-            <div
-              class="find-result-list-content"
-              v-html="handleContent(cell)"
-            ></div>
+            <div class="find-result-list-index">{{ 'Cell ' + (cell.cellIndex + 1) }}</div>
+            <div class="find-result-list-content" v-html="handleContent(cell)"></div>
           </div>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="replaceCurrent">{{ $t('replace') }}</el-button>
-        <el-button type="primary" @click="replaceAll">{{
-          $t('replaceAll')
-        }}</el-button>
+        <el-button @click="replaceCurrent">{{ $t('notebook.replace') }}</el-button>
+        <el-button type="primary" @click="replaceAll">{{$t('notebook.replaceAll')}}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -351,35 +333,8 @@ export default class FindAndReplace extends Vue {
 }
 </script>
 
-<i18n>
-{
-  "zh": {
-    "findAndReplaceTitle": "Find and Replace",
-    "findKey": "Content",
-    "replaceKey": "Replace",
-    "inputPlaceholder": "Please Enter...",
-    "findResult": "Results",
-    "previous": "Prev",
-    "next": "Next",
-    "replace": "Replace",
-    "replaceAll": "Replace All"
-  },
-  "en": {
-    "findAndReplaceTitle": "Find and Replace",
-    "findKey": "Content",
-    "replaceKey": "Replace",
-    "inputPlaceholder": "Please Enter...",
-    "findResult": "Results",
-    "previous": "Prev",
-    "next": "Next",
-    "replace": "Replace",
-    "replaceAll": "Replace All"
-  }
-}
-</i18n>
-
 <style lang="scss">
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 
 .find-and-replace {
   .dialog-title {
@@ -418,7 +373,7 @@ export default class FindAndReplace extends Vue {
       text-align: center;
       font-size: 12px;
       transform: scale(0.75);
-      color: $--color-info-secondary;
+      color: $--color-info-lighter;
     }
     .find-result-list-content {
       flex: 1;

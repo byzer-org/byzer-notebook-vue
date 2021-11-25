@@ -5,7 +5,7 @@
       type="info"
       show-icon>
       <div slot="title">
-        Read Only. To edit it further, click <a href="javascript:;" :class="!this.cellList.length && 'disabled-style is-disabled'" @click="saveAsNotebook">Save As Notebook</a>
+        {{$t('workflow.readOnlyTip')}}<a href="javascript:;" :class="!this.cellList.length && 'disabled-style is-disabled'" @click="saveAsNotebook">{{$t('workflow.saveAsNotebook')}}</a>
       </div>
     </el-alert>
     <ul class="workflow-preview-cell-list">
@@ -71,7 +71,7 @@ export default class WorkflowPreview extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .workflow-preview {
   width: 100%;
   background-color: $--color-white;
@@ -87,7 +87,7 @@ export default class WorkflowPreview extends Vue {
       padding-right: 72px;
       .cell-order {
         width: 100%;
-        color: $--color-info-secondary;
+        color: $--color-info-lighter;
         padding-bottom: 4px;
         &-text {
           display: inline-block;
@@ -101,7 +101,7 @@ export default class WorkflowPreview extends Vue {
         min-height: 60px;
         padding: 8px;
         padding-left: 16px;
-        border: 1px solid $--border-secondary;
+        border: 1px solid $--border-color-light;
         &:hover {
           box-shadow: 0px 1px 4px rgba(63, 89, 128, 0.16);
         }

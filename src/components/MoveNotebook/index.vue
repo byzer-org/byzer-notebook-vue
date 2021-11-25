@@ -3,7 +3,7 @@
   <el-dialog
     width="400px"
     append-to-body
-    :title="$t('common.move')"
+    :title="$t('move')"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :visible="isShow"
@@ -29,8 +29,8 @@
       </el-form>
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" @click="handleSubmit">{{$t('common.move')}}</el-button>
+      <el-button @click="closeModal">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" @click="handleSubmit">{{$t('move')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -138,9 +138,9 @@ export default class MoveNotebookModal extends Vue {
   // 校验参数名称
   async validateName (rule, value, callback) {
     if (!value.length) {
-      return callback(new Error('Please select a folder'))
+      return callback(new Error(this.$t('notebook.selectFolder')))
     } else if (value[value.length - 1] === this.currentNodeParentInfo.folder_id || (this.isMoveFolder && value.includes(this.fileInfo.folder_id))) {
-      return callback(new Error('Please select another folder'))
+      return callback(new Error(this.$t('notebook.reselectFolder')))
     } else {
       return callback()
     }
@@ -214,20 +214,20 @@ export default class MoveNotebookModal extends Vue {
   }
   getMoveTip (target_folder_name, move_name, type) {
     const fileType = this.isMoveFolder ? 'folder' : type
-    const titleType = this.$t(fileType)
-    const notebookText = target_folder_name === '' ? this.$t('notebook.moveTipText2', { type: titleType.toLowerCase() }) : this.$t('notebook.moveTipText1', { type: titleType.toLowerCase(), folderName: target_folder_name })
-    const folderText = target_folder_name === '' ? this.$t('notebook.moveFolderTipText2', { type: titleType.toLowerCase() }) : this.$t('notebook.moveFolderTipText1', { type: titleType.toLowerCase(), folderName: target_folder_name })
+    const titleType = this.$t(`workspace.${fileType}`).toLowerCase()
+    const notebookText = target_folder_name === '' ? this.$t('notebook.moveTipText2', { type: titleType }) : this.$t('notebook.moveTipText1', { type: titleType, folderName: target_folder_name })
+    const folderText = target_folder_name === '' ? this.$t('notebook.moveFolderTipText2', { type: titleType }) : this.$t('notebook.moveFolderTipText1', { type: titleType, folderName: target_folder_name })
     const isMoveFolder = type === 'folder'
     const title = this.$t('notebook.moveTipTitle', { name: move_name })
     const text = isMoveFolder ? folderText : notebookText
     return this.$confirm(text, title, {
-      confirmButtonText: isMoveFolder ? this.$t('common.ok') : this.$t('common.replace'),
-      cancelButtonText: this.$t('common.cancel'),
+      confirmButtonText: isMoveFolder ? this.$t('ok') : this.$t('replace'),
+      cancelButtonText: this.$t('cancel'),
       confirmButtonClass: isMoveFolder ? '' : 'el-button--danger',
       showClose: false,
       showCancelButton: !isMoveFolder,
       type: 'warning',
-      centerButton: true
+      customClass: 'centerButton'
     })
   }
   
@@ -235,14 +235,3 @@ export default class MoveNotebookModal extends Vue {
 </script>
 <style lang="scss">
 </style>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "notebook": "Notebook",
-      "workflow": "Workflow",
-      "folder": "Folder"
-    }
-  }
-</i18n>

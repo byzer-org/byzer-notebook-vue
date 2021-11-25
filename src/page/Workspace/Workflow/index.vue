@@ -3,20 +3,20 @@
     <div class="notebook-workflow-actions">
       <el-dropdown @command="handleNotebook">
         <span class="el-dropdown-link">
-          <el-button type="text" size="medium" icon="el-ksd-icon-document_22" ><i class="el-ksd-icon-arrow_down_22"></i></el-button>
+          <i class="el-ksd-icon-document_22 font-22"></i><i class="el-ksd-icon-arrow_down_22 font-22"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command='add'>{{$t('createWorkflow')}}</el-dropdown-item>
-          <el-dropdown-item command='rename'>{{$t('common.rename')}}</el-dropdown-item>
-          <el-dropdown-item command='clone'>{{$t('common.clone')}}</el-dropdown-item>
+          <el-dropdown-item command='add'>{{$t('workflow.createWorkflow')}}</el-dropdown-item>
+          <el-dropdown-item command='rename'>{{$t('rename')}}</el-dropdown-item>
+          <el-dropdown-item command='clone'>{{$t('clone')}}</el-dropdown-item>
           <el-dropdown-item command='delete'>
-            <span class="txt-danger">{{$t('deleteWorkflow')}}</span>
+            <span class="txt-danger">{{$t('workflow.deleteCurrentWorkflow')}}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-tooltip placement="bottom" content="Save as Notebook">
-        <el-button type="text" size="medium" :disabled="disableSaveToNotebook" icon="el-ksd-icon-save_22" @click="saveAsNotebook"></el-button>
-      </el-tooltip>
+      <span class="ml-15">
+        <icon-btn icon="el-ksd-icon-save_22" :text="$t('workflow.saveAsNotebook')" :handler="saveAsNotebook" />
+      </span>
     </div>
     <el-tabs v-model="activeName" class="tabs_button" @tab-click="handleClick">
       <el-tab-pane label="Notebook" name="notebook">
@@ -105,11 +105,11 @@ export default class WorkflowWrapper extends Vue {
       const type = this.nodeInfo?.type
       const detailIsChanged = this.nodeInfo && this.$refs.nodeEditor?.$refs[`${type}Node`]?.detailIsChanged
       if (detailIsChanged) {
-        this.$confirm('You will lose unsaved content if you change to another node.', 'Warning', {
-          confirmButtonText: this.$t('common.ok'),
-          cancelButtonText: this.$t('common.cancel'),
+        this.$confirm(this.$t('workflow.changeNodeTip'), this.$t('tip'), {
+          confirmButtonText: this.$t('ok'),
+          cancelButtonText: this.$t('cancel'),
           type: 'warning',
-          centerButton: true
+          customClass: 'centerButton'
         }).then(() => {
           this.confirmOpenNewNode(node)
         })
@@ -153,7 +153,7 @@ export default class WorkflowWrapper extends Vue {
     if (isSubmit) {
       this.$message({
         type: 'success',
-        message: this.$t('notebook.createSuccess')
+        message: this.$t('workspace.createSuccess')
       })
       this.changeTabList(newNotobookInfo)
     }
@@ -184,18 +184,9 @@ export default class WorkflowWrapper extends Vue {
   }
 }
 </script>
-<i18n>
-{
-  "zh":{},
-  "en":{
-    "createWorkflow": "Add a new Workflow",
-    "deleteWorkflow": "Delete Current Workflow"
-  }
-}
-</i18n>
 
 <style lang="scss">
-@import '../../../assets/css/config.scss';
+@import '../../../assets/css/variable.scss';
 .notebook-workflow {
   width: 100%;
   height: calc(100vh - 100px);
@@ -205,17 +196,19 @@ export default class WorkflowWrapper extends Vue {
     width: 180px;
     display: inline-block;
     margin-left: calc(100% - 196px);
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   &-actions {
+    height: 22px;
     position: absolute;
-    left: 16px;
+    left: 30px;
+    top: 13px;
   }
   &-container {
     width: 100%;
     height: calc(100vh - 150px) ;
     overflow-y: auto;
-    border-top: 1px solid $--border-secondary;
+    border-top: 1px solid $--border-color-light;
     position: relative;
     padding-right: 0px;
     transition: all .2s ease-in;
@@ -233,7 +226,7 @@ export default class WorkflowWrapper extends Vue {
       top: 0;
       width: 400px;
       height: 100%;
-      border-left: 1px solid $--border-secondary;
+      border-left: 1px solid $--border-color-light;
       background-color: $--color-white;
     }
   }

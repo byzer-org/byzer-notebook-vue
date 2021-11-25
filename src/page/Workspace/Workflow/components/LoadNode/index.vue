@@ -3,13 +3,13 @@
     <div class="node-container-form">
       <el-form ref="form" label-position="top" :model="ruleForm" :rules="rules">
         <el-form-item label="Data Source" prop="datasource_type">
-          <el-select v-model="ruleForm.datasource_type" @change="changeDatasourceType" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-select v-model="ruleForm.datasource_type" @change="changeDatasourceType" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item.label" :value="item.value" v-for="item in dataSourceList" :key="item.value"></el-option>
           </el-select>
         </el-form-item>
         <div class="form-part" v-if="ruleForm.datasource_type==='hdfs'">
           <el-form-item label="Data Type" prop="data_type">
-            <el-select v-model="ruleForm.data_type" @change="handleChangeDataType" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+            <el-select v-model="ruleForm.data_type" @change="handleChangeDataType" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in dataTypeList" :key="item"></el-option>
             </el-select>
           </el-form-item>
@@ -26,37 +26,37 @@
         </div>
         <div class="form-part" v-if="['hive'].includes(ruleForm.datasource_type)">
           <el-form-item label="Database" prop="database" key="hive-database">
-            <el-select filterable v-model="ruleForm.database" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+            <el-select filterable v-model="ruleForm.database" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in databaseList" :key="item"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Source Table Name" prop="source" key="hive-table">
-            <el-select filterable v-model="ruleForm.source" @visible-change="getTableList"  style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+            <el-select filterable v-model="ruleForm.source" @visible-change="getTableList"  style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in tableList" :key="item"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="form-part" v-if="['deltalake'].includes(ruleForm.datasource_type)">
           <el-form-item label="Database" prop="database" key="deltalake-database">
-            <el-select filterable v-model="ruleForm.database" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+            <el-select filterable v-model="ruleForm.database" @visible-change="getDatabaseList" @change="changeDatabase" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in databaseList" :key="item"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="Source Table Name" prop="source" key="deltalake-table">
-            <el-select filterable v-model="ruleForm.source" @visible-change="getTableList" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+            <el-select filterable v-model="ruleForm.source" @visible-change="getTableList" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in tableList" :key="item"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="form-part" v-if="ruleForm.datasource_type==='jdbc'">
           <el-form-item label="Exsisting Connection" prop="connection">
-            <el-select filterable v-model="ruleForm.connection" :disabled="!connectionList.length" @change="changeConnection" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+            <el-select filterable v-model="ruleForm.connection" :disabled="!connectionList.length" @change="changeConnection" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item.name" :value="item.id" v-for="item in connectionList" :key="item.id"></el-option>
             </el-select>
             <el-alert
-              class="form-alert-type"
+              class="hide-bg"
               v-if="!connectionList.length"
-              :title="$t('connectionTip')"
+              :title="$t('workflow.connectionTip')"
               icon="el-ksd-icon-info_border_16"
               :show-background="false"
               :closable="false"
@@ -64,13 +64,13 @@
             </el-alert>
           </el-form-item>
           <el-form-item label="Source Table Name" prop="source" key="jdbc-source">
-            <el-select filterable v-model="ruleForm.source" @visible-change="getTableByConnection" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+            <el-select filterable v-model="ruleForm.source" @visible-change="getTableByConnection" style="width: 100%;" :placeholder="$t('pleaseSelect')">
               <el-option :label="item" :value="item" v-for="item in connectionTableList" :key="item"></el-option>
             </el-select>
             <el-alert
-              class="form-alert-type"
+              class="hide-bg"
               v-if="!connectionList.length"
-              :title="$t('connectionTip')"
+              :title="$t('workflow.connectionTip')"
               icon="el-ksd-icon-info_border_16"
               :show-background="false"
               :closable="false"
@@ -79,7 +79,7 @@
           </el-form-item>
         </div>
         <el-form-item label="Output" prop="target">
-          <el-input v-model.trim="ruleForm.target" :placeholder="$t('common.pleaseInput')"></el-input>
+          <el-input v-model.trim="ruleForm.target" :placeholder="$t('pleaseInput')"></el-input>
         </el-form-item>
         <el-form-item label="Advanced Parameter" v-if="(ruleForm.datasource_type==='hdfs') && (ruleForm.data_type === 'csv')">
           <el-switch v-model="showAdvancedParams"></el-switch>
@@ -99,7 +99,7 @@
                   <span>{{formItem.name}}</span>
                 </el-tooltip>
               </span>
-              <el-select v-if="formItem['value_type'] === 'ENUM'" v-model="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+              <el-select v-if="formItem['value_type'] === 'ENUM'" v-model="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('pleaseSelect')">
                 <el-option :label="item" :value="item" v-for="item in formItem['enum_values']" :key="item"></el-option>
               </el-select>
               <el-select
@@ -110,10 +110,10 @@
                 filterable
                 allow-create
                 :duplicate-remove="true"
-                :placeholder="$t('common.pleaseInput')"
+                :placeholder="$t('pleaseInput')"
                 default-first-option>
               </el-select>
-              <el-input v-else v-model.trim="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('common.pleaseInput')" />
+              <el-input v-else v-model.trim="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('pleaseInput')" />
             </el-form-item>
           </el-form>
         </template>
@@ -121,7 +121,7 @@
     </div>
     <div class="view-sql">
       <div class="view-sql-label">MLSQL VIEWER
-        <el-tooltip placement="top" :content="$t('common.copy')">
+        <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
       </div>
@@ -148,19 +148,19 @@ import ParameterValid from '../TrainNode/ParameterValid.vue'
     rules () {
       return {
         datasource_type: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         data_type: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         database: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         connection: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         source: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         target: [
           { required: true, validator: this.validateTarget, trigger: 'blur' }
@@ -364,12 +364,12 @@ export default class LoadNodeForm extends Vue {
   }
   validateTarget (rule, value, callback) {
     if (!value) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('pleaseInput')))
     } else {
       const initOutput = this.initRuleForm?.target ?? ''
       const duplicateOutputCount = this.existingTableList.filter(v => v === value).length
       const isDuplicate = (duplicateOutputCount > 0) && (initOutput !== value)
-      return isDuplicate ? callback(new Error(this.$t('outputDuplicate'))) : callback()
+      return isDuplicate ? callback(new Error(this.$t('workflow.outputDuplicate'))) : callback()
     }
   }
 
@@ -522,24 +522,12 @@ export default class LoadNodeForm extends Vue {
     }
   }
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "outputDuplicate": "该 Output 已存在于 Workflow 中，请重新命名。"
-    },
-    "en": {
-      "connectionTip": "Please connect JDBC data source from settings first.",
-      "outputDuplicate": "Output already exists in workflow, please rename it."
-    }
-  }
-</i18n>
-
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .node-container.load {
   .parameter-part {
     padding: 8px;

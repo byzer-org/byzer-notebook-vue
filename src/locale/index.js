@@ -7,6 +7,7 @@ import enLocale from 'element-ui/lib/locale/lang/en'
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 import zh from './zh.json'
 import en from './en.json'
+import { getGlobalLang } from '@/util'
 
 Vue.use(VueI18n)
 
@@ -22,7 +23,7 @@ const messages = {
 }
 
 export default new VueI18n({
-  locale: 'en',
+  locale: getGlobalLang(),
   messages,
   silentFallbackWarn: true
 })

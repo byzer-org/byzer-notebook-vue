@@ -3,7 +3,7 @@
   <el-dialog
     width="400px"
     append-to-body
-    :title="$t(`${type}Title`)"
+    :title="$t(`settings.${type}Title`)"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :visible="isShow"
@@ -12,8 +12,8 @@
       <Form ref="ruleForm" />
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal" size="medium">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('common.ok')}}</el-button>
+      <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('ok')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -107,13 +107,3 @@ export default class CreateConnectionModal extends Vue {
 </script>
 <style lang="scss">
 </style>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "addTitle": "Add External Data Source",
-      "editTitle": "Edit External Data Source"
-    }
-  }
-</i18n>

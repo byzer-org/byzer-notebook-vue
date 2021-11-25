@@ -17,15 +17,15 @@
         <el-form-item prop="name" :label="labelName">
           <el-input
             v-model="form.name"
-            :placeholder="$t('notebook.notebookNameHolder')"
+            :placeholder="$t('workspace.nameHolder')"
             @change="value => handleInput('name', value)"
           />
         </el-form-item>
       </el-form>
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal" size="medium">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('common.create')}}</el-button>
+      <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('create')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -69,9 +69,9 @@ export default class CreateNoteBookModal extends Vue {
 
   get labelName () {
     if (this.form.type === 'workflow') {
-      return this.$t('workflowName')
+      return this.$t('workspace.workflowName')
     } else {
-      return this.$t('notebookName')
+      return this.$t('workspace.notebookName')
     }
   }
 
@@ -85,9 +85,9 @@ export default class CreateNoteBookModal extends Vue {
 
   get title () {
     if (this.form.type === 'save-as-notebook') {
-      return this.$t('saveAsNotebook')
+      return this.$t('workspace.saveAsNotebook')
     } else {
-      return this.$t(`${this.form.type}Create`)
+      return this.$t(`workspace.${this.form.type}Create`)
     }
   }
 
@@ -109,7 +109,7 @@ export default class CreateNoteBookModal extends Vue {
     if (!value || value.trim() === '') {
       return callback(new Error(`Please input ${type} name`))
     } else if (!notebookNameReg.test(value)) {
-      return callback(new Error(this.$t('notebook.nameFormatValidTip')))
+      return callback(new Error(this.$t('workspace.nameFormatValidTip')))
     }
     return callback()
   }
@@ -158,16 +158,3 @@ export default class CreateNoteBookModal extends Vue {
 </script>
 <style lang="scss">
 </style>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "saveAsNotebook": "Save as Notebook",
-      "notebookCreate": "Create Notebook",
-      "workflowCreate": "Create Workflow",
-      "notebookName": "Notebook Name",
-      "workflowName": "Workflow Name"
-    }
-  }
-</i18n>

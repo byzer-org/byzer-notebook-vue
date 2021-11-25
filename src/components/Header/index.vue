@@ -8,6 +8,7 @@
     </div>
     <div class="page-header-right">
       <GlobalHelp />
+      <ChangeLang />
       <UserInfo class="page-header-right-item" v-if="!isLoginPage" />
     </div>
   </div>
@@ -18,12 +19,14 @@ import { Component } from 'vue-property-decorator'
 import HeaderMenu from './HeaderMenu'
 import UserInfo from './UserInfo'
 import GlobalHelp from './GlobalHelp'
+import ChangeLang from './ChangeLang.vue'
 import { mapState } from 'vuex'
 @Component({
   components: {
     HeaderMenu,
     UserInfo,
-    GlobalHelp
+    GlobalHelp,
+    ChangeLang
   },
   computed: {
     ...mapState({
@@ -38,7 +41,7 @@ export default class Header extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 .page-header {
   display: flex;
   background-color: $--color-nav;

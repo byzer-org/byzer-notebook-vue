@@ -2,16 +2,16 @@
 <template>
   <div ref="notebookListRef" class="notebook-list">
     <div class="header">
-      <span class="title">Workspace</span>
+      <span class="title">{{$t('menu.workspace')}}</span>
       <el-dropdown class="notebook-drop" @command="command => handleWorkspace(command)">
         <span class="el-dropdown-link">
-          <el-button type="text" size="medium" icon="el-ksd-icon-add_22"></el-button>
+          <i class="el-ksd-icon-add_22 font-22 hasEvent"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="handleCreateFolder">{{$t('common.folder')}}</el-dropdown-item>
-          <el-dropdown-item command="handleCreateNoteBook">{{$t('common.notebook')}}</el-dropdown-item>
-          <el-dropdown-item command="handleCreateWorkflow">{{$t('common.workflow')}}</el-dropdown-item>
-          <el-dropdown-item command="handleImport">{{$t('common.import')}}</el-dropdown-item>
+          <el-dropdown-item command="handleCreateFolder">{{$t('folder')}}</el-dropdown-item>
+          <el-dropdown-item command="handleCreateNoteBook">{{$t('workspace.notebook')}}</el-dropdown-item>
+          <el-dropdown-item command="handleCreateWorkflow">{{$t('workspace.workflow')}}</el-dropdown-item>
+          <el-dropdown-item command="handleImport">{{$t('import')}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -39,29 +39,28 @@
           </span>
           <el-dropdown class="node-more node-actions" :style="{'left': treeOffsetWidth + 'px'}" @command="(command) => handleWorkspace(command, node)">
             <span class="el-dropdown-link" @click.stop>
-              <!-- <el-button type="text" icon="el-ksd-icon-more_22" size="small"></el-button> -->
-              <icon-btn :hasbg="true" icon="el-ksd-icon-more_22 font-22" />
+              <el-button class="icon-bg" icon="el-ksd-icon-more_22" type="text" size="small"></el-button>
             </span>
             <el-dropdown-menu slot="dropdown">
               <template v-if="data.id">
-                <el-dropdown-item command="changeActiveTab">{{$t('common.open')}}</el-dropdown-item>
-                <el-dropdown-item command="handleRename">{{$t('common.rename')}}</el-dropdown-item>
-                <el-dropdown-item command="handleClone">{{$t('common.clone')}}</el-dropdown-item>
-                <el-dropdown-item command="handleMove">{{$t('common.move')}}</el-dropdown-item>
-                <el-dropdown-item command="handleExport">{{$t('common.export')}}</el-dropdown-item>
+                <el-dropdown-item command="changeActiveTab">{{$t('open')}}</el-dropdown-item>
+                <el-dropdown-item command="handleRename">{{$t('rename')}}</el-dropdown-item>
+                <el-dropdown-item command="handleClone">{{$t('clone')}}</el-dropdown-item>
+                <el-dropdown-item command="handleMove">{{$t('move')}}</el-dropdown-item>
+                <el-dropdown-item command="handleExport">{{$t('export')}}</el-dropdown-item>
                 <el-dropdown-item command="handleDelete">
-                  <span class="txt-danger">{{$t('common.delete')}}</span>
+                  <span class="txt-danger">{{$t('delete')}}</span>
                 </el-dropdown-item>
               </template>
               <template v-else>
-                <el-dropdown-item command="handleCreateFolder">Add Folder</el-dropdown-item>
-                <el-dropdown-item command="handleCreateNoteBook">Add Notebook</el-dropdown-item>
-                <el-dropdown-item command="handleCreateWorkflow">Add Workflow</el-dropdown-item>
-                <el-dropdown-item command="handleMove">{{$t('common.move')}}</el-dropdown-item>
-                <el-dropdown-item command="handleRename">{{$t('common.rename')}}</el-dropdown-item>
-                <el-dropdown-item command="handleClone">{{$t('common.clone')}}</el-dropdown-item>
+                <el-dropdown-item command="handleCreateFolder">{{$t('workspace.folderCreate')}}</el-dropdown-item>
+                <el-dropdown-item command="handleCreateNoteBook">{{$t('workspace.notebookCreate')}}</el-dropdown-item>
+                <el-dropdown-item command="handleCreateWorkflow">{{$t('workspace.workflowCreate')}}</el-dropdown-item>
+                <el-dropdown-item command="handleMove">{{$t('move')}}</el-dropdown-item>
+                <el-dropdown-item command="handleRename">{{$t('rename')}}</el-dropdown-item>
+                <el-dropdown-item command="handleClone">{{$t('clone')}}</el-dropdown-item>
                 <el-dropdown-item command="handleDelete" v-if="showDeleteFolderBtn(node)">
-                  <span class="txt-danger">{{$t('common.delete')}}</span>
+                  <span class="txt-danger">{{$t('delete')}}</span>
                 </el-dropdown-item>
               </template>
             </el-dropdown-menu>
@@ -206,7 +205,7 @@ export default class WorkspaceList extends Vue {
     if (isSubmit) {
       this.$message({
         type: 'success',
-        message: this.$t('notebook.createSuccess')
+        message: this.$t('workspace.createSuccess')
       })
       this.$emit('fetchNotebookList')
     }
@@ -263,20 +262,21 @@ export default class WorkspaceList extends Vue {
     }
   }
   getMoveTip (target_folder_name, move_name, type) {
-    const titleType = type === 'notebook' ? this.$t('common.notebook') : this.$t('common.folder')
-    const notebookText = target_folder_name === '' ? this.$t('notebook.moveTipText2', { type: titleType.toLowerCase() }) : this.$t('notebook.moveTipText1', { type: titleType.toLowerCase(), folderName: target_folder_name })
-    const folderText = target_folder_name === '' ? this.$t('notebook.moveFolderTipText2', { type: titleType.toLowerCase() }) : this.$t('notebook.moveFolderTipText1', { type: titleType.toLowerCase(), folderName: target_folder_name })
+    const titleType = type === 'notebook' ? this.$t('notebook') : this.$t('folder')
+    const titleText = titleType.toLowerCase()
+    const notebookText = target_folder_name === '' ? this.$t('notebook.moveTipText2', { type: titleText }) : this.$t('notebook.moveTipText1', { type: titleText, folderName: target_folder_name })
+    const folderText = target_folder_name === '' ? this.$t('notebook.moveFolderTipText2', { type: titleText }) : this.$t('notebook.moveFolderTipText1', { type: titleText, folderName: target_folder_name })
     const isMoveFolder = type === 'folder'
     const title = this.$t('notebook.moveTipTitle', { name: move_name })
     const text = isMoveFolder ? folderText : notebookText
     return this.$confirm(text, title, {
-      confirmButtonText: isMoveFolder ? this.$t('common.ok') : this.$t('common.replace'),
-      cancelButtonText: this.$t('common.cancel'),
+      confirmButtonText: isMoveFolder ? this.$t('ok') : this.$t('replace'),
+      cancelButtonText: this.$t('cancel'),
       confirmButtonClass: isMoveFolder ? '' : 'el-button--danger',
       showClose: false,
       showCancelButton: !isMoveFolder,
       type: 'warning',
-      centerButton: true
+      customClass: 'centerButton'
     })
   }
   async handleDrop (draggingNode, dropNode, dropType, event) {
@@ -389,7 +389,7 @@ export default class WorkspaceList extends Vue {
 } 
 </script>
 <style lang="scss">
-@import '../../../assets/css/config.scss';
+@import '../../../assets/css/variable.scss';
 .notebook-list {
   width: 100%;
   height: 100%;
