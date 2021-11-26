@@ -10,7 +10,7 @@
     @close="isShow && closeModal()">
     <div slot="title" class="node-modal-title">
       <span class="text">{{nodeInfo ? nodeInfo.name : ''}}</span>
-      <el-tooltip placement="top" :content="$t('selectTip')" v-if="nodeType==='select'">
+      <el-tooltip placement="top" :content="$t('workflow.selectTip')" v-if="nodeType==='select'">
         <i class="el-ksd-icon-info_border_16 header-icon"></i>
       </el-tooltip>
     </div>
@@ -18,8 +18,8 @@
       <component :is="`${nodeType}Form`" v-if="isShow" ref="ruleForm" type="add" :nodeInfo="nodeInfo" :nodeTypeId="nodeInfo.id" :initRuleForm="form" />
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal" size="medium">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('common.ok')}}</el-button>
+      <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('ok')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -152,12 +152,3 @@ export default class CreateNodeModal extends Vue {
   }
 }
 </style>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "title": "Save"
-    }
-  }
-</i18n>

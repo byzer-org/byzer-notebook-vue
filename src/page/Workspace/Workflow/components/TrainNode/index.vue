@@ -2,17 +2,17 @@
   <div class="node-container train" :class="type === 'add' && 'extra-style'">
     <div class="node-container-form">
       <el-form ref="form" label-position="top" :model="ruleForm" :rules="rules">
-        <el-form-item label="Select the Algorithm" prop="algorithm">
-          <el-select v-model="ruleForm.algorithm" @change="changeAlgorithm" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+        <el-form-item :label="$t('selectAlgorithm')" prop="algorithm">
+          <el-select v-model="ruleForm.algorithm" @change="changeAlgorithm" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option filterable :label="item.name" :value="item.name" v-for="item in algorithmList" :key="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="Select the Table to Be trained" prop="source">
-          <el-select filterable v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+        <el-form-item :label="$t('tableTrained')" prop="source">
+          <el-select filterable v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item" :value="item" v-for="item in tableList" :key="item"></el-option>
           </el-select>
           <el-alert
-            class="form-alert-type"
+            class="hide-bg"
             v-if="!tableList.length"
             :title="$t('noTableTip')"
             icon="el-ksd-icon-info_border_16"
@@ -25,7 +25,7 @@
           <!-- Object.keys(parameters).length 当 originParamter 刚刚获取到，paramters 还未生成时会出现报错（初始值类型可能不对） -->
           <div class="form-custom">
             <span class="txt-danger">* </span>
-            <span class="label">Parameter Setting</span>
+            <span class="label">{{$t('parameterSetting')}}</span>
           </div>
           <el-form class="form-form" ref="paramForm" label-position="left" label-width="160px" :model="parameters">
             <el-form-item
@@ -40,7 +40,7 @@
                   <span>{{formItem.name}}</span>
                 </el-tooltip>
               </span>
-              <el-select v-if="formItem['value_type'] === 'ENUM'" v-model="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+              <el-select v-if="formItem['value_type'] === 'ENUM'" v-model="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('pleaseSelect')">
                 <el-option :label="item" :value="item" v-for="item in formItem['enum_values']" :key="item"></el-option>
               </el-select>
               <!-- <InputToTag :key="formItem.name" v-model="parameters[formItem.name]" v-else-if="formItem['value_type'] === 'ARRAY'"/> -->
@@ -52,25 +52,25 @@
                 filterable
                 allow-create
                 :duplicate-remove="true"
-                :placeholder="$t('common.pleaseInput')"
+                :placeholder="$t('pleaseInput')"
                 default-first-option>
               </el-select>
-              <el-input v-else v-model.trim="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('common.pleaseInput')" />
+              <el-input v-else v-model.trim="parameters[formItem.name]" style="width: 100%;" :placeholder="$t('pleaseInput')" />
             </el-form-item>
           </el-form>
         </template>
-        <el-form-item label="Model Name" prop="target">
-          <el-input v-model.trim="ruleForm.target" :placeholder="$t('common.pleaseInput')" />
+        <el-form-item :label="$t('modelName')" prop="target">
+          <el-input v-model.trim="ruleForm.target" :placeholder="$t('pleaseInput')" />
         </el-form-item>
-        <el-form-item label="Save Path" prop="save_path">
-          <el-input v-model.trim="ruleForm.save_path" :placeholder="$t('common.pleaseInput')" />
+        <el-form-item :label="$t('savePath')" prop="save_path">
+          <el-input v-model.trim="ruleForm.save_path" :placeholder="$t('pleaseInput')" />
         </el-form-item>
       </el-form>
     </div>
     <div class="view-sql">
       <div class="view-sql-label">
         MLSQL VIEWER
-        <el-tooltip placement="top" :content="$t('common.copy')">
+        <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
       </div>
@@ -95,10 +95,10 @@ import ParameterValid from './ParameterValid.vue'
     rules () {
       return {
         source: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         algorithm: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         target: [
           { required: true, validator: this.validateModel, trigger: 'blur' }
@@ -157,7 +157,7 @@ export default class TrainNodeForm extends Vue {
 
   validateModel (rule, value, callback) {
     if (!value) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('pleaseInput')))
     } else {
       return this.checkPathIsDuplicate(callback)
     }
@@ -175,7 +175,7 @@ export default class TrainNodeForm extends Vue {
   }
   validatePath (rule, value, callback) {
     if (!value) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('pleaseInput')))
     } else if (!value.startsWith('/')) {
       return callback(new Error(this.$t('pathValid')))
     } else {
@@ -307,38 +307,9 @@ export default class TrainNodeForm extends Vue {
 
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "maxGroup": "当前参数组超过上限，参数组合最多 9 组。",
-      "maxSize": "当前参数最多输入 3 个值。",
-      "valueType": "输入值类型错误，应该为 {type}。",
-      "valueRange": "输入值应在 [{min},{max}] 之间。",
-      "floatValid": "float 最多两位小数。",
-      "copySuccess": "复制成功!" ,
-      "pathValid": "path 必须以 / 开头。",
-      "minValue": "最小值是 {min}.",
-      "maxValue": "最大值是 {max}.",
-      "modelExist": "当前路径下已存在同名模型，请重命名。"
-    },
-    "en": {
-      "maxGroup": "Parameter groups exceed the upper limit. Maximum of nine groups.",
-      "maxSize": "Maximum of {size} values are allowed.",
-      "valueType": "Wrong data type, should be {type}",
-      "valueRange": "Input value should be in [{min},{max}]",
-      "floatValid": "At most two decimal places.",
-      "copySuccess": "Successfully Copied!" ,
-      "pathValid": "Path must start with /.",
-      "minValue": "Minimum value is {min}.",
-      "maxValue": "Maximum value is {max}.",
-      "modelExist": "Model with the same name already exists in the current path, please rename it.",
-      "noTableTip": "No table is available."
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .node-container.train {
   .node-container-form {
     padding: 16px;

@@ -1,7 +1,7 @@
 
 <template>
   <div class="shortcut-item">
-    <div class="description">{{ $t(content) }}</div>
+    <div class="description">{{ $t(`notebook.${content}`) }}</div>
     <div class="key-logo">
       <span v-if="shortcutList.length > 0" class="btn-wrapper">
         <span
@@ -70,87 +70,8 @@ export default class ShortcutItem extends Vue {
 }
 </script>
 
-<i18n>
-{
-  "zh": {
-    "hotKeyEditMode": "Switch to Edit Mode",
-    "hotKeyRunCell": "Run Cell",
-    "hotKeyCodeSuggest": "Code Suggest",
-    "hotKeyCodeEditor": "Code Editor",
-    "hotKeyMarkdownEditor": "Markdowm Editor",
-    "hotKeyFindAndReplace": "Find And Replace",
-    "hotKeyAddCellAbove": "Add Cell Above",
-    "hotKeyAddCell": "Add Cell Below",
-    "hotKeyDeleteCell": "Delete Cell",
-    "hotKeyCutCell": "Cut Cell",
-    "hotKeyCopyCell": "Copy Cell",
-    "hotKeyPasteCellAbove": "Paste Cell Above",
-    "hotKeyPasteCell": "Paste Cell Below",
-    "hotKeyUndoDelete": "Undo Delete",
-    "hotKeySave": "Save",
-    "hotKeyShowShortcutHelp": "Show Shortcut Help",
-    "hotKeySelectPreviousCell": "Select the Previous Cell",
-    "hotKeySelectNextCell": "Select the Next Cell",
-    "hotKeyTitleLevel1": "Title Level 1",
-    "hotKeyTitleLevel2": "Title Level 2",
-    "hotKeyTitleLevel3": "Title Level 3",
-    "hotKeyTitleLevel4": "Title Level 4",
-    "hotKeyCommandMode": "Switch to Command Mode",
-    "hotKeyMoveCousorToStartOfCell": "Move Cursor To Start of Cell",
-    "hotKeyMoveCousorToEndOfCell": "Move Cursor To End of Cell",
-    "hotKeyMoveCousorToStartOfLine": "Move Cursor To Start of Line",
-    "hotKeyMoveCousorToEndOfLine": "Move Cursor To End of Line",
-    "hotKeyToggleLineComment": "Toggle Line Comment",
-    "hotKeyIndent": "Indent",
-    "hotKeyUnindent": "Unindent",
-    "hotKeySelectAll": "Select All",
-    "hotKeyUndo": "Undo",
-    "hotKeyDeleteLine": "Delete Line",
-    "hotKeyCursorDown": "Cursor Down",
-    "hotKeyCursorUp": "Cursor Up"
-  },
-  "en": {
-    "hotKeyEditMode": "Switch to Edit Mode",
-    "hotKeyRunCell": "Run Cell",
-    "hotKeyCodeSuggest": "Code Suggest",
-    "hotKeyCodeEditor": "Code Editor",
-    "hotKeyMarkdownEditor": "Markdowm Editor",
-    "hotKeyFindAndReplace": "Find And Replace",
-    "hotKeyAddCellAbove": "Add Cell Above",
-    "hotKeyAddCell": "Add Cell Below",
-    "hotKeyDeleteCell": "Delete Cell",
-    "hotKeyCutCell": "Cut Cell",
-    "hotKeyCopyCell": "Copy Cell",
-    "hotKeyPasteCellAbove": "Paste Cell Above",
-    "hotKeyPasteCell": "Paste Cell Below",
-    "hotKeyUndoDelete": "Undo Delete",
-    "hotKeySave": "Save",
-    "hotKeyShowShortcutHelp": "Show Shortcut Help",
-    "hotKeySelectPreviousCell": "Select the Previous Cell",
-    "hotKeySelectNextCell": "Select the Next Cell",
-    "hotKeyTitleLevel1": "Title Level 1",
-    "hotKeyTitleLevel2": "Title Level 2",
-    "hotKeyTitleLevel3": "Title Level 3",
-    "hotKeyTitleLevel4": "Title Level 4",
-    "hotKeyCommandMode": "Switch to Command Mode",
-    "hotKeyMoveCousorToStartOfCell": "Move Cursor To Start of Cell",
-    "hotKeyMoveCousorToEndOfCell": "Move Cursor To End of Cell",
-    "hotKeyMoveCousorToStartOfLine": "Move Cursor To Start of Line",
-    "hotKeyMoveCousorToEndOfLine": "Move Cursor To End of Line",
-    "hotKeyToggleLineComment": "Toggle Line Comment",
-    "hotKeyIndent": "Indent",
-    "hotKeyUnindent": "Unindent",
-    "hotKeySelectAll": "Select All",
-    "hotKeyUndo": "Undo",
-    "hotKeyDeleteLine": "Delete Line",
-    "hotKeyCursorDown": "Cursor Down",
-    "hotKeyCursorUp": "Cursor Up"
-  }
-}
-</i18n>
-
 <style lang="scss" scoped>
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 .shortcut-item {
   margin: 9px 10px 9px 0;
   display: flex;

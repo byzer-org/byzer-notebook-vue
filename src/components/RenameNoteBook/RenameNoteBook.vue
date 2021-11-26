@@ -3,7 +3,7 @@
   <el-dialog
     width="400px"
     append-to-body
-    :title="$t(`${this.form.type}Rename`)"
+    :title="$t(`workspace.${this.form.type}Rename`)"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :visible="isShow"
@@ -14,18 +14,18 @@
         :model="form"
         :rules="rules"
         ref="$form">
-        <el-form-item prop="name" :label="$t(`${form.type}Name`)">
+        <el-form-item prop="name" :label="$t(`workspace.${form.type}Name`)">
           <el-input
             v-model="form.name"
-            :placeholder="$t('notebook.notebookNameHolder')"
+            :placeholder="$t('workspace.nameHolder')"
             @change="value => handleInput('name', value)"
           />
         </el-form-item>
       </el-form>
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal" size="large">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" size="large" @click="handleSubmit">{{$t('common.rename')}}</el-button>
+      <el-button @click="closeModal" size="large">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" size="large" @click="handleSubmit">{{$t('rename')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -90,7 +90,7 @@ export default class RenameNoteBookModal extends Vue {
     if (!value || value.trim() === '') {
       return callback(new Error(`Please input ${this.form.type} name`))
     } else if (!notebookNameReg.test(value)) {
-      return callback(new Error(this.$t('notebook.nameFormatValidTip')))
+      return callback(new Error(this.$t('workspace.nameFormatValidTip')))
     }
     return callback()
   }
@@ -135,20 +135,5 @@ export default class RenameNoteBookModal extends Vue {
   }
 }
 </script>
-<i18n>
-{
-  "zh": {
-  },
-  "en": {
-    "notebookRename": "Rename Notebook",
-    "folderRename": "Rename Folder",
-    "workflowRename": "Rename Workflow",
-    "notebookName": "Notebook Name",
-    "workflowName": "Workflow Name",
-    "folderName": "Folder Name",
-    "nameHolder": "Please enter a name"
-  }
-}
-</i18n>
 <style lang="scss">
 </style>

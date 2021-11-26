@@ -2,7 +2,7 @@
   <el-dialog
     width="400px"
     append-to-body
-    title="Upload File"
+    :title="$t('workspace.uploadFile')"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :visible="isShow"
@@ -12,7 +12,6 @@
         <el-upload
           class="upload-file"
           drag
-          accept="*"
           :headers="headers"
           action="/api/upload_file"
           :auto-upload="false"
@@ -20,13 +19,13 @@
           :on-change="changeFile"
           :on-remove="handleRemove"
           :fileList="fileList">
-          <div class="el-upload__text">{{$t('common.uploadFileText1')}}<em>{{$t('common.uploadFileText2')}}</em></div>
+          <div class="el-upload__text">{{$t('uploadFileText1')}}<em>{{$t('uploadFileText2')}}</em></div>
         </el-upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal" size="medium">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="loadingSubmit" size="medium" @click="handleSubmit">{{$t('common.submit')}}</el-button>
+      <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="loadingSubmit" size="medium" @click="handleSubmit">{{$t('submit')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -104,17 +103,17 @@ export default class FileUploadModal extends Vue {
   // 校验参数名称
   async validateFile (rule, value, callback) {
     if (!value) {
-      return callback(new Error(this.$t('fileRequired')))
+      return callback(new Error(this.$t('workspace.fileRequired')))
     } else {
       const newList = uniqBy(this.fileList, 'name')
       const isDuplicate = this.fileList.length !== newList.length
       if (isDuplicate) {
-        return callback(new Error(this.$t('validDupFile')))
+        return callback(new Error(this.$t('workspace.validDupFile')))
       } else if (this.isTrial) {
         if (this.checkFileSize()) {
-          return callback(new Error(this.$t('validSingleSize')))
+          return callback(new Error(this.$t('workspace.validSingleSize')))
         } else if (this.checkTotalSize()) {
-          return callback(new Error(this.$t('validTotalSize')))
+          return callback(new Error(this.$t('workspace.validTotalSize')))
         }
         return callback()
       } else {
@@ -129,6 +128,7 @@ export default class FileUploadModal extends Vue {
   }
 
   changeFile (file, fileList) {
+    console.log(file, 'file')
     this.fileList = fileList
     this.handleInput('file', this.fileList.map(v => v.raw))
     this.$refs.$form.validateField('file')
@@ -163,20 +163,6 @@ export default class FileUploadModal extends Vue {
   }
 }
 </script>
-<i18n>
-{
-  "zh": {
-    "fileRequired": "Please upload",
-    "validDupFile": "Please remove duplicate file."
-  },
-  "en": {
-    "fileRequired": "Please upload",
-    "validDupFile": "Please remove duplicate file.",
-    "validSingleSize": "Max file size is 200M",
-    "validTotalSize": "Max file total size is 500M"
-  }
-}
-</i18n>
 <style lang="scss">
 .upload-file {
   .el-upload {

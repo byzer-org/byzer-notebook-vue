@@ -74,15 +74,15 @@
         </el-tabs>
         <!-- tab 区 end -->
         <div class="container-r-nodata" v-else>
-          <div class="container-r-nodata-text">{{$t('createTip')}}</div>
+          <div class="container-r-nodata-text">{{$t('workspace.createTip')}}</div>
           <el-dropdown>
             <span class="el-dropdown-link">
-              <el-button type="default" plain icon="el-ksd-icon-add_22">Create</el-button>
+              <el-button type="default" plain icon="el-ksd-icon-add_22">{{$t('create')}}</el-button>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click="handleCreateNoteBook({type: 'notebook'})">{{$t('common.notebook')}}</el-dropdown-item>
-              <el-dropdown-item @click="handleCreateNoteBook({type: 'workflow'})">{{$t('common.workflow')}}</el-dropdown-item>
-              <el-dropdown-item @click="handleImport">{{$t('common.import')}}</el-dropdown-item>
+              <el-dropdown-item @click="handleCreateNoteBook({type: 'notebook'})">{{$t('notebook')}}</el-dropdown-item>
+              <el-dropdown-item @click="handleCreateNoteBook({type: 'workflow'})">{{$t('workflow')}}</el-dropdown-item>
+              <el-dropdown-item @click="handleImport">{{$t('import')}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -225,10 +225,10 @@ export default {
       const isEqual = this.arrayIsEqual(originList, changedList)
       if (!isEqual) {
         this.$confirm(this.$t('notebook.confirmCloseNotebook'), this.$t('notebook.unsaveTip'), {
-          confirmButtonText: this.$t('common.close'),
+          confirmButtonText: this.$t('close'),
           cancelButtonText: this.$t('notebook.backToEdit'),
           type: 'warning',
-          centerButton: true
+          customClass: 'centerButton'
         }).then(() => {
           this.confirmCloseTab(tabId)
         })
@@ -247,7 +247,7 @@ export default {
       if (isSubmit) {
         this.$message({
           type: 'success',
-          message: this.$t('notebook.createSuccess')
+          message: this.$t('workspace.createSuccess')
         })
         this.changeTabList(newNotobookInfo)
       }
@@ -276,7 +276,7 @@ export default {
       if (isSubmit) {
         this.$message({
           type: 'success',
-          message: this.$t('notebook.cloneSuccess')
+          message: this.$t('workspace.cloneSuccess')
         })
         if (item.type === 'folder') {
           this.fetchNotebookList()
@@ -311,18 +311,19 @@ export default {
       })
     },
     handleDelete (item) {
-      const title = this.$t(`${item.type}DeleteTitle`)
-      const text = this.$t('confirmDelete', {type: item.type})
+      const title = this.$t(`workspace.${item.type}DeleteTitle`)
+      const text = this.$t('workspace.confirmDelete', {type: this.$t(`workspace.${item.type}`)})
       this.$confirm(text, title, {
-        confirmButtonText: this.$t('common.delete'),
-        cancelButtonText: this.$t('common.cancel'),
+        confirmButtonText: this.$t('delete'),
+        cancelButtonText: this.$t('cancel'),
         confirmButtonClass: 'el-button--danger',
         type: 'warning',
-        centerButton: true
+        customClass: 'centerButton'
       }).then(() => {
         this.confirmDelete(item)
       }).catch(() => {      
       })
+      this.$forceUpdate()
     },
     async confirmDelete (item) {
       try {
@@ -335,7 +336,7 @@ export default {
           if (res) {
             this.$message({
               type: 'success',
-              message: this.$t('notebook.deleteSuccess')
+              message: this.$t('workspace.deleteSuccess')
             })
             if (item.type === 'folder') {
               this.fetchNotebookList()
@@ -513,26 +514,9 @@ export default {
   }
 }
 </script>
-<i18n>
-{
-  "zh": {
-    "notebookDeleteTitle": "Delete Notebook",
-    "folderDeleteTitle": "Delete Folder",
-    "workflowDeleteTitle": "Delete Workflow",
-    "confirmDelete": "Are you sure you want to delete this {type}? Please note this action can’t be reverted.",
-    "createTip": "Create a blank Notebook/Workflow or select an existing file"
-  },
-  "en": {
-    "notebookDeleteTitle": "Delete Notebook",
-    "folderDeleteTitle": "Delete Folder",
-    "workflowDeleteTitle": "Delete Workflow",
-    "confirmDelete": "Are you sure you want to delete this {type}? Please note this action can’t be reverted.",
-    "createTip": "Create a blank Notebook/Workflow or select an existing file"
-  }
-}
-</i18n>
+
 <style lang="scss">
-@import '../../../assets/css/config.scss';
+@import '../../../assets/css/variable.scss';
 .notebookPage {
   width: 100%;
   display: flex;
@@ -559,12 +543,12 @@ export default {
       z-index: 5;
       border-radius: 50%;
       cursor: pointer;
-      color: $--color-text-disabled;
+      color: $--font-color-disabled-base;
       background-color: $--color-white;
       box-shadow: 0px 2px 8px rgba(50, 73, 107, 0.24);
       &:hover {
         color: $--color-white;
-        background-color: $--color-primary-hover;
+        background-color: $--color-primary-light-1;
       }
     }
     .container-l {
@@ -576,7 +560,7 @@ export default {
     .resize-handler {
       width: 1px;
       height: 100%;
-      background-color: $--border-secondary;
+      background-color: $--border-color-light;
       position: absolute;
       user-select: none;
       cursor: ew-resize;
@@ -584,7 +568,7 @@ export default {
       top: 0px;
       right: 0px;
       &:hover {
-        background-color: $--color-primary-hover;
+        background-color: $--color-primary-light-1;
       }
     }
     
@@ -605,7 +589,7 @@ export default {
         align-items: center;
         &-nodata {
           text-align: center;
-          color: $--color-info-secondary;
+          color: $--color-info-lighter;
           &-text {
             padding-bottom: 16px;
           }

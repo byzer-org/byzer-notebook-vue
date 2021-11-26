@@ -1,10 +1,10 @@
 <template>
   <div class="jobs-page page-outer-padding">
-    <div class="page-inner-header">Job History</div>
+    <div class="page-inner-header">{{$t('jobs.jobHistory')}}</div>
     <div class="btns-search">
       <div class="btns">
-        <!-- <el-button type="primary" text :disabled="deleteList.length === 0" icon="el-ksd-icon-delete_22" @click="handleDelete()">{{$t('common.delete')}}</el-button> -->
-        <el-button type="text" size="medium" :disabled="stopList.length === 0" icon="el-ksd-icon-stop_with_border_22" @click="handleStop()">{{$t('common.discard')}}</el-button>
+        <!-- <el-button type="primary" text :disabled="deleteList.length === 0" icon="el-ksd-icon-delete_22" @click="handleDelete()">{{$t('delete')}}</el-button> -->
+        <el-button type="text" size="medium" :disabled="stopList.length === 0" icon="el-ksd-icon-stop_with_border_22" @click="handleStop()">{{$t('discard')}}</el-button>
       </div>
       <el-input prefix-icon="el-ksd-icon-search_22" style="width: 248px;" :placeholder="$t('jobs.filterHolder')" v-model="filterData.keyword" />
     </div>
@@ -25,56 +25,46 @@
       </el-table-column>
       <el-table-column
         prop="job_id"
-        label="Job Id"
+        :label="$t('jobs.jobId')"
         min-width="150">
         <template slot-scope="scope">
           <div class="job-id-wrap">
             <span>{{ scope.row.job_id }}</span>
-            <el-tooltip
-              placement="top"
-              :content="$t('common.copy')">
-              <el-button
-                type="text"
-                size="small"
-                icon="el-ksd-icon-dup_16"
-                v-clipboard:success="onCopy"
-                v-clipboard:copy="scope.row.job_id">
-              </el-button>
-            </el-tooltip>
+            <icon-btn icon="el-ksd-icon-dup_16" :text="$t('copy')" class="font-16" v-clipboard:success="onCopy" v-clipboard:copy="scope.row.job_id" />
           </div>
         </template>
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
         prop="user"
-        label="User"
+        :label="$t('jobs.user')"
         width="100">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
         prop="notebook"
-        label="Notebook"
+        :label="$t('jobs.notebook')"
         width="120">
       </el-table-column>
       <el-table-column
         sortable
         show-overflow-tooltip
         prop="start_time"
-        label="Start Time"
+        :label="$t('jobs.startTime')"
         :formatter="formateDate"
         width="180">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
         prop="duration"
-        label="Duration"
+        :label="$t('jobs.duration')"
         :formatter="formateDuration"
         width="140">
       </el-table-column>
       <el-table-column
         show-overflow-tooltip
         prop="status"
-        label="Status"
+        :label="$t('jobs.status')"
         width="150"
         column-key="status"
         :filter-multiple="false"
@@ -87,18 +77,14 @@
       </el-table-column>
       <el-table-column
         prop="engine"
-        label="Engine"
+        :label="$t('jobs.engine')"
         width="100">
       </el-table-column>
-      <el-table-column :label="$t('common.action')" width="100">
+      <el-table-column :label="$t('action')" width="100">
         <template slot-scope="scope">
-          <el-tooltip :content="$t('common.view')" placement="top">
-            <el-button type="text" size="medium" class="nobg-text" icon="el-ksd-icon-view_22" @click="getCode(scope.row)" />
-          </el-tooltip>
-          <el-tooltip :content="$t('common.discard')" placement="top">
-            <el-button type="text" size="medium" class="nobg-text" icon="el-ksd-icon-stop_with_border_22" :disabled="scope.row.status !== '0'" @click="scope.row.status === '0' && handleStop(scope.row)" />
-          </el-tooltip>
-          <!-- <IconBtn icon="el-icon-ksd-delete_22" :disabled="scope.row.status === '0'" :text="$t('common.delete')" :handler="() => handleDelete(scope.row)" /> -->
+          <icon-btn icon="el-ksd-icon-view_22" :text="$t('view')" :handler="() => getCode(scope.row)" />
+          <icon-btn icon="el-ksd-icon-stop_with_border_22" :text="$t('discard')" :disabled="scope.row.status !== '0'" :handler="() => handleStop(scope.row)" />
+          <!-- <icon-btn icon="el-icon-ksd-delete_22" :disabled="scope.row.status === '0'" :text="$t('delete')" :handler="() => handleDelete(scope.row)" /> -->
         </template>
       </el-table-column>
     </el-table>
@@ -215,10 +201,10 @@ export default class JobPage extends Vue {
   }
   handleDelete (item) {
     this.$confirm(this.$t('jobs.confirmDeleteJobs'), this.$t('jobs.deleteTitle'), {
-      confirmButtonText: this.$t('common.delete'),
-      cancelButtonText: this.$t('common.cancel'),
+      confirmButtonText: this.$t('delete'),
+      cancelButtonText: this.$t('cancel'),
       type: 'warning',
-      centerButton: true
+      customClass: 'centerButton'
     }).then(() => {
       this.confirmDelete(item)
     })
@@ -283,10 +269,10 @@ export default class JobPage extends Vue {
   async handleStop (item) {
     const text = item ? this.$t('notebook.discardJobText') : this.$t('notebook.discardAllJob')
     this.$confirm(text, this.$t('notebook.discardTitle'), {
-      confirmButtonText: this.$t('common.discard'),
-      cancelButtonText: this.$t('common.cancel'),
+      confirmButtonText: this.$t('discard'),
+      cancelButtonText: this.$t('cancel'),
       type: 'warning',
-      centerButton: true
+      customClass: 'centerButton'
     }).then(() => {
       this.confirmStopJob(item)
     })
@@ -307,12 +293,12 @@ export default class JobPage extends Vue {
     }))
   }
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 .jobs-page {
   .job-id-wrap {
     display: flex;

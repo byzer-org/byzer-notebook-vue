@@ -2,7 +2,9 @@
   <div class="action-button">
     <span class="action-element" v-for="(item, index) in iconActions" :key="index">
       <el-tooltip effect="dark" placement="top" :content="item.label" popper-class="action-item">
-        <el-button size="medium" :icon="item.iconClass" :disabled="item.disabled" @click="handleAction(item)"></el-button>
+        <el-button size="small" :disabled="item.disabled" @click="handleAction(item)">
+          <i class="font-22" :class="item.iconClass"></i>
+        </el-button>
       </el-tooltip>
     </span>
   </div>

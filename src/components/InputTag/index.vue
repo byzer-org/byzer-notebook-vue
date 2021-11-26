@@ -94,7 +94,7 @@ export default class InputToTag extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 .input-to-tag {
   width: 100%;
   border: 1px solid #E6EBF4;
@@ -138,12 +138,3 @@ export default class InputToTag extends Vue {
   }
 }
 </style>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "title": "Save"
-    }
-  }
-</i18n>

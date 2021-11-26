@@ -84,17 +84,9 @@ export default class FormItem extends Vue {
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .form-code-editor {
   border: 1px solid #eee;
   border-radius: 4px;

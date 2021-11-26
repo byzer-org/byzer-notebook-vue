@@ -18,8 +18,8 @@
         </el-tag>
       </div>
       <div class="form-select-btns-r">
-        <el-button size="mini" nobg-text icon="el-ksd-icon-clear_16" @click="clearResult" v-if="checkResult">Clear</el-button>
-        <el-button size="mini" nobg-text icon="el-ksd-icon-confirm_16" @click="checkSql">Check</el-button>
+        <el-button size="mini" type="text" icon="el-ksd-icon-clear_16" @click="clearResult" v-if="checkResult">{{$t('workflow.clear')}}</el-button>
+        <el-button size="mini" type="text" icon="el-ksd-icon-confirm_16" @click="checkSql">{{$t('workflow.check')}}</el-button>
       </div>
     </div>
   </div>
@@ -87,12 +87,12 @@ export default class SelectNodeForm extends Vue {
   }
   checkForm () {
     if (this.checkResult === 'error') {
-      return this.$confirm(this.$t('saveTipText'), this.$t('saveTipTitle'), {
-        confirmButtonText: this.$t('common.save'),
-        cancelButtonText: this.$t('common.cancel'),
+      return this.$confirm(this.$t('tip'), this.$t('workflow.saveTipTitle'), {
+        confirmButtonText: this.$t('save'),
+        cancelButtonText: this.$t('cancel'),
         showClose: false,
         type: 'warning',
-        centerButton: true
+        customClass: 'centerButton'
       })
     } else {
       return new Promise(function (resolve) {
@@ -123,21 +123,9 @@ export default class SelectNodeForm extends Vue {
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "saveTipTitle": "提示",
-      "saveTipText": "当前节点 MLSQL 语法错误，是否确认暂存该节点?"
-    },
-    "en": {
-      "saveTipTitle": "Warning",
-      "saveTipText": "MLSQL syntax of the current node is incorrect. Are you sure to save this node?"
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .form-select {
   width: 100%;
   height: 100%;
@@ -168,8 +156,7 @@ export default class SelectNodeForm extends Vue {
   }
   &-btns {
     width: 100%;
-    padding: 4px;
-    background-color: #fff;
+    background-color: $--color-white;
     position: absolute;
     left: 0;
     bottom: 0;
@@ -177,15 +164,16 @@ export default class SelectNodeForm extends Vue {
     display: flex;
     justify-content: space-between;
     &-l {
+      padding: 4px;
       .error {
-        color: $--color-danger-hover;
+        color: $--color-danger-light;
       }
       .success {
-        color: $--color-success-hover
+        color: $--color-success-light;
       }
     }
     &-r {
-      padding-top: 5px;
+      padding-right: 4px;
     }
   }
 }

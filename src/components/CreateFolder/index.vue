@@ -3,7 +3,7 @@
   <el-dialog
     width="400px"
     append-to-body
-    :title="$t('notebook.createFolderTitle')"
+    :title="$t('workspace.folderCreate')"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     :visible="isShow"
@@ -14,18 +14,18 @@
         :model="form"
         :rules="rules"
         ref="$form">
-        <el-form-item prop="name" :label="$t('notebook.folderName')">
+        <el-form-item prop="name" :label="$t('workspace.folderName')">
           <el-input
             v-model="form.name"
-            :placeholder="$t('notebook.notebookNameHolder')"
+            :placeholder="$t('workspace.nameHolder')"
             @change="value => handleInput('name', value)"
           />
         </el-form-item>
       </el-form>
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" @click="handleSubmit">{{$t('common.create')}}</el-button>
+      <el-button @click="closeModal">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" @click="handleSubmit">{{$t('create')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -89,9 +89,9 @@ export default class CreateFolderModal extends Vue {
       return
     }
     if (!value || value.trim() === '') {
-      return callback(new Error('Please input folder name'))
+      return callback(new Error(this.$t('workspace.nameHolder')))
     } else if (!notebookNameReg.test(value)) {
-      return callback(new Error(this.$t('notebook.nameFormatValidTip')))
+      return callback(new Error(this.$t('workspace.nameFormatValidTip')))
     }
     return callback()
   }
@@ -133,11 +133,3 @@ export default class CreateFolderModal extends Vue {
 </script>
 <style lang="scss">
 </style>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-    }
-  }
-</i18n>

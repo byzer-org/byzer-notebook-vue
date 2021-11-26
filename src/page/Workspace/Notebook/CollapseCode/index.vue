@@ -19,7 +19,7 @@ export default class CollapseCode extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/variables.scss';
+@import '../../../../assets/css/variable.scss';
 .collapse-code {
   .ellipsis-item {
     padding-bottom: 15px;

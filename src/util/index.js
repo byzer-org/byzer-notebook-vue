@@ -2,6 +2,15 @@
 import axios from '../service/handleService'
 import CryptoJS from 'crypto-js'
 
+export function getBrowserLang () {
+  const lang = navigator.language || navigator.browserLanguage
+  return lang.toLowerCase().includes('zh') ? 'en' : 'zh'
+}
+export function getGlobalLang () {
+  let localLang = localStorage.getItem('lang')
+  let browerserLang = getBrowserLang()
+  return localLang || browerserLang
+}
 export function Base64Encode (input) {
   var _keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
   var output = ''

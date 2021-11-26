@@ -10,8 +10,8 @@
     custom-class="select-modal"
     >
     <div slot="title" class="select-modal-title">
-      <span class="text">{{$t('title')}}</span>
-      <el-tooltip placement="top" :content="$t('selectTip')">
+      <span class="text">Select</span>
+      <el-tooltip placement="top" :content="$t('workflow.selectTip')">
         <i class="el-ksd-icon-info_border_16 header-icon"></i>
       </el-tooltip>
     </div>
@@ -19,8 +19,8 @@
       <Form v-if="isShow" ref="ruleForm" :initRuleForm="initForm" />
     </div>
     <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal" size="medium">{{$t('common.cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('common.ok')}}</el-button>
+      <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
+      <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('ok')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -122,13 +122,3 @@ export default class CreateSelectModal extends Vue {
   }
 }
 </style>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "title": "Select",
-      "selectTip": "Write your own SELECT script and click Check to verify the correctness"
-    }
-  }
-</i18n>

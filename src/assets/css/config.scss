@@ -1,5 +1,5 @@
 
-@import './variables.scss';
+@import './variable.scss';
 
 html, body {
   height: 100%;
@@ -34,20 +34,12 @@ ul,li {list-style:none;}
   line-height: 0
 }
 
-.ksd-fleft{
-  float: left;
-}
-
-.ksd-fright{
-  float: right;
-}
-
 .is-disabled {
   cursor: not-allowed;
   // pointer-events: unset;
 }
 .disabled-style {
-  color: $--color-text-disabled;
+  color: $--font-color-disabled-base;
 }
 
 .ellipsis-item {
@@ -85,7 +77,6 @@ ul,li {list-style:none;}
   color: $--color-danger;
 }
 
-
 .page-inner-header {
   line-height: 38px;
   font-size: 26px;
@@ -95,8 +86,9 @@ ul,li {list-style:none;}
   padding: 36px 54px;
 }
 .dialog-footer-400 {
+  display: flex;
   .el-button {
-    width: 170px;
+    flex: 1;
   }
 }
 .el-tooltip__popper div {
@@ -158,10 +150,14 @@ ul,li {list-style:none;}
 }
 }
 
-.form-alert-type {
-  padding-top: 6px;
-  padding-bottom: 0;
-  color: #8b99ae;
+.el-alert {
+  &.hide-bg {
+    background-color: $--color-white;
+    padding: 0px;
+    .el-alert__content {
+      padding: 0;
+    }
+  }
 }
 
 .node-icon-item { // workflow 节点样式
@@ -223,33 +219,3 @@ ul,li {list-style:none;}
   }
 }
 
-$sizeArr: (2, 5, 10, 12, 15, 16, 20, 22, 24, 48);
-@each $size in $sizeArr {
-  .font-#{$size} {
-    font-size: $size + px;
-  }
-  .pl-#{$size} {
-    padding-left: $size + px;
-  }
-  .pr-#{$size} {
-    padding-right: $size + px;
-  }
-  .pt-#{$size} {
-    padding-top: $size + px;
-  }
-  .pb-#{$size} {
-    padding-bottom: $size + px;
-  }
-  .ml-#{$size} {
-    margin-left: $size + px;
-  }
-  .mr-#{$size} {
-    margin-right: $size + px;
-  }
-  .mt-#{$size} {
-    margin-top: $size + px;
-  }
-  .mb-#{$size} {
-    margin-bottom: $size + px;
-  }
-}

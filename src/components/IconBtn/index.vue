@@ -1,6 +1,6 @@
 <template>
   <el-tooltip placement="top" :content="text" :disabled="!text">
-    <i :class="[icon, hasbg && 'has-bg', disabled ? 'is-disabled' : 'hasEvent']" @click="handler"></i>
+    <i class="icon-btn" :class="[icon, hasbg && 'has-bg', disabled ? 'is-disabled' : 'hasEvent']" @click="handleAction"></i>
   </el-tooltip>
 </template>
 <script>
@@ -33,15 +33,22 @@ import { Component } from 'vue-property-decorator'
 })
 
 export default class IconBtn extends Vue {
-  
+  handleAction () {
+    if (!this.disabled) {
+      this.handler()
+    }
+  }
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/config.scss';
-.has-bg {
-  display: inline-block;
-  text-align: center;
-  background-color: $--background-color-hover;
-  border-radius: 6px;
+@import '../../assets/css/variable.scss';
+.icon-btn {
+  font-size: 22px;
+  &.has-bg {
+    display: inline-block;
+    text-align: center;
+    background-color: $--background-color-hover;
+    border-radius: 6px;
+  }
 }
 </style>

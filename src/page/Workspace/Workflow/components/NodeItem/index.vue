@@ -68,7 +68,7 @@ export default class NodeItem extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .node-item {
   position: absolute;
   display: flex;

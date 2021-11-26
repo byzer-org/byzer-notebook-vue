@@ -70,7 +70,7 @@ export default class ParameterValid extends Vue {
     // 和初始的相同可以保存 和初始值不同并且在已有 model 列表中不能找到同名的
     const duplicateModelsCount = this.tableList.filter(v => v === value).length
     if (duplicateModelsCount > 0 && initModel !== value) {
-      return callback(new Error(this.$t('outputDuplicate')))
+      return callback(new Error(this.$t('workflow.outputDuplicate')))
     } else {
       return callback()
     }
@@ -83,9 +83,9 @@ export default class ParameterValid extends Vue {
 
   validatePath (value, callback) {
     if (!value) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('workflow.pleaseInput')))
     } else if (!value.startsWith('/')) {
-      return callback(new Error(this.$t('pathValid')))
+      return callback(new Error(this.$t('workflow.pathValid')))
     } else {
       return this.checkPathIsDuplicate(value, callback)
     }
@@ -103,7 +103,7 @@ export default class ParameterValid extends Vue {
     // 和初始的相同可以保存 和初始值不同并且在已有 model 列表中不能找到同名的
     const duplicateModelsCount = this.allModelList.filter(v => v.path === model).length
     if (duplicateModelsCount > 0 && initModel !== model) {
-      return callback(new Error(this.$t('modelExist')))
+      return callback(new Error(this.$t('workflow.modelExist')))
     } else {
       return callback()
     }
@@ -122,21 +122,21 @@ export default class ParameterValid extends Vue {
       this.validatePath(value, callback, item)
     } else if (arrayLikeType.includes(value_type)) {
       if (value_type === 'MULTI_ENUM' && value.length > max_length) {
-        return callback(new Error(this.$t('maxLength', { size: max_length })))
+        return callback(new Error(this.$t('workflow.maxLength', { size: max_length })))
       }
       return callback()
     } else if (value_type === 'STRING' && max_length && (value.length > max_length)) {
-      return callback(new Error(this.$t('maxLength', { size: max_length })))
+      return callback(new Error(this.$t('workflow.maxLength', { size: max_length })))
     } else if (value_type === 'MULTI_ENUM' && max_length && (value.length > max_length)) {
-      return callback(new Error(this.$t('maxSize', { size: max_length })))
+      return callback(new Error(this.$t('workflow.maxSize', { size: max_length })))
     } else if (!this.checkValueType(value, value_type)) { // 校验值类型
-      return callback(new Error(this.$t('valueType', { type: value_type.toLowerCase()})))
+      return callback(new Error(this.$t('workflow.valueType', { type: value_type.toLowerCase()})))
     } else if (!this.checkMinValue(value, value_type, min)) { // 校验值范围
-      return callback(new Error(this.$t('minValue', { min })))
+      return callback(new Error(this.$t('workflow.minValue', { min })))
     } else if (!this.checkMaxValue(value, value_type, max)) { // 校验值范围
-      return callback(new Error(this.$t('maxValue', { max })))
+      return callback(new Error(this.$t('workflow.maxValue', { max })))
       // else if (!this.checkFloatCount(value, value_type)) { // 校验小数位数
-      //   return callback(new Error(this.$t('floatValid')))
+      //   return callback(new Error(this.$t('workflow.floatValid')))
       // }
     } else {
       return callback()
@@ -161,36 +161,36 @@ export default class ParameterValid extends Vue {
         }
         const { value_type: valueType, max, min, max_length: value_max_length, sum } = array_value_type
         if (!value.length) {
-          return callback(new Error(this.$t('common.pleaseInput')))
+          return callback(new Error(this.$t('workflow.pleaseInput')))
         } else if (!value.every(v => this.checkValueType(v, valueType))) { // 校验值类型
-          return callback(new Error(this.$t('valueType', { type: valueType.toLowerCase()})))
+          return callback(new Error(this.$t('workflow.valueType', { type: valueType.toLowerCase()})))
         } else if (valueType === 'INT') { // 整数校验
           if (!value.every(v => this.checkMinValue(v, valueType, min))) { // 校验值范围
-            return callback(new Error(this.$t('minValue', { min })))
+            return callback(new Error(this.$t('workflow.minValue', { min })))
           } else if (!value.every(v => this.checkMaxValue(v, valueType, max))) { // 校验值范围
-            return callback(new Error(this.$t('maxValue', { max })))
+            return callback(new Error(this.$t('workflow.maxValue', { max })))
           } else {
             return callback()
           }
         } else if (valueType === 'FLOAT') { // 校验小数
           if (!value.every(v => this.checkValueRange(v, valueType, max, min))) { // 校验值范围
-            return callback(new Error(this.$t('valueRange', { max, min })))
+            return callback(new Error(this.$t('workflow.valueRange', { max, min })))
           // } else if (!value.every(v => this.checkFloatCount(v, valueType))) { // 校验小数位数
-          //   return callback(new Error(this.$t('floatValid')))
+          //   return callback(new Error(this.$t('workflow.floatValid')))
           } else if (sum && (this.getArraySum(value) !== sum)) {
-            return callback(new Error(this.$t('sumValue')))
+            return callback(new Error(this.$t('workflow.sumValue')))
           } else {
             return callback()
           }
         } else if (valueType === 'STRING') {
           const isNormal = value.every(v => v.length <= value_max_length)
           if (!isNormal) {
-            return callback(new Error(this.$t('maxLength')))
+            return callback(new Error(this.$t('workflow.maxLength')))
           } else {
             return callback()
           }
         } else if (value.length > max_length) { // 校验数组的最大长度
-          return callback(new Error(this.$t('maxSize', {size: max_length})))
+          return callback(new Error(this.$t('workflow.maxSize', {size: max_length})))
         } else {
           return callback()
         }
@@ -198,7 +198,7 @@ export default class ParameterValid extends Vue {
         return callback()
       } else if (required === 'true' && (!value || value.length === 0)) { // 必填 没有值
         const selectValueType = ['ENUM', 'MULTI_ENUM', 'INPUT/TABLE', 'INPUT/MODEL']
-        const msg = selectValueType.includes(value_type) ? this.$t('common.pleaseSelect') : this.$t('common.pleaseInput')
+        const msg = selectValueType.includes(value_type) ? this.$t('pleaseSelect') : this.$t('pleaseInput')
         return callback(new Error(msg))
       }
       return this.validSimpleParam(value, callback, item)

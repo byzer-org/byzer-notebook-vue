@@ -10,13 +10,13 @@
     :visible="isShow"
     @close="isShow && closeModal()">
     <div class="container">
-      <el-tooltip placement="top" :content="$t('common.copy')">
+      <el-tooltip placement="top" :content="$t('copy')">
         <i class="hasEvent copy-btn el-ksd-icon-dup_22" type="text" v-clipboard:success="onCopy" v-clipboard:copy="content"></i>
       </el-tooltip>
       <CodeEditor :value="content" :readOnly="true" />
     </div>
     <div slot="footer">
-      <el-button type="primary" size="medium" @click="closeModal">{{$t('common.ok')}}</el-button>
+      <el-button type="primary" size="medium" @click="closeModal">{{$t('ok')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -78,12 +78,12 @@ export default class CodeModal extends Vue {
   }
 
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 .code-dialog {
   .progress {
     line-height: 20px;
@@ -95,7 +95,7 @@ export default class CodeModal extends Vue {
     min-height: 50px;
     max-height: 320px;
     overflow: auto;
-    border: 1px solid $--background-color-active;
+    border: 1px solid $--border-color-light;
     box-sizing: border-box;
     border-radius: 6px;
     &:hover {

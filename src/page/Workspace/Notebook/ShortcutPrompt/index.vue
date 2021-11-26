@@ -41,7 +41,7 @@ export default class ShortcutPrompt extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 
 .shortcut-prompt {
   .header {

@@ -3,13 +3,13 @@
     <div class="node-container-form">
       <el-form ref="form" label-position="top" :model="ruleForm" :rules="rules">
         <el-form-item label="Select the Model to be registered" prop="source">
-          <el-select filterable v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('common.pleaseSelect')">
+          <el-select filterable v-model="ruleForm.source" style="width: 100%;" :placeholder="$t('pleaseSelect')">
             <el-option :label="item.model" :value="item.model" v-for="item in modelList" :key="item.model"></el-option>
           </el-select>
           <el-alert
-            class="form-alert-type"
+            class="hide-bg"
             v-if="!modelList.length"
-            :title="$t('noModelTip')"
+            :title="$t('workflow.noModelTip')"
             icon="el-ksd-icon-info_border_16"
             :show-background="false"
             :closable="false"
@@ -17,23 +17,23 @@
           </el-alert>
         </el-form-item>
         <el-form-item label="Resigter the Model as a function" prop="target">
-          <el-input v-model.trim="ruleForm.target" :placeholder="$t('common.pleaseInput')" />
+          <el-input v-model.trim="ruleForm.target" :placeholder="$t('pleaseInput')" />
         </el-form-item>
         <el-form-item class="mb0">
           <span slot="label"><el-checkbox label="Deploy Mode" v-model="deploy_mode"></el-checkbox></span>
         </el-form-item>
         <el-form-item ref="deployUrl" label="URL" class="indent" prop="deploy_mode_param.url">
-          <el-input :disabled="!deploy_mode" v-model.trim="ruleForm.deploy_mode_param.url" :placeholder="$t('common.pleaseInput')" />
+          <el-input :disabled="!deploy_mode" v-model.trim="ruleForm.deploy_mode_param.url" :placeholder="$t('pleaseInput')" />
         </el-form-item>
         <el-form-item ref="deployToken" label="Access Token" class="indent" prop="deploy_mode_param.access_token">
-          <el-input :disabled="!deploy_mode" v-model.trim="ruleForm.deploy_mode_param.access_token" :placeholder="$t('common.pleaseInput')" />
+          <el-input :disabled="!deploy_mode" v-model.trim="ruleForm.deploy_mode_param.access_token" :placeholder="$t('pleaseInput')" />
         </el-form-item>
       </el-form>
     </div>
     <div class="view-sql">
       <div class="view-sql-label">
         MLSQL VIEWER
-        <el-tooltip placement="top" :content="$t('common.copy')">
+        <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
       </div>
@@ -58,7 +58,7 @@ import CodeEditor from '../CodeEditor'
     rules () {
       return {
         source: [
-          { required: true, message: this.$t('common.pleaseSelect'), trigger: 'change' }
+          { required: true, message: this.$t('pleaseSelect'), trigger: 'change' }
         ],
         target: [
           { required: true, validator: this.validateTarget, trigger: 'blur' }
@@ -131,18 +131,18 @@ export default class SaveNodeForm extends Vue {
 
   validateTarget (rule, value, callback) {
     if (!value) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('pleaseInput')))
     } else {
       const initOutput = this.initRuleForm?.target ?? ''
       const duplicateOutputCount = this.tableList.filter(v => v === value).length
       const isDuplicate = (duplicateOutputCount > 0) && (initOutput !== value)
-      return isDuplicate ? callback(new Error(this.$t('outputDuplicate'))) : callback()
+      return isDuplicate ? callback(new Error(this.$t('workflow.outputDuplicate'))) : callback()
     }
   }
 
   validateURL (rule, value, callback) {
     if (!value && this.deploy_mode) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('pleaseInput')))
     } else {
       return callback()
     }
@@ -150,7 +150,7 @@ export default class SaveNodeForm extends Vue {
 
   validateToken (rule, value, callback) {
     if (!value && this.deploy_mode) {
-      return callback(new Error(this.$t('common.pleaseInput')))
+      return callback(new Error(this.$t('pleaseInput')))
     } else {
       return callback()
     }
@@ -220,22 +220,10 @@ export default class SaveNodeForm extends Vue {
     return this.$refs.form.validate()
   }
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "noModelTip": "No model is available. Please train a model first.",
-      "outputDuplicate": "该 Output 已存在于 Workflow 中，请重新命名。"
-    },
-    "en": {
-      "noModelTip": "No model is available. Please train a model first.",
-      "outputDuplicate": "Output already exists in workflow, please rename it."
-    }
-  }
-</i18n>
 
 <style lang="scss">
 </style>

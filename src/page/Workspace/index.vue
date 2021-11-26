@@ -63,7 +63,7 @@ export default class Notebook extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 .notebookWrapper {
   width: 100%;
   height: calc(100vh - 48px);
@@ -71,7 +71,7 @@ export default class Notebook extends Vue {
   &-sidebar {
     width: 32px;
     height: 100%;
-    border-right: 1px solid $--border-secondary;
+    border-right: 1px solid $--border-color-light;
     float: left;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -81,7 +81,7 @@ export default class Notebook extends Vue {
       text-align: center;
       cursor: pointer;
       &.active {
-        border: 1px solid $--border-secondary;
+        border: 1px solid $--border-color-light;
         border-right: 1px solid $--background-color-secondary;
         border-left: 2px solid $--color-primary;
         position: relative;

@@ -109,13 +109,13 @@ export default class Login extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/config.scss';
+@import '../../assets/css/variable.scss';
 #loginPage {
   .login-box {
     width: 500px;
     height: 420px;
     border-radius: 4px;
-    box-shadow: inset 0px 0px 10px 0px $--border-secondary;
+    box-shadow: inset 0px 0px 10px 0px $--border-color-light;
     position: absolute;
     top: 50%;
     left: 50%;

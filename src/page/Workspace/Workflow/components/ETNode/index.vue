@@ -25,9 +25,9 @@
       <div class="node-container-form-wrapper" v-if="groupParamsList.length">
         <div class="form-custom">
           <span class="txt-danger">* </span>
-          <span class="label">Parameter Groups</span>
+          <span class="label">{{$t('workflow.parameterGroups')}}</span>
         </div>
-        <el-form ref="groupForm" label-position="left" size="medium" label-width="120px" :model="groupRuleForm">
+        <el-form ref="groupForm" label-position="left" size="medium" label-width="170px" :model="groupRuleForm">
           <div class="form-group-list" v-for="(group, index) in groupRuleForm.groupList" :key="index">
             <div class="form-group-list-item">
               <div class="form-group-list-item-label">
@@ -90,7 +90,7 @@
     <div class="view-sql">
       <div class="view-sql-label">
         MLSQL VIEWER
-        <el-tooltip placement="top" :content="$t('common.copy')">
+        <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
       </div>
@@ -691,40 +691,9 @@ export default class ETNodeForm extends Vue {
 
 }
 </script>
-<i18n>
-  {
-    "zh": {
-      "valueType": "输入值类型错误，应该为 {type}。",
-      "floatValid": "float 最多两位小数。",
-      "copySuccess": "复制成功!" ,
-      "pathValid": "path 必须以 / 开头。",
-      "minValue": "最小值是 {min}.",
-      "maxValue": "最大值是 {max}.",
-      "modelExist": "当前路径下已存在同名模型，请重命名。",
-      "maxLength": "最大长度是 {size}",
-      "maxSize": "最大数量是 {size}",
-      "sumValue": "输入值的和应为 {sum}",
-      "outputDuplicate": "该 Output 已存在于 Workflow 中，请重新命名。"
-    },
-    "en": {
-      "valueType": "Wrong data type, should be {type}",
-      "floatValid": "At most two decimal places.",
-      "copySuccess": "Successfully Copied!" ,
-      "pathValid": "Path must start with /.",
-      "minValue": "Minimum value is {min}.",
-      "maxValue": "Maximum value is {max}.",
-      "modelExist": "Model with the same name already exists in the current path, please rename it.",
-      "noTableTip": "No table is available.",
-      "maxLength": "Max length is {size}",
-      "maxSize": "Max size is {size}",
-      "sumValue": "The sum is {sum}",
-      "outputDuplicate": "Output already exists in workflow, please rename it."
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .node-container.et {
   padding-right: 10px;
   .node-container-form {

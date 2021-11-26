@@ -1,14 +1,8 @@
 
-@import './common.scss';
 .el-button [class*=el-icon-]+span, .el-button [class*=el-ksd-icon]+span {
   margin-left: 2px;
 }
 .el-button {
-  border-radius: 6px;
-  font-weight: normal;
-  &:hover {
-    color: inherit;
-  }
   i {
     vertical-align: middle;
   }
@@ -16,64 +10,13 @@
     vertical-align: middle;
     line-height: 22px;
   }
-  &.el-button--medium {
-    padding: 5px 9px;
-    [class*=el-icon-], [class*=el-ksd-icon-] {
-      font-size: 22px;
+  &.icon-bg {
+    padding: 2px 4px;
+    font-size: 16px;
+    background-color: $--background-color-hover;
+    i {
+      color: $--color-text-primary;
     }
-  }
-  &.el-button--small {
-    font-size: 12px;
-    padding: 5px 7px;
-    [class*=el-icon-], [class*=el-ksd-icon-] {
-      font-size: 16px;
-    }
-  }
-  &.el-button--mini {
-    font-size: 12px;
-    padding: 2px 3px;
-    [class*=el-icon-], [class*=el-ksd-icon-] {
-      font-size: 12px;
-    }
-  }
-}
-.el-button--default {
-  color: #546177;
-  border-color: $--color-secondary;
-  background-color: $--color-secondary;
-  &.is-plain {
-    border-color: $--color-secondary;
-    background-color: $--color-white;
-  }
-  &:hover, &:not(.is-disabled):focus {
-    color: inherit;
-    border-color: $--color-secondary-hover;
-    background-color: $--color-secondary-hover;
-  }
-}
-.el-button--text {
-  color: $--color-text-secondary;
-  &:hover {
-    border-color: $--color-secondary;
-    background-color: $--color-secondary;
-  }
-  &.nobg-text {
-    padding: 0 !important;
-    border: none;
-    background-color: transparent;
-    &:hover {
-      border: none;
-      background-color: transparent;
-    }
-  }
-}
-.el-button--primary {
-  border-color: $--color-primary;
-  background-color: $--color-primary;
-  &:hover {
-    color: $--color-white;
-    border-color: $--color-primary-hover;
-    background-color: $--color-primary-hover;
   }
 }
 .el-dialog {
@@ -105,7 +48,7 @@
   height: 34px;
 }
 .el-tabs--card > .el-tabs__header {
-  background-color: $--color-info-secondary-bg;
+  background-color: $--background-color-secondary;
   .el-tabs__item.is-active {
     background-color: $--color-white;
   }
@@ -121,7 +64,7 @@
       }
       &.is-active {
         border-radius: 4px 4px 0 0;
-        color: $--color-text-secondary;
+        color: $--color-text-primary;
         font-weight: bold;
       }
     }
@@ -176,28 +119,31 @@
   font-size: 14px;
   line-height: 22px;
   height: 26px;
-  color: $--color-nav;
-  background-color: $--color-info-tag-bg;
-  border-color: $--color-info-tag-bg;
+  border-color: $--color-primary-light-9;
   &.el-tag--success {
-    background-color: $--color-success-tag-bg;
-    border-color: $--color-success-tag-bg;
-    color: $--color-success-active;
+    border-color: $--color-success-lighter;
   }
   &.el-tag--info {
-    background-color: $--color-info-secondary-tag-bg;
-    border-color: $--color-info-secondary-tag-bg;
-    color: $--color-info-secondary-active;
+    border-color: $--color-info-lighter;
     .el-tag__close {
-      color: $--color-info-secondary-active;
+      color: $--color-info-light;
     }
   }
   &.el-tag--danger {
-    background-color: $--color-danger-tag-bg;
-    border-color: $--color-danger-tag-bg;
-    color: $--color-danger-active;
+    border-color: $--color-danger-lighter;
   }
 }
 .el-select .el-tag__close.el-icon-close {
   background-color: transparent;
+}
+.el-message-box {
+  padding-bottom: 15px;
+  &.centerButton {
+    .el-message-box__btns {
+      display: flex;
+      .el-button {
+        flex: 1;
+      }
+    }
+  }
 }

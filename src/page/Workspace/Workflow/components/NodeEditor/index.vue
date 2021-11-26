@@ -2,7 +2,7 @@
   <div class="node-wrapper">
     <div class="node-wrapper-header">
       {{getName(nodeInfo)}}
-      <el-tooltip placement="top" :content="$t('selectTip')" v-if="nodeType === 'select'">
+      <el-tooltip placement="top" :content="$t('workflow.selectTip')" v-if="nodeType === 'select'">
         <i class="el-ksd-icon-info_border_16 node-wrapper-header-icon"></i>
       </el-tooltip>
     </div>
@@ -16,8 +16,8 @@
       <ETNode ref="etNode" v-else-if="nodeType==='et'" type="edit" :nodeInfo="nodeInfo" :originSql="originSql" :initRuleForm="nodeDetail" @cancelEdit="cancelEdit" @confirmSubmit="confirmSubmit"  />
     </div>
     <div class="node-wrapper-submit-btns">
-      <el-button size="small" @click="cancelEdit">{{$t('common.cancel')}}</el-button>
-      <el-button size="small" type="primary" @click="submitForm">{{$t('common.save')}}</el-button>
+      <el-button size="small" @click="cancelEdit">{{$t('cancel')}}</el-button>
+      <el-button size="small" type="primary" @click="submitForm">{{$t('save')}}</el-button>
     </div>
   </div>
 </template>
@@ -142,21 +142,9 @@ export default class NodeEditor extends Vue {
   }
 }
 </script>
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "select": "Select",
-      "load": "Load",
-      "save": "Save",
-      "selectTip": "Write your own SELECT script and click Check to verify the correctness"
-    }
-  }
-</i18n>
 
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .node-wrapper {
   width: 100%;
   height: 100%;
@@ -173,7 +161,7 @@ export default class NodeEditor extends Vue {
     padding-left: 16px;
     font-size: 14px;
     font-weight: 500;
-    border-bottom: 1px solid $--border-secondary;
+    border-bottom: 1px solid $--border-color-light;
     &-icon {
       font-size: 16px;
     }
@@ -184,11 +172,10 @@ export default class NodeEditor extends Vue {
     
   }
   &-submit-btns {
-    border-top: 1px solid $--border-secondary;
+    border-top: 1px solid $--border-color-light;
     position: absolute;
     left: 0;
     bottom: 0px;
-    height: 45px;
     width: 100%;
     text-align: right;
     padding: 8px 16px;

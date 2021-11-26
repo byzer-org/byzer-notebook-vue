@@ -1,17 +1,17 @@
 
 <template>
   <div class="excute-detail font-12">
-    <div class="duration">Job Id: {{jobId}}
-      <el-tooltip placement="top" :content="$t('common.copy')">
+    <div class="duration">{{$t('notebook.jobId')}}: {{jobId}}
+      <el-tooltip placement="top" :content="$t('copy')">
         <i class="hasEvent copy-btn el-ksd-icon-dup_16 font-16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="jobId"></i>
       </el-tooltip>
     </div>
-    <div class="duration">Total Duration: {{formatTime(totalDuration)}}</div>
+    <div class="duration">{{$t('notebook.totalDuration')}}: {{formatTime(totalDuration)}}</div>
     <ul class="progress-jobs" v-show="inprogressJobs.length || failedJobs.length">
       <li v-for="item in inprogressJobs" :key="item.spark_job_id">
         <div class="job-row">
           <i class="loading el-ksd-icon-loading_22 font-16 mr-5"></i>
-          <span class="label">Spark Job ID: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
+          <span class="label">{{$t('notebook.sparkJobId')}}: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
           <el-tooltip trigger="hover" placement="top" :value="showCode">
             <div slot="content">
               <div>Running {{currentScriptCount}}/{{totalScriptCount}}</div>
@@ -27,21 +27,21 @@
       <li v-for="item in failedJobs" :key="item.spark_job_id">
         <div class="job-row">
           <i class="el-icon-error txt-danger"></i>
-          <span class="label">Spark Job ID: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
+          <span class="label">{{$t('notebook.sparkJobId')}}: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
         </div>
         <el-progress :stroke-width="4" :percentage="getPercentage(item.completed_task_count,item.total_task_count)"></el-progress>
       </li>
     </ul>
     <div class="view-complete-btn">
       <el-button type="text" size="mini" @click="showDetails = !showDetails">
-        View Completed Spark Jobs({{completeJobs.length}})
+        {{$t('notebook.viewCompleted')}}({{completeJobs.length}})
         <i :class="showDetails ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'"></i>
       </el-button>
     </div>
     <ul class="complete-jobs" v-show="showDetails && completeJobs.length">
       <li v-for="item in completeJobs" :key="item.spark_job_id">
         <div class="job-row">
-          <span class="label">Spark Job ID: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
+          <span class="label">{{$t('notebook.sparkJobId')}}: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
         </div>
         <div class="value">{{formatTime(item.duration)}}</div>
       </li>
@@ -124,12 +124,12 @@ export default class ExcuteDetail extends Vue {
   }
 
   onCopy () {
-    this.$message.success('Successfully Copied')
+    this.$message.success(this.$t('copySuccess'))
   }
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/config.scss';
+@import '../../../../assets/css/variable.scss';
 .excute-detail {
   width: 340px;
   .duration {

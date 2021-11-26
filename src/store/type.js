@@ -2,6 +2,7 @@
 
 // global
 export const HIDE_ALL_MODALS = 'HIDE_ALL_MODALS'
+export const CHANGE_LANG = 'CHANGE_LANG'
 
 // cell actions
 export const CHANGE_CELL_LIST = 'CHANGE_CELL_LIST'

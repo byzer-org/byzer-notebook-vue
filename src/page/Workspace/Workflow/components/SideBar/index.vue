@@ -7,8 +7,8 @@
         <div class="workflow-side-wrapper-node-header">
           <div class="workflow-side-wrapper-node-header-title">{{node.type}} Node</div>
           <div class="workflow-side-wrapper-node-header-btn" @click="handleToggleShow(index)">
-            <el-button type="text" size="medium" icon="el-ksd-icon-arrow_down_22" v-if="node.showNode"></el-button>
-            <el-button type="text" size="medium" icon="el-ksd-icon-arrow_up_22" v-else></el-button>
+            <icon-btn icon="el-ksd-icon-arrow_down_22" v-if="node.showNode"/>
+            <icon-btn icon="el-ksd-icon-arrow_up_22" v-else />
           </div>
         </div>
         <div class="workflow-side-wrapper-node-content" v-if="node.showNode">
@@ -123,20 +123,8 @@ export default class WorkflowSide extends Vue {
   }
 } 
 </script>
-
-<i18n>
-  {
-    "zh": {
-    },
-    "en": {
-      "select": "Select",
-      "load": "Load",
-      "save": "Save"
-    }
-  }
-</i18n>
 <style lang="scss">
-@import '../../../../../assets/css/config.scss';
+@import '../../../../../assets/css/variable.scss';
 .node-tooltip.el-tooltip__popper {
   .title {
     font-size: 12px;
@@ -185,6 +173,7 @@ export default class WorkflowSide extends Vue {
           padding-top: 2px;
           width: 40px;
           height: 40px;
+          padding: 9px 6px;
           text-align: center;
           .el-button {
             .icon {
@@ -227,7 +216,7 @@ export default class WorkflowSide extends Vue {
               line-clamp: 2;
             }
             text-align: center;
-            color: $--color-text-secondary;
+            color: $--color-text-regular;
             padding: 0 3px;
             padding-top: 2px;
             line-height: 14px;

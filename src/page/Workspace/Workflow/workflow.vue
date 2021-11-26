@@ -137,11 +137,11 @@ export default {
     },
     async confirmDelteNode (node) {
       try {
-        await this.$confirm('Are you sure you want to delete this node? Please note this action can’t be reverted.', 'Delete Node', {
-          confirmButtonText: this.$t('common.delete'),
-          cancelButtonText: this.$t('common.cancel'),
+        await this.$confirm(this.$t('workflow.deleteNodeTip'), this.$t('workflow.deleteNodeTitle'), {
+          confirmButtonText: this.$t('delete'),
+          cancelButtonText: this.$t('cancel'),
           type: 'warning',
-          centerButton: true
+          customClass: 'centerButton'
         })
         await this.deleteWorkflowNode(node.id)
         this.$emit('openNodeEditor', null)
@@ -187,7 +187,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../assets/css/config.scss';
+@import '../../../assets/css/variable.scss';
 .flow-region {
   width: 100%;
   height: 100%;
