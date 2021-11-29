@@ -16,9 +16,6 @@
         </el-dropdown>
         <div class="btn">
           <icon-btn icon="el-ksd-icon-save_22" :disabled="isRunningAll" :text="$t('save')" :handler="() => handleSave(true)" />
-          <!-- <el-tooltip placement="bottom" content="Save">
-            <icon-btn @click="isRunningAll && handleSave(true)" type="text" size="medium" :disabled="isRunningAll" icon="el-ksd-icon-save_22" ></icon-btn>
-          </el-tooltip> -->
         </div>
         <div class="btn">
           <icon-btn icon="el-ksd-icon-add_22" :disabled="isRunningAll" :text="$t('notebook.addCell')" :handler="() => handleAddCell({ type: 'below' }, selectCell)" />
@@ -665,7 +662,7 @@ export default {
         this.saveNotebook(params).then(() => {
             this.loadingSave = false
             if (showMessage) {
-              this.$message.success('Successfully Saved!')
+              this.$message.success(this.$t('workspace.saveSuccess'))
             }
             this.reloadCellList(!showMessage) // 隐藏 loading
             resolve('save')

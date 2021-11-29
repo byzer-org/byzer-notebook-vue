@@ -257,7 +257,7 @@ export default {
       if (isSubmit) {
         this.$message({
           type: 'success',
-          message: this.$t('notebook.renameSuccess')
+          message: this.$t('workspace.renameSuccess')
         })
         if (item.type === 'folder') {
           this.fetchNotebookList()

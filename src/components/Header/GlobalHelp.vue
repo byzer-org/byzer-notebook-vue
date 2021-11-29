@@ -1,6 +1,6 @@
 
 <template>
-  <div class="global-help" v-show="!isTrial">
+  <div class="global-help" v-show="isTrial">
     <el-dropdown>
       <i class="el-ksd-icon-help_22 drop-icon"></i>
       <el-dropdown-menu slot="dropdown" class="global-help-drop">
