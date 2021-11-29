@@ -22,3 +22,9 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Change global color
+```
+change in element.variables.scss
+then run et/node_modules/.bin/et
+```
