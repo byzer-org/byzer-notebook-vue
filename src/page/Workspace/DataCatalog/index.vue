@@ -18,10 +18,10 @@
             <span :title="node.label">{{ node.label }}</span>
           </div>
           <div class="node-actions" :style="{'left': (treeOffsetWidth - (node.data.upload ? 40 : 0)) + 'px'}">
-            <el-tooltip placement="top" :content="$t('copy')" v-if="data.id && data.id.includes('Table')">
+            <el-tooltip placement="top" :content="$t('copy')" v-if="data.id && data.id.startsWith('Database_Table_')">
               <el-button class="icon-bg" icon="el-ksd-icon-dup_16" type="text" size="small" v-clipboard:success="onCopy" v-clipboard:copy="node.label"></el-button>
             </el-tooltip>
-            <el-tooltip effect="dark" v-else-if="data.id === 'file'" :content="$t('upload')" placement="top">
+            <el-tooltip effect="dark" v-else-if="node.data.id === 'file'" :content="$t('upload')" placement="top">
               <el-button class="icon-bg" icon="el-ksd-icon-add_16" type="text" size="mini" @click.stop="uploadFile"></el-button>
             </el-tooltip>
             <span v-else-if="node.data.isLeaf && node.data.id.startsWith('file')">
@@ -222,10 +222,10 @@ export default class DataCataLog extends Vue {
     try {
       const res = await this.getTables(params)
       const list = res.data?.list ?? []
-      const tableList = list.map((v, i) => {
+      const tableList = list.map(v => {
         return {
           label: v,
-          id: data.label + '_Table' + i,
+          id: 'Database_Table_' + data.label,
           isLeaf: true,
           children: []
         }

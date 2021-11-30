@@ -68,6 +68,7 @@
     "deleteSuccess": "Successfully Deleted",
     "saveSuccess": "Successfully Saved",
     "createSuccess": "Successfully Created",
+    "importSuccess": "Successfully imported",
     "notebookClone": "Clone Notebook",
     "folderClone": "Clone Folder",
     "workflowClone": "Clone Workflow",
