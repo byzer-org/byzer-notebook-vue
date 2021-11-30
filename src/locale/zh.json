@@ -67,6 +67,7 @@
     "deleteSuccess": "删除成功",
     "saveSuccess": "保存成功",
     "createSuccess": "创建成功",
+    "importSuccess": "导入成功",
     "notebookClone": "克隆笔记本",
     "folderClone": "克隆文件夹",
     "workflowClone": "克隆工作流",
