@@ -101,7 +101,10 @@ export default class SelectNodeForm extends Vue {
     }
   }
   changeContent (value = '') {
-    this.ruleForm.sql = value.split('\n').map(i => i ? i.trim().endsWith(';') ? i : i + ';' : i).join('\n')
+    const reverseArr = value.split('\n').reverse()
+    const index = reverseArr.findIndex(i => i)
+    reverseArr[index] = (reverseArr[index] || '').endsWith(';') ? reverseArr[index] : reverseArr[index] + ';'
+    this.ruleForm.sql = reverseArr.reverse().join('\n')
   }
   clearResult () {
     this.checkResult = ''

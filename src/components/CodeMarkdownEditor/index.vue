@@ -166,6 +166,12 @@ export default class CodeMarkdownEditor extends Vue {
   display: none;
 }
 
+.v-md-editor__preview-wrapper {
+  li {
+    list-style: inherit;
+  }
+}
+
 /* 编辑器最小高度 */
 .v-md-editor {
   min-height: 38px;
