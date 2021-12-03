@@ -1,12 +1,12 @@
 
 <template>
   <div class="cell-excute-result">
-    <div class="cell-excute-result-wrapper" :class="{ 'hide-detail': showBtn && !showDetail, 'pb-48': showBtn }" ref="resultContainer">
+    <div class="cell-excute-result-wrapper" :class="{ 'hide-detail': detailType === 'table' && showBtn && !showDetail, 'pb-48': detailType === 'table' && showBtn }" ref="resultContainer">
       <div class="container" v-if="status === 'RUNNING'">
         <div class="empty-table">{{$t('nodata')}}</div>
       </div>
       <div class="container" v-else-if="excuteSuccess">
-        <div class="wrapper" v-if="detailType === 'html'">
+        <div class="wrapper not-table" v-if="detailType === 'html'">
           <iframe
             class="html"
             ref="htmlDom"
@@ -16,8 +16,8 @@
             scrolling="yes"
           />
         </div>
-        <div class="wrapper" v-if="detailType === 'image'">
-          <img ref="jobImage" id="jobImage" style="width: 800px;" :src="`data:image/png;base64,${detailContent}`" alt="">
+        <div class="wrapper not-table" v-if="detailType === 'image'">
+          <img ref="jobImage" id="jobImage" class="html" :src="`data:image/png;base64,${detailContent}`" alt="">
         </div>
         <div class="table wrapper" v-else-if="detailType === 'table' && tableList.length">
           <el-table
@@ -67,7 +67,6 @@
             </el-pagination>
           </div>
         </div>
-        <div class="empty-table" v-else>{{$t('nodata')}}</div>
       </div>
       <div class="container failed" v-else>
         <div class="log-item">{{root_cause}}</div>
@@ -232,7 +231,7 @@ export default class ExcuteResult extends Vue {
     }
   }
   .container {
-    height: 100%;
+    width: 100%;
     .wrapper {
       .render-list-cell {
         padding-right: 10px;
@@ -250,10 +249,16 @@ export default class ExcuteResult extends Vue {
         padding: 8px 0;
       }
     }
-    .html {
-      width: 60%;
-      height: 300px;
-      overflow: auto;
+    .not-table {
+      padding-top: 20px;
+      .html {
+        display: block;
+        width: 90%;
+        margin: 0 auto;
+        height: 800px;
+        box-shadow: 1px 1px 4px rgba(63, 89, 128, 0.16);
+        border-top: 1px solid $--border-color-light;
+      }
     }
     .empty-table {
       line-height: 40px;
