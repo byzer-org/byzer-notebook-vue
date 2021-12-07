@@ -7,65 +7,67 @@
       </div>
       <div class="container" v-else-if="excuteSuccess">
         <div class="wrapper not-table" v-if="detailType === 'html'">
-          <iframe
+          <iframe 
             class="html"
-            ref="htmlDom"
-            sandbox="allow-scripts"
+            scrolling="no"
             :srcDoc="detailContent"
-            frameBorder="0"
-            scrolling="yes"
-          />
+            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' 
+            style="height:200px;border: none;overflow:hidden;">
+          </iframe>
         </div>
         <div class="wrapper not-table" v-if="detailType === 'image'">
           <img ref="jobImage" id="jobImage" class="html" :src="`data:image/png;base64,${detailContent}`" alt="">
         </div>
-        <div class="table wrapper" v-else-if="detailType === 'table' && tableList.length">
-          <el-table
-            v-if="headerList.length === 1 && headerList[0].prop === 'fileSystem'"
-            :data="renderTableList"
-            style="width: 100%;">
-            <el-table-column
-              v-for="col in headerList"
-              :key="col.label"
-              :prop="col.prop"
-              :formatter="formatterValue"
-              :label="col.label">
-              <template slot-scope="scope">
-                <div v-html="scope.row.fileSystem.includes('\n') ? scope.row.fileSystem.replace(/\n/g, '<br />') : scope.row.fileSystem"></div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-table
-            class="render-list"
-            v-else
-            :data="renderTableList"
-            style="min-width: 100%;">
-            <el-table-column
-              min-width="200px"
-              v-for="col in headerList"
-              :key="col.label"
-              :formatter="formatterValue"
-              :label="col.label"
-              :cell-class-name="'cell-test'">
-              <template slot-scope="scope">
-                <!-- <p class="text-one-ellipse" ><span v-custom-tooltip="{text: scope.row[col.prop], w: 0, tableClassName: 'render-list'}">{{scope.row[col.prop]}}</span></p> -->
-                <div class="render-list-cell">
-                  {{scope.row[col.prop]}}
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="page">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="pageInfo.page"
-              :page-sizes="[10, 15, 20]"
-              :page-size="15"
-              layout="total, prev, pager, next, jumper"
-              :total="totalCount">
-            </el-pagination>
-          </div>
+        <div class="table wrapper" v-else-if="detailType === 'table'">
+          <template v-if="tableList.length">
+            <el-table
+              v-if="headerList.length === 1 && headerList[0].prop === 'fileSystem'"
+              :data="renderTableList"
+              style="width: 100%;">
+              <el-table-column
+                v-for="col in headerList"
+                :key="col.label"
+                :prop="col.prop"
+                :formatter="formatterValue"
+                :label="col.label">
+                <template slot-scope="scope">
+                  <div v-html="scope.row.fileSystem.includes('\n') ? scope.row.fileSystem.replace(/\n/g, '<br />') : scope.row.fileSystem"></div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-table
+              class="render-list"
+              v-else
+              :data="renderTableList"
+              style="min-width: 100%;">
+              <el-table-column
+                min-width="200px"
+                v-for="col in headerList"
+                :key="col.label"
+                :formatter="formatterValue"
+                :label="col.label"
+                :cell-class-name="'cell-test'">
+                <template slot-scope="scope">
+                  <!-- <p class="text-one-ellipse" ><span v-custom-tooltip="{text: scope.row[col.prop], w: 0, tableClassName: 'render-list'}">{{scope.row[col.prop]}}</span></p> -->
+                  <div class="render-list-cell">
+                    {{scope.row[col.prop]}}
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <div class="page">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="pageInfo.page"
+                :page-sizes="[10, 15, 20]"
+                :page-size="15"
+                layout="total, prev, pager, next, jumper"
+                :total="totalCount">
+              </el-pagination>
+            </div>
+          </template>
+          <div class="empty-table" v-else>{{$t('nodata')}}</div>
         </div>
       </div>
       <div class="container failed" v-else>
@@ -255,7 +257,7 @@ export default class ExcuteResult extends Vue {
         display: block;
         width: 90%;
         margin: 0 auto;
-        height: 800px;
+        height: auto;
         box-shadow: 1px 1px 4px rgba(63, 89, 128, 0.16);
         border-top: 1px solid $--border-color-light;
       }

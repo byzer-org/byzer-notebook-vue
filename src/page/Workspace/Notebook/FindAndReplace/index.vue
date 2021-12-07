@@ -373,7 +373,7 @@ export default class FindAndReplace extends Vue {
       text-align: center;
       font-size: 12px;
       transform: scale(0.75);
-      color: $--color-info-lighter;
+      color: $--color-info;
     }
     .find-result-list-content {
       flex: 1;
