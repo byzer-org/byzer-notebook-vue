@@ -80,8 +80,8 @@
               <el-button type="default" plain icon="el-ksd-icon-add_22">{{$t('create')}}</el-button>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click="handleCreateNoteBook({type: 'notebook'})">{{$t('notebook')}}</el-dropdown-item>
-              <el-dropdown-item @click="handleCreateNoteBook({type: 'workflow'})">{{$t('workflow')}}</el-dropdown-item>
+              <el-dropdown-item @click="handleCreateNoteBook({type: 'notebook'})">{{$t('workspace.notebook')}}</el-dropdown-item>
+              <el-dropdown-item @click="handleCreateNoteBook({type: 'workflow'})">{{$t('workspace.workflow')}}</el-dropdown-item>
               <el-dropdown-item @click="handleImport">{{$t('import')}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -589,7 +589,7 @@ export default {
         align-items: center;
         &-nodata {
           text-align: center;
-          color: $--color-info-lighter;
+          color: $--color-info;
           &-text {
             padding-bottom: 16px;
           }
