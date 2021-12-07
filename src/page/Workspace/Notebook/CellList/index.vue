@@ -951,7 +951,7 @@ export default {
           .cell-order {
             width: 100%;
             padding-left: 55px;
-            color: $--color-info;
+            color: $--color-info-lighter;
             padding-bottom: 4px;
             .text {
               display: inline-block;
