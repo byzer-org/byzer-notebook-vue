@@ -87,7 +87,7 @@ export default class WorkflowPreview extends Vue {
       padding-right: 72px;
       .cell-order {
         width: 100%;
-        color: $--color-info-lighter;
+        color: $--color-info;
         padding-bottom: 4px;
         &-text {
           display: inline-block;
