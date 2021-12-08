@@ -9,17 +9,19 @@
         <div class="wrapper not-table" v-if="detailType === 'html'">
           <iframe
             class="html"
+            scrolling="no"
             ref="htmlDom"
             sandbox="allow-scripts"
             :srcDoc="detailContent"
-            frameBorder="0"
-            scrolling="yes"
-          />
+            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' 
+            style="height:200px;border:none;overflow:hidden;">
+          </iframe>
         </div>
         <div class="wrapper not-table" v-if="detailType === 'image'">
           <img ref="jobImage" id="jobImage" class="html" :src="`data:image/png;base64,${detailContent}`" alt="">
         </div>
-        <div class="table wrapper" v-else-if="detailType === 'table' && tableList.length">
+        <div class="table wrapper" v-else-if="detailType === 'table'">
+          <template v-if="tableList.length">
           <el-table
             v-if="headerList.length === 1 && headerList[0].prop === 'fileSystem'"
             :data="renderTableList"
@@ -66,6 +68,8 @@
               :total="totalCount">
             </el-pagination>
           </div>
+          </template>
+          <div class="empty-table" v-else>{{$t('nodata')}}</div>
         </div>
       </div>
       <div class="container failed" v-else>
@@ -255,7 +259,7 @@ export default class ExcuteResult extends Vue {
         display: block;
         width: 90%;
         margin: 0 auto;
-        height: 800px;
+        height: auto;
         box-shadow: 1px 1px 4px rgba(63, 89, 128, 0.16);
         border-top: 1px solid $--border-color-light;
       }
