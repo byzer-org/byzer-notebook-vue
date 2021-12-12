@@ -1,4 +1,3 @@
-
 <template>
   <div
     class="markdown-editor"
@@ -19,6 +18,8 @@ import { Component, Watch } from 'vue-property-decorator'
 import { MarkdownTag } from '../../config/index'
 
 import VMdEditor from '@kangc/v-md-editor/lib/codemirror-editor'
+import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/npm'
+import createMermaidPlugin from '@kangc/v-md-editor/lib/plugins/mermaid/npm'
 import '@kangc/v-md-editor/lib/style/codemirror-editor.css'
 import githubTheme from '@kangc/v-md-editor/lib/theme/github.js'
 import '@kangc/v-md-editor/lib/theme/style/github.css'
@@ -45,14 +46,10 @@ import 'codemirror/addon/scroll/simplescrollbars'
 import 'codemirror/addon/scroll/simplescrollbars.css'
 // style
 import 'codemirror/lib/codemirror.css'
-
-VMdEditor.Codemirror = Codemirror
-
-VMdEditor.use(githubTheme, {
-  Hljs: hljs
-})
-
-Vue.use(VMdEditor)
+// katex
+import 'katex/dist/katex.css'
+// mermaid
+import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css'
 
 @Component({
   props: {
@@ -96,7 +93,7 @@ export default class CodeMarkdownEditor extends Vue {
    * @description: 修改编辑器内容
    * @Date: 2021-08-26 15:42:22
    */
-  changeContent () {
+  changeContent() {
     this.$emit('changeContent', this.content)
   }
 
@@ -104,7 +101,7 @@ export default class CodeMarkdownEditor extends Vue {
    * @description: 获绑定codemirror实例
    * @Date: 2021-08-30 14:55:46
    */
-  bindCmInstance () {
+  bindCmInstance() {
     this.cmInstance = this.$refs['md' + this.cellId].codemirrorInstance
   }
 
@@ -112,7 +109,7 @@ export default class CodeMarkdownEditor extends Vue {
    * @description: 聚焦md
    * @Date: 2021-08-30 16:01:50
    */
-  handleFocus () {
+  handleFocus() {
     this.$nextTick(() => {
       // 聚焦
       this.$refs['md' + this.cellId].focus()
@@ -120,7 +117,7 @@ export default class CodeMarkdownEditor extends Vue {
   }
 
   @Watch('mode')
-  modeHandler (newValue, oldValue) {
+  modeHandler(newValue, oldValue) {
     if (newValue === oldValue) {
       return
     }
@@ -137,14 +134,14 @@ export default class CodeMarkdownEditor extends Vue {
   }
 
   @Watch('isSelected')
-  isSelectedHandler (newValue) {
+  isSelectedHandler(newValue) {
     if (!newValue) {
       this.mdMode = 'preview'
     }
   }
 
   @Watch('value')
-  valuehandler (newValue, oldValue) {
+  valuehandler(newValue, oldValue) {
     if (
       newValue === (oldValue || '').replace(MarkdownTag, '') ||
       oldValue === newValue.replace(MarkdownTag, '')
@@ -153,7 +150,19 @@ export default class CodeMarkdownEditor extends Vue {
     }
   }
 
-  mounted () {
+  created() {
+    VMdEditor.Codemirror = Codemirror
+    VMdEditor.use(githubTheme, {
+      Hljs: hljs
+    })
+    // formula
+    VMdEditor.use(createKatexPlugin())
+    VMdEditor.use(createMermaidPlugin())
+
+    Vue.use(VMdEditor)
+  }
+
+  mounted() {
     this.bindCmInstance()
   }
 }

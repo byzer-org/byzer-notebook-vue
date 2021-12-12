@@ -28,3 +28,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 change in element.variables.scss
 then run et/node_modules/.bin/et
 ```
+
+### Notes
+[![Node](https://img.shields.io/badge/Node-14-green.svg?style=plastic)](https://nodejs.org/en/)
+[![npm](https://img.shields.io/badge/npm-6-blue.svg?style=plastic)]()
