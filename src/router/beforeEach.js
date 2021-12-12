@@ -8,11 +8,7 @@ export default async function beforeEach (to, from, next) {
     const res = await store.dispatch(actionsTypes.GET_ENV)
     const is_trial = res.data.is_trial
     store.commit('SET_CURRENT_ENV', is_trial)
-    if (is_trial) {
-      document.title = 'MLSQL Lab'
-    } else {
-      document.title = 'Byzer'
-    }
+    document.title = 'Byzer Notebook'
   } catch (e) {
     console.log(e)
   }

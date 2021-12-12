@@ -1,6 +1,6 @@
 
 <template>
-  <div class="mlsql-editor" :class="{ 'active-editor': isSelected && !readOnly }" >
+  <div class="Kolo-editor" :class="{ 'active-editor': isSelected && !readOnly }" >
     <!-- 光标移动原因：编辑器接收值后会重新渲染编辑器，会导致光标移动到最开头。 -->
     <editor :value="content" ref="nodeEditor" :height="height" lang="sql" :options="options" @input="changeContent"></editor>
   </div>

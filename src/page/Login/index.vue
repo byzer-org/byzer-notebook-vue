@@ -3,7 +3,7 @@
   <div id="loginPage">
     <div class="login-box">
       <div class="login-logo">
-        <div class="login-logo-text">Byzer</div>
+        <div class="login-logo-text">Byzer Notebook</div>
       </div>
       <div class="login-form">
         <el-form @keyup.native.enter="beforeSubmit" :model="user" ref="loginForm" :rules="rules">

@@ -44,7 +44,7 @@ module.exports = {
     config
       .plugin('html')
       .tap(args => {
-        args[0].title = 'Byzer'
+        args[0].title = 'Byzer Notebook'
         return args
       })
       .end()

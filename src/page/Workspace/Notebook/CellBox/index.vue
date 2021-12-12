@@ -7,7 +7,7 @@
     </div>
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
       <!-- Code编辑器 & log -->
-      <span v-if="editType === 'MLSQL' || editType === 'Python'">
+      <span v-if="editType === 'Kolo' || editType === 'Python'">
         <CodeEditor
           @changeMode="changeMode"
           :cellId="cellId"
@@ -24,7 +24,7 @@
       <div class="cell-btns" :ref="'cellHover' + cellId">
         <ActionButton :actions="actions" />
       </div>
-      <span v-if="editType === 'MLSQL' || editType === 'Python'">
+      <span v-if="editType === 'Kolo' || editType === 'Python'">
         <div class="excute-result" v-if="status !== 'NEW'">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
@@ -86,7 +86,7 @@ export default {
       showExcuteDetails: true,
       startTime: 0,
       showAddCode: false,
-      editType: this.cellInfo.editType || 'MLSQL' // 编辑器类型
+      editType: this.cellInfo.editType || 'Kolo' // 编辑器类型
     }
   },
   components: {
@@ -123,7 +123,7 @@ export default {
     cellInfo: {
       handler (newVal) {
         this.content = this.cellInfo.content
-        this.editType = this.cellInfo.editType || 'MLSQL'
+        this.editType = this.cellInfo.editType || 'Kolo'
         if (!newVal.job_id) {
           this.excuteResult = {}
           this.status = 'NEW'

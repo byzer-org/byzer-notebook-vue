@@ -48,7 +48,7 @@
     "upload_data": "导入和连接数据",
     "upload_data_desc": "快速导入和连接数据",
     "create_notebook": "创建新笔记本",
-    "create_notebook_desc": "创建笔记本以开始清理、处理、可视化和建模您的数据。",
+    "create_notebook_desc": "创建笔记本以开始分析、训练和可视化您的数据。",
     "explore": "探索",
     "upload": "上传",
     "create": "创建"
@@ -227,7 +227,7 @@
     "inputOtherName": "请输入其他名称。",
     "check": "检查",
     "clear": "清除",
-    "saveTipText": "当前节点 MLSQL 语法错误，是否确认暂存该节点?",
+    "saveTipText": "当前节点 Kolo 语法错误，是否确认暂存该节点?",
     "readOnlyTip": "只读。要进一步编辑，请单击",
     "saveAsNotebook": "另存为笔记本",
     "createWorkflow": "创建工作流",

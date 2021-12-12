@@ -2,8 +2,7 @@
 <template>
   <div class="page-header">
     <div class="page-header-left">
-      <img src="@/assets/images/MLSQL_LAB.svg" alt="" v-if="isTrial">
-      <span class="page-header-left-logo" v-else>Byzer</span>
+      <span class="page-header-left-logo">Byzer Notebook</span>
       <header-menu v-if="!isLoginPage"></header-menu>
     </div>
     <div class="page-header-right">
@@ -50,14 +49,11 @@ export default class Header extends Vue {
   &-left {
     display: flex;
     &-logo {
-      width: 180px;
+      width: 300px;
       font-size: 20px;
       color: $--color-white;
       line-height: 48px;
       padding: 0 20px;
-    }
-    img {
-      width: 180px;
     }
   }
   &-right {

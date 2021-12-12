@@ -335,10 +335,10 @@ export default {
     changeCurrentEditType () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         let editType = '';
-        if (this.selectCell.editType === 'MLSQL' || this.selectCell.editType === 'Python') {
+        if (this.selectCell.editType === 'Kolo' || this.selectCell.editType === 'Python') {
           editType = 'Markdown';
         } else {
-          editType = 'MLSQL';
+          editType = 'Kolo';
           if (this.selectCell.content.split('\n').map(i => i.trim()).indexOf(PythonTag) > -1) {
             editType = 'Python'
           }
