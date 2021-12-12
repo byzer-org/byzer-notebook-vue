@@ -1,7 +1,7 @@
 
 <template>
   <div
-    class="mlsql-editor"
+    class="Kolo-editor"
     :class="{ 'active-editor': isSelected && !readOnly }"
   >
     <editor

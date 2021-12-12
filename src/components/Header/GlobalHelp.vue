@@ -5,7 +5,7 @@
       <i class="el-ksd-icon-help_22 drop-icon"></i>
       <el-dropdown-menu slot="dropdown" class="global-help-drop">
         <el-dropdown-item command=""><a href="https://github.com/allwefantasy/mlsql" target="_blank">Give Feedback</a></el-dropdown-item>
-        <el-dropdown-item command=""><a href="https://mlsql-docs.kyligence.io/latest/zh-hans/" target="_blank">MLSQL Docs</a></el-dropdown-item>
+        <el-dropdown-item command=""><a href="https://mlsql-docs.kyligence.io/latest/zh-hans/" target="_blank">Kolo Docs</a></el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>

@@ -6,7 +6,7 @@
         <span class="user-box">{{simplyName}}</span><span class="username ellipsis-item">{{userInfo && userInfo.username}}</span><i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>Username: {{userInfo && userInfo.username || ''}}</el-dropdown-item>
+        <el-dropdown-item>{{$t('login.userName')}}: {{userInfo && userInfo.username || ''}}</el-dropdown-item>
         <el-dropdown-item command="logout">{{$t('login.logout')}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>

@@ -49,7 +49,7 @@
     "upload_data": "Import & Connect Data",
     "upload_data_desc": "Quickly import and connect data",
     "create_notebook": "Create a New Notebook",
-    "create_notebook_desc": "Create a notebook to start cleaning, processing, visualizing, and modeling your data.",
+    "create_notebook_desc": "Create a notebook to start analyzing, training, and visualizing your data.",
     "explore": "Explore",
     "upload": "Upload",
     "create": "Create"
@@ -227,7 +227,7 @@
     "inputOtherName": "Please input another name.",
     "check": "Check",
     "clear": "Clear",
-    "saveTipText": "MLSQL syntax of the current node is incorrect. Are you sure to save this node?",
+    "saveTipText": "Kolo syntax of the current node is incorrect. Are you sure to save this node?",
     "readOnlyTip": "Read Only. To edit it further, click",
     "saveAsNotebook": " Save As Notebook",
     "createWorkflow": "Add a new Workflow",

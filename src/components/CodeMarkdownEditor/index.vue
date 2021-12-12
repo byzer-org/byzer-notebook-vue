@@ -93,7 +93,7 @@ export default class CodeMarkdownEditor extends Vue {
    * @description: 修改编辑器内容
    * @Date: 2021-08-26 15:42:22
    */
-  changeContent() {
+  changeContent () {
     this.$emit('changeContent', this.content)
   }
 
@@ -101,7 +101,7 @@ export default class CodeMarkdownEditor extends Vue {
    * @description: 获绑定codemirror实例
    * @Date: 2021-08-30 14:55:46
    */
-  bindCmInstance() {
+  bindCmInstance () {
     this.cmInstance = this.$refs['md' + this.cellId].codemirrorInstance
   }
 
@@ -109,7 +109,7 @@ export default class CodeMarkdownEditor extends Vue {
    * @description: 聚焦md
    * @Date: 2021-08-30 16:01:50
    */
-  handleFocus() {
+  handleFocus () {
     this.$nextTick(() => {
       // 聚焦
       this.$refs['md' + this.cellId].focus()
@@ -117,7 +117,7 @@ export default class CodeMarkdownEditor extends Vue {
   }
 
   @Watch('mode')
-  modeHandler(newValue, oldValue) {
+  modeHandler (newValue, oldValue) {
     if (newValue === oldValue) {
       return
     }
@@ -134,14 +134,14 @@ export default class CodeMarkdownEditor extends Vue {
   }
 
   @Watch('isSelected')
-  isSelectedHandler(newValue) {
+  isSelectedHandler (newValue) {
     if (!newValue) {
       this.mdMode = 'preview'
     }
   }
 
   @Watch('value')
-  valuehandler(newValue, oldValue) {
+  valuehandler (newValue, oldValue) {
     if (
       newValue === (oldValue || '').replace(MarkdownTag, '') ||
       oldValue === newValue.replace(MarkdownTag, '')
@@ -150,7 +150,7 @@ export default class CodeMarkdownEditor extends Vue {
     }
   }
 
-  created() {
+  created () {
     VMdEditor.Codemirror = Codemirror
     VMdEditor.use(githubTheme, {
       Hljs: hljs
@@ -162,7 +162,7 @@ export default class CodeMarkdownEditor extends Vue {
     Vue.use(VMdEditor)
   }
 
-  mounted() {
+  mounted () {
     this.bindCmInstance()
   }
 }

@@ -1,7 +1,7 @@
 
 <template>
   <div class="workflow-side">
-    <div class="workflow-side-title">Workflow</div>
+    <div class="workflow-side-title">{{$t('workspace.workflow')}}</div>
     <div class="workflow-side-wrapper" :class="(activeNotebook && activeNotebook.isPreviewMode) && 'disable-drag'">
       <div v-for="(node, index) in allNodeList" :key="node.type" class="workflow-side-wrapper-node">
         <div class="workflow-side-wrapper-node-header">
