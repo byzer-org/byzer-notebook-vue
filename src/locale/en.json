@@ -41,7 +41,9 @@
     "workspace": "Workspace",
     "catalog": "Data Catalog",
     "jobs": "Jobs",
-    "settings": "Settings"
+    "settings": "Settings",
+    "give_feedback": "Give Feedback",
+    "Kolo_docs": "Kolo Docs"
   },
   "home": {
     "quick_start": "Quick Start",

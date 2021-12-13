@@ -40,7 +40,9 @@
     "home": "主页",
     "workspace": "工作区",
     "jobs": "任务",
-    "settings": "设置"
+    "settings": "设置",
+    "give_feedback": "反馈",
+    "Kolo_docs": "Kolo 手册"
   },
   "home": {
     "quick_start": "快速开始",
