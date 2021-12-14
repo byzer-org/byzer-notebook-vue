@@ -23,7 +23,7 @@
         </el-upload>
       </el-form-item>
     </el-form>
-    <div slot="footer" class="dialog-footer-400">
+    <div slot="footer" class="dialog-footer-btns">
       <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
       <el-button type="primary" :loading="loadingSubmit" size="medium" @click="handleSubmit">{{$t('submit')}}</el-button>
     </div>

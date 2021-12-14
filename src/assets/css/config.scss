@@ -85,10 +85,19 @@ ul,li {list-style:none;}
 .page-outer-padding {
   padding: 36px 54px;
 }
-.dialog-footer-400 {
+.dialog-footer-btns {
   display: flex;
   .el-button {
     flex: 1;
+  }
+}
+.el-form-item.dialog-btns {
+  .el-form-item__content {
+    width: 100%;
+    display: flex;
+    .el-button {
+      flex: 1;
+    }
   }
 }
 .el-tooltip__popper div {

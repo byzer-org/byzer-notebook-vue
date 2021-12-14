@@ -18,7 +18,7 @@
     <div class="create-select-form">
       <Form v-if="isShow" ref="ruleForm" :initRuleForm="initForm" />
     </div>
-    <div slot="footer" class="dialog-footer-400">
+    <div slot="footer" class="dialog-footer-btns">
       <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
       <el-button type="primary" :loading="isSubmiting" size="medium" @click="handleSubmit">{{$t('ok')}}</el-button>
     </div>
