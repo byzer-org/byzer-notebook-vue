@@ -10,7 +10,6 @@
     @close="isShow && closeModal()">
     <div>
       <el-form
-        @keyup.native.enter="handleSubmit"
         :model="form"
         :rules="rules"
         ref="$form">
@@ -21,11 +20,11 @@
             @change="value => handleInput('name', value)"
           />
         </el-form-item>
+        <el-form-item class="dialog-btns">
+          <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
+          <el-button type="primary" :loading="isSubmiting" size="medium" native-type="submit" @click="handleSubmit">{{$t('clone')}}</el-button>
+        </el-form-item>
       </el-form>
-    </div>
-    <div slot="footer" class="dialog-footer-400">
-      <el-button @click="closeModal">{{$t('cancel')}}</el-button>
-      <el-button type="primary" :loading="isSubmiting" @click="handleSubmit">{{$t('create')}}</el-button>
     </div>
   </el-dialog>
 </template>

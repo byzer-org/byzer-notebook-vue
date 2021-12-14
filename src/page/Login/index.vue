@@ -6,7 +6,7 @@
         <div class="login-logo-text">Byzer Notebook</div>
       </div>
       <div class="login-form">
-        <el-form @keyup.native.enter="beforeSubmit" :model="user" ref="loginForm" :rules="rules">
+        <el-form :model="user" ref="loginForm" :rules="rules">
           <div class="input_group">
             <el-form-item label="" prop="username">
               <el-input v-model.trim="user.username" auto-complete="on" :autofocus="true" :placeholder="$t('login.userName')" name="username"></el-input>
@@ -17,7 +17,7 @@
           </div>
           <el-form-item class="login-btn" :class="isTrial && 'hide-sign'">
             <el-button v-if="!isTrial" size="medium" @click.native="checkForm('sign-up')" :disabled="loadingLogin" :loading="loadingSign">{{$t('login.signUp')}}</el-button>
-            <el-button type="primary" size="medium" @click.native="checkForm('login')" :disabled="loadingSign" :loading="loadingLogin">{{$t('login.signIn')}}</el-button>
+            <el-button type="primary" size="medium" native-type="submit" @click.native="checkForm('login')" :disabled="loadingSign" :loading="loadingLogin">{{$t('login.signIn')}}</el-button>
           </el-form-item>
         </el-form>
       </div>
