@@ -11,7 +11,6 @@
             class="html"
             scrolling="no"
             ref="htmlDom"
-            sandbox="allow-scripts"
             :srcDoc="detailContent"
             onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' 
             style="height:200px;border:none;overflow:hidden;">
