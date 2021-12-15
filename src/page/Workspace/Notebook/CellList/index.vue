@@ -29,10 +29,10 @@
         </div>
         <div class="btn">
           <icon-btn v-if="isRunningAll" icon="el-ksd-icon-stop_with_border_22" :text="$t('notebook.cancelAll')" :handler="() => hanldeExcuteAll('stop')" />
-          <icon-btn v-else icon="el-ksd-icon-play_all_outline_22" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
+          <icon-btn v-else icon="el-icon-video-play" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
         </div>
         <div class="btn">
-          <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
+          <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1 || isRunningAll" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
         </div>
         <div class="btn">
           <icon-btn icon="el-ksd-icon-clear_22" :disabled="isRunningAll" :text="$t('notebook.clearAllResult')" :handler="clearAllResult" />
@@ -79,6 +79,7 @@
               :ref="'cellLi' + cell.id">
               <div class="cell-order"><div class="text">Cell {{index + 1}}</div></div>
               <cell-box
+                class="editor-extra-header"
                 :key="'cell_'+ cell.id"
                 :isRunningAll="isRunningAll"
                 :disableDelete="newCellList.length <= 1"
@@ -93,6 +94,8 @@
                 @handleAddCell="(data) => handleAddCell(data, cell)"
                 @handleDeleteCell="() => handleDeleteCell(cell)"
                 @handleSave="handleSave"
+                @handleRunToHere="handleRunToHere"
+                @handleStopHere="hanldeExcuteAll('stop')"
                 :mode="mode"
                 @gotoNextCell="gotoNextCell"
                 @changeMode="changeMode"
@@ -134,6 +137,7 @@ export default {
       initList: [{ id: '1', content: '' }],
       someIsRunning: false,
       runningIndex: -1,
+      runToIndex: -1, // index of run to here cell
       exuteType: 'run',
       isRunningAll: false,
       draggableOptions: {
@@ -374,7 +378,7 @@ export default {
         // editor元素
         const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
         // 包裹editor的li
-        const containerNode = this.$refs['cellLi' + item.id][0]
+        const containerNode = this.$refs['cell' + item.id][0].$el
         // 每个li的左侧拖拽和添加icon
         const btnNode = this.$refs['cell' + item.id][0].$refs['cellBtn' + item.id]
         // 运行和折叠按钮
@@ -697,6 +701,7 @@ export default {
             this.confirmExcuteAll(true)
           })
         } else {
+          this.runToIndex = this.newCellList.length - 1
           this.confirmExcuteAll(true)
         }
       } catch (e) {
@@ -711,11 +716,19 @@ export default {
         this.confirmStopAll(isFirst)
       }
     },
+    handleRunToHere (cellId) {
+      this.runToIndex = this.newCellList.findIndex(i => i.id === cellId)
+      this.exuteType = 'run'
+      this.confirmExcuteAll(true)
+    },
     confirmRunAll () {
       this.runningIndex++
       const ids = this.newCellList.map(v => v.id)
       const id = ids[this.runningIndex]
-      if (id) {
+      if (
+        id && 
+        this.runToIndex >= this.runningIndex
+      ) {
         const domRef = `cell${id}`
         if (this.$refs[domRef] && this.$refs[domRef][0].content) {
           // 运行到哪个，哪个就切换为选中状态
@@ -728,6 +741,7 @@ export default {
       } else {
         this.changeRunAll(false)
         this.runningIndex = -1
+        this.runToIndex = -1
       }
     },
     confirmStopAll (isFirst) {
@@ -790,6 +804,9 @@ export default {
       this.handleSave()
     },
     async handleDeleteCell (item) {
+      if (this.isRunningAll) {
+        return
+      }
       const params = {
         id: this.activeNotebookId,
         cell_id: item.id
@@ -930,6 +947,19 @@ export default {
           margin-top: 12px;
           background-color: $--color-white;
           position: relative;
+          .editor-extra-header {
+            // ace-editor
+            .ace_gutter {
+              padding-top: 19px;
+            }
+            .ace_scroller {
+              top: 19px;
+            }
+            // md
+            .CodeMirror-sizer > div:first-child {
+              top: 19px !important;
+            }
+          }
           &.active::before {
             content: '';
             position: absolute;

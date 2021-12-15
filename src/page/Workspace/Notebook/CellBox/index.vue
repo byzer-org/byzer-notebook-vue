@@ -28,13 +28,13 @@
         <div class="excute-result" v-if="status !== 'NEW'">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
-              <ExcuteResult :result="excuteResult" :status="status" />
+              <ExcuteResult :result="excuteResult" :status="status" :innerMaxHeight="innerMaxHeight" />
             </el-tab-pane>
             <el-tab-pane label="Job Details" name="details">
-              <ExcuteDetail :result="excuteResult" :jobId="jobId"/>
+              <ExcuteDetail :result="excuteResult" :jobId="jobId" :innerMaxHeight="innerMaxHeight" />
             </el-tab-pane>
             <el-tab-pane label="Log Message" name="logs">
-              <LogMessage :result="excuteResult" v-if="jobId" :status="status" :jobId="jobId"/>
+              <LogMessage :result="excuteResult" v-if="jobId" :status="status" :jobId="jobId" :innerMaxHeight="innerMaxHeight" />
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -88,7 +88,8 @@ export default {
       startTime: 0,
       showAddCode: false,
       editType: this.cellInfo.editType || 'Kolo', // 编辑器类型
-      mdMode: 'preview'
+      mdMode: 'preview',
+      innerMaxHeight: ''
     }
   },
   components: {
@@ -104,12 +105,15 @@ export default {
     if (this.cellInfo.job_id) { // cell cell 状态获取
       this.getStatus(this.cellInfo.job_id)
     }
+    this.calInnerMaxHeight()
   },
   computed: {
     actions () {
       return [
         { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('run'), iconClass: 'el-ksd-icon-play_outline_22', handler: this.handleRun },
         { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStop },
+        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('notebook.runToHere'), isSvg: true, handler: this.handleRunToHere },
+        // { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStopToHere },
         { disabled: this.isRunningAll, isShow: !this.showCode, label: this.$t('notebook.showCode'), iconClass: 'el-ksd-icon-arrow_down_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: this.showCode, label: this.$t('notebook.hideCode'), iconClass: 'el-ksd-icon-arrow_up_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: true, label: this.$t('notebook.addAbove'), iconClass: '', handler: this.handleAddAbove },
@@ -145,6 +149,27 @@ export default {
     changeMdMode (mode) {
       this.mdMode = mode
     },
+    /**
+     * @description: cal the max-height of the inner elements in px
+     * @return {*} string
+     * @Date: 2021-12-14 14:15:37
+     */
+    calInnerMaxHeight () {
+      let avlHeight = 0
+      if (window.innerHeight) {
+        avlHeight = window.innerHeight
+      } else if (document.body && document.body.clientHeight) {
+        avlHeight = document.body.clientHeight
+      }
+      if (
+        document.documentElement &&
+        document.documentElement.clientHeight &&
+        document.documentElement.clientWidth
+      ) {
+        avlHeight = document.documentElement.clientHeight
+      }
+      this.innerMaxHeight = Math.round(avlHeight * 0.53) + 'px'
+    },
     changeStatus (status) {
       this.status = JOB_STATUS[status]
       this.$emit('changeStatus', this.status)
@@ -158,6 +183,12 @@ export default {
       if (this.cellInfo.id === this.selectCell.id) {
         this.handleRun()
       }
+    },
+    handleRunToHere () {
+      this.$emit('handleRunToHere', this.cellId)
+      },
+    handleStopToHere () {
+      this.$emit('handleStopHere')
     },
     async handleRun () {
       if (this.editType === 'Markdown') {
@@ -340,7 +371,7 @@ export default {
     }
     .cell-btns {
       z-index: 999;
-      height: 30px;
+      // height: 30px;
       padding: 4px 5px;
       padding-top: 0;
       display: none;

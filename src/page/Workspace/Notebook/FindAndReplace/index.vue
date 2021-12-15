@@ -366,6 +366,7 @@ export default class FindAndReplace extends Vue {
     margin-bottom: 16px;
   }
   .find-result-list-container {
+    margin-top: 16px;
     width: 100%;
     max-height: 340px;
     overflow: auto;
