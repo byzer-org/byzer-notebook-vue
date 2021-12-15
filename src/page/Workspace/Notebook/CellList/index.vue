@@ -104,6 +104,7 @@
     </div>
     <ShortcutPrompt ref="shortcutPrompt" class="shortcut-wrap"></ShortcutPrompt>
     <FindAndReplace
+      :replacedText="replacedText"
       ref="findAndReplace"
       :results="results"
       @handleReplace="handleReplace"
