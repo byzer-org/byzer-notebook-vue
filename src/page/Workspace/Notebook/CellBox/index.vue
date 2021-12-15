@@ -7,7 +7,7 @@
     </div>
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
       <!-- Code编辑器 & log -->
-      <span v-if="editType === 'Kolo' || editType === 'Python'">
+      <div v-if="editType === 'Kolo' || editType === 'Python'">
         <CodeEditor
           @changeMode="changeMode"
           :cellId="cellId"
@@ -20,11 +20,11 @@
           @gotoNextCell="gotoNextCell"
           :isSelected="selectCell.id===cellId"
         />
-      </span>
+      </div>
       <div class="cell-btns" :ref="'cellHover' + cellId">
         <ActionButton :actions="actions" />
       </div>
-      <span v-if="editType === 'Kolo' || editType === 'Python'">
+      <div v-if="editType === 'Kolo' || editType === 'Python'">
         <div class="excute-result" v-if="status !== 'NEW'">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
@@ -38,18 +38,19 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-      </span>
+      </div>
       <!-- markdown编辑器 -->
-      <CodeMarkdownEditor
-        v-else-if="editType === 'Markdown'"
-        :cellId="cellId"
-        :readOnly="mode !== 'edit'"
-        :ref="'cellEditor' + cellId"
-        :value="content"
-        :mode="mode"
-        :isSelected="selectCell.id === cellId"
-        @changeContent="changeContent"
-      />
+      <template v-else-if="editType === 'Markdown'">
+        <CodeMarkdownEditor
+          :cellId="cellId"
+          :ref="'cellEditor' + cellId"
+          :value="content"
+          :mode="mode"
+          :isSelected="selectCell.id === cellId"
+          @changeContent="changeContent"
+          @changeMdMode="changeMdMode"
+        />
+      </template>
     </div>
     <div class="cell-box-container" v-else>
       <div class="cell-btns hide-mode" :ref="'cellHover' + cellId">
@@ -86,7 +87,8 @@ export default {
       showExcuteDetails: true,
       startTime: 0,
       showAddCode: false,
-      editType: this.cellInfo.editType || 'Kolo' // 编辑器类型
+      editType: this.cellInfo.editType || 'Kolo', // 编辑器类型
+      mdMode: 'preview'
     }
   },
   components: {
@@ -140,6 +142,9 @@ export default {
       getJobStatus: 'GET_JOB_STATUS',
       cancelExcuteCell: 'CANCEL_EXCUTE_CELL'
     }),
+    changeMdMode (mode) {
+      this.mdMode = mode
+    },
     changeStatus (status) {
       this.status = JOB_STATUS[status]
       this.$emit('changeStatus', this.status)

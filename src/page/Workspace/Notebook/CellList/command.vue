@@ -14,7 +14,8 @@ export default {
       operateContent: '', // 剪切/复制的内容
       deletedCellList: [], // 被删除的cell
       shortcutPromptInstance: undefined, // 快捷键帮助组件实例
-      findAndReplaceInstance: undefined // 查找和替换组件实例
+      findAndReplaceInstance: undefined, // 查找和替换组件实例
+      replacedText: ''
     }
   },
   watch: {
@@ -302,13 +303,25 @@ export default {
      * @Date: 2021-09-02 09:58:09
      */
     findAndReplace () {
+      this.replacedText = this.getSelectedText()
       if (this.currentNotebook.id === this.activeNotebookId) {
         this.findAndReplaceInstance.showMsg = true
         this.handleFindKeyChanged(this.findKey)
       }
     },
+    getSelectedText () {
+      const editorType = ['Kolo', 'Python']
+      const { editType, id } = this.selectCell
+      const node = this.$refs['cell' + id][0].$refs['cellEditor' + id]
+      if (editorType.includes(editType)) {
+        const editor = node.$refs['codeEditor' + id].editor
+        return editor.getSelectedText()
+      }
+      return ''
+    },
+
     /**
-     * @description: D(连续按两次)  删除本单元格
+     * @description: D(连续按两次) 删除本单元格
      * @Date: 2021-08-31 17:15:28
      */
     handleKeyBoardDeleteCell () {
@@ -318,10 +331,10 @@ export default {
           // 按了一下之后变为true
           this.doublePressD = true;
           this.timer = setTimeout(() => {
-              this.doublePressD = false
-          }, 1000);
+            this.doublePressD = false
+          }, 1000)
         } else {
-          // doublePressD为true表示1秒内按了第二次
+          // doublePressD为true表示 1 秒内按了第二次
           clearTimeout(this.timer)
           this.doublePressD = false
           this.handleDeleteCell(this.selectCell)
@@ -334,11 +347,11 @@ export default {
      */
     changeCurrentEditType () {
       if (this.currentNotebook.id === this.activeNotebookId) {
-        let editType = '';
+        let editType = ''
         if (this.selectCell.editType === 'Kolo' || this.selectCell.editType === 'Python') {
-          editType = 'Markdown';
+          editType = 'Markdown'
         } else {
-          editType = 'Kolo';
+          editType = 'Kolo'
           if (this.selectCell.content.split('\n').map(i => i.trim()).indexOf(PythonTag) > -1) {
             editType = 'Python'
           }
