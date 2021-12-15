@@ -2,10 +2,10 @@
   <div class="action-button">
     <div class="action-element" v-for="(item, index) in iconActions" :key="index">
       <span @click="handleAction(item)">
-        <icon-btn v-if="!item.isSvg" class="font-16 opr-btn" :disabled="item.disabled" :icon="item.iconClass" :text="item.label" />
+        <icon-btn v-if="!item.isSvg" class="opr-btn" :disabled="item.disabled" :icon="item.iconClass" :text="item.label" />
         
         <el-tooltip v-else effect="dark" placement="top" :content="item.label" popper-class="action-item">
-          <svg-icon :iconClass="'run_to_here_16'" :className="'font-16 hasEvent'" :class="{'action-disabled': item.disabled}"></svg-icon>
+          <svg-icon :iconClass="'run_to_here_16'" :className="'font-22 hasEvent'" :class="{'action-disabled': item.disabled}"></svg-icon>
         </el-tooltip> 
       </span>
     </div>
@@ -61,8 +61,8 @@ export default {
   height: 17px;
   .action-element {
     margin-left: 10px;
-    height: 16px;
-    line-height: 16px;
+    height: 22px;
+    line-height: 22px;
     .action-disabled {
       cursor: no-drop;
     }

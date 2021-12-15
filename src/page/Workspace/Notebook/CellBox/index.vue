@@ -378,7 +378,7 @@ export default {
       background-color: transparent;
       position: absolute;
       right: 8px;
-      top: 12px;
+      top: 10px;
     }
     .excute-result {
       margin-top: 15px;
