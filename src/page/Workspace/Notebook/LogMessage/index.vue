@@ -1,6 +1,6 @@
 
 <template>
-  <div class="log-message">
+  <div class="log-message" :style="{'max-height': innerMaxHeight}">
     <ul class="log-message-list" v-if="logList.length">
       <li v-for="(item, index) in logList" :key="index">
         {{item}}
@@ -15,7 +15,7 @@ import { Component, Watch } from 'vue-property-decorator'
 import { mapActions } from 'vuex'
 
 @Component({
-  props: ['result', 'jobId', 'status'],
+  props: ['result', 'jobId', 'status', 'innerMaxHeight'],
   methods: {
     ...mapActions({
       getJobLogs: 'GET_JOB_LOGS'
@@ -81,6 +81,7 @@ export default class ExcuteDetail extends Vue {
 <style lang="scss">
 @import '../../../../assets/css/variable.scss';
 .log-message {
+  overflow: auto;
   &-list {
     padding: 10px;
     li {

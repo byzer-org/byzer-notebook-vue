@@ -1,7 +1,7 @@
 
 <template>
   <div class="cell-excute-result">
-    <div class="cell-excute-result-wrapper" :class="{ 'hide-detail': detailType === 'table' && showBtn && !showDetail, 'pb-48': detailType === 'table' && showBtn }" ref="resultContainer">
+    <div class="cell-excute-result-wrapper" ref="resultContainer">
       <div class="container" v-if="status === 'RUNNING'">
         <div class="empty-table">{{$t('nodata')}}</div>
       </div>
@@ -41,6 +41,7 @@
             class="render-list"
             v-else
             :data="renderTableList"
+            :max-height="innerMaxHeight"
             style="min-width: 100%;">
             <el-table-column
               min-width="200px"
@@ -50,7 +51,6 @@
               :label="col.label"
               :cell-class-name="'cell-test'">
               <template slot-scope="scope">
-                <!-- <p class="text-one-ellipse" ><span v-custom-tooltip="{text: scope.row[col.prop], w: 0, tableClassName: 'render-list'}">{{scope.row[col.prop]}}</span></p> -->
                 <div class="render-list-cell">
                   {{scope.row[col.prop]}}
                 </div>
@@ -72,23 +72,15 @@
           <div class="empty-table" v-else>{{$t('nodata')}}</div>
         </div>
       </div>
-      <div class="container failed" v-else>
+      <div class="container failed" :style="{'max-height': innerMaxHeight}" v-else>
         <div class="log-item">{{root_cause}}</div>
         <div class="failed-btns">
-          <el-button type="text" size="small" :icon="showDetail ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'" @click="showDetail = !showDetail">
-          {{showDetail ? $t('hideDetails') : $t('viewAll')}}
-          </el-button>
         </div>
-        <div class="failed-details" v-if="showDetail">
+        <div class="failed-details">
           <ul>
             <li class="log-item" v-for="(item, index) in failedMessage" :key="index">{{item}}</li>
           </ul>
         </div>
-      </div>
-      <div class="btn" v-if="excuteSuccess && showBtn && detailType === 'table'" :class="showDetail ? '' : 'hide-detail'">
-        <el-button type="text" size="small" :icon="showDetail ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'" @click="showDetail = !showDetail">
-        {{showDetail ? $t('hideDetails') : $t('viewAll')}}
-        </el-button>
       </div>
     </div>
     <div class="download-btn" v-if="excuteSuccess && (detailType === 'html' || tableList.length)">
@@ -108,7 +100,7 @@ import { Parser } from 'json2csv'
 import moment from 'moment'
 
 @Component({
-  props: ['result', 'status']
+  props: ['result', 'status', 'innerMaxHeight']
 })
 
 export default class ExcuteResult extends Vue {
@@ -122,8 +114,6 @@ export default class ExcuteResult extends Vue {
     page: 1
   }
   renderTableList = []
-  showBtn = false
-  showDetail = false
   root_cause = ''
   detailType = 'table'
   detailContent = ''
@@ -148,17 +138,6 @@ export default class ExcuteResult extends Vue {
 
   created () {
     this.initData()
-  }
-  mounted () {
-    this.$nextTick(() => {
-      this.getAllHeight()
-    })
-  }
-
-
-  getAllHeight () {
-    const allHeight = this.$refs.resultContainer && this.$refs.resultContainer.offsetHeight
-    this.showBtn = allHeight && allHeight > 200
   }
 
   initData () {
@@ -245,6 +224,7 @@ export default class ExcuteResult extends Vue {
     }
     &.failed {
       word-wrap: break-word;
+      overflow: auto;
       .log-item {
         line-height: 22px;
         color: $--color-text-secondary;
