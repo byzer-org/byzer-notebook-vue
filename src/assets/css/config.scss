@@ -159,7 +159,6 @@ ul,li {list-style:none;}
     }
   }
 }
-
 .node-icon-item { // workflow 节点样式
   &.tool, &.select {
     border-color: $pattern-blue-500;
@@ -216,6 +215,37 @@ ul,li {list-style:none;}
       border-color: $pattern-orange-600;
       background-color: $pattern-orange-700;
     }
+  }
+}
+
+$sizeArr: (2, 5, 10, 12, 15, 16, 20, 22, 24, 48);
+@each $size in $sizeArr {
+  .font-#{$size} {
+    font-size: $size + px;
+  }
+  .pl-#{$size} {
+    padding-left: $size + px;
+  }
+  .pr-#{$size} {
+    padding-right: $size + px;
+  }
+  .pt-#{$size} {
+    padding-top: $size + px;
+  }
+  .pb-#{$size} {
+    padding-bottom: $size + px;
+  }
+  .ml-#{$size} {
+    margin-left: $size + px;
+  }
+  .mr-#{$size} {
+    margin-right: $size + px;
+  }
+  .mt-#{$size} {
+    margin-top: $size + px;
+  }
+  .mb-#{$size} {
+    margin-bottom: $size + px;
   }
 }
 
