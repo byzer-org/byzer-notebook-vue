@@ -1,6 +1,6 @@
 
 <template>
-  <div class="excute-detail font-12">
+  <div class="excute-detail font-12" :style="{'max-height': innerMaxHeight}">
     <div class="duration">{{$t('notebook.jobId')}}: {{jobId}}
       <el-tooltip placement="top" :content="$t('copy')">
         <i class="hasEvent copy-btn el-ksd-icon-dup_16 font-16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="jobId"></i>
@@ -55,7 +55,7 @@ import { timeToStr } from '@/util'
 import { mapActions } from 'vuex'
 
 @Component({
-  props: ['result', 'jobId'],
+  props: ['result', 'jobId', 'innerMaxHeight'],
   methods: {
     ...mapActions('CodeModal', {
       callCodeModal: 'CALL_MODAL'
@@ -131,7 +131,7 @@ export default class ExcuteDetail extends Vue {
 <style lang="scss">
 @import '../../../../assets/css/variable.scss';
 .excute-detail {
-  width: 340px;
+  overflow: auto;
   .duration {
     color: $--color-text-secondary;
     line-height: 22px;

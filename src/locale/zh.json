@@ -134,6 +134,7 @@
     "nologs": "暂无可用日志",
     "addCell": "新增单元格",
     "run": "运行",
+    "runToHere": "运行至此",
     "runNext": "运行下一个",
     "runAll": "运行所有",
     "stop": "停止",
