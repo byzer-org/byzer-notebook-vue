@@ -8,6 +8,7 @@
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
       <!-- Code编辑器 & log -->
       <div v-if="editType === 'Kolo' || editType === 'Python'">
+        <div class="mock-editor" :class="!(mode === 'edit' && selectCell.id === cellId) && 'preview'"><div class="mock-editor-gutter"></div><div class="mock-editor-content"></div></div>
         <CodeEditor
           @changeMode="changeMode"
           :cellId="cellId"
@@ -357,6 +358,26 @@ export default {
     border: 1px solid $--border-color-light;
     &:hover {
       box-shadow: 0px 1px 4px rgba(63, 89, 128, 0.16);
+    }
+    .mock-editor {
+      display: flex;
+      height: 19px;
+      &.preview {
+        .mock-editor-gutter {
+          background-color: $--color-white;
+        }
+        .mock-editor-content {
+          background-color: $--color-white;
+        }
+      }
+      &-gutter {
+        width: 60px;
+        background-color: $--background-color-hover;
+      }
+      &-content {
+        flex: 1;
+        background-color: $--background-color-secondary;
+      }
     }
     &.is-md-cell {
       border: none;
