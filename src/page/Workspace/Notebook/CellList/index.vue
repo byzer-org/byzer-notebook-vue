@@ -948,16 +948,12 @@ export default {
           background-color: $--color-white;
           position: relative;
           .editor-extra-header {
-            // ace-editor
-            .ace_gutter {
-              padding-top: 19px;
-            }
-            .ace_scroller {
-              top: 19px;
+            .ace_gutter-layer {
+              width: 60px !important;
             }
             // md
             .CodeMirror-sizer > div:first-child {
-              top: 19px !important;
+              padding-top: 19px !important;
             }
           }
           &.active::before {
