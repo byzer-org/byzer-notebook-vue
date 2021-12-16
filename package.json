@@ -61,7 +61,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "jest": "^27.3.1",
-    "sass": "^1.43.4",
+    "sass": "^1.45.0",
     "sass-loader": "10.1.1",
     "svg-sprite-loader": "^6.0.2",
     "vue-i18n-locale-message": "^0.16.2",
