@@ -74,8 +74,11 @@
       <div class="container failed" :style="{'max-height': innerMaxHeight}" v-else>
         <div class="log-item">{{root_cause}}</div>
         <div class="failed-btns">
+          <el-button type="text" size="small" :icon="showDetail ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'" @click="showDetail = !showDetail">
+          {{showDetail ? $t('hideDetails') : $t('viewAll')}}
+          </el-button>
         </div>
-        <div class="failed-details">
+        <div class="failed-details" v-if="showDetail">
           <ul>
             <li class="log-item" v-for="(item, index) in failedMessage" :key="index">{{item}}</li>
           </ul>
@@ -113,6 +116,7 @@ export default class ExcuteResult extends Vue {
     page: 1
   }
   renderTableList = []
+  showDetail = false
   root_cause = ''
   detailType = 'table'
   detailContent = ''
