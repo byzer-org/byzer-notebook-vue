@@ -44,7 +44,7 @@
     </div>
     <div class="view-sql">
       <div class="view-sql-label">
-        Kolo VIEWER
+        Byzer VIEWER
         <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
@@ -128,7 +128,7 @@ export default class SaveNodeForm extends Vue {
   get connectedMlsql () {
     return this.getConnectionMlsql(this.ruleForm)
   }
-  
+
   created () {
     this.getExistTables()
     this.getExistModels()
@@ -193,7 +193,7 @@ export default class SaveNodeForm extends Vue {
     const param = auto ? 'autoSelectByMetric' : 'aigIndex'
     return `predict ${source} as ${model} where ${param}="${value}" as ${target};`
   }
-  
+
   initData () {
     const form = this.initRuleForm || {}
     const { source = '', model = '', target = '', predict_param = { auto: true, value: ''} } = form
@@ -203,7 +203,7 @@ export default class SaveNodeForm extends Vue {
     if (!modelItem && !predict_param.auto) {
       predict_param.value = ''
     }
-    this.ruleForm = { 
+    this.ruleForm = {
       source,
       model: model1,
       target,
@@ -219,7 +219,7 @@ export default class SaveNodeForm extends Vue {
     try {
       const res = await this.getExistingTable()
       this.tableList = res.data?.output ?? []
-    } catch (e){ 
+    } catch (e){
       console.log(e)
     }
   }
@@ -234,7 +234,7 @@ export default class SaveNodeForm extends Vue {
       console.log(e)
     }
   }
-  
+
   clearResult () {
     this.$refs.form.clearValidate()
   }

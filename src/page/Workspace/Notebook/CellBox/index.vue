@@ -7,7 +7,7 @@
     </div>
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
       <!-- Code编辑器 & log -->
-      <div v-if="editType === 'Kolo' || editType === 'Python'">
+      <div v-if="editType === 'Byzer' || editType === 'Python'">
         <div class="mock-editor" :class="!(mode === 'edit' && selectCell.id === cellId) && 'preview'"><div class="mock-editor-gutter"></div><div class="mock-editor-content"></div></div>
         <CodeEditor
           @changeMode="changeMode"
@@ -25,7 +25,7 @@
       <div class="cell-btns" :ref="'cellHover' + cellId">
         <ActionButton :actions="actions" />
       </div>
-      <div v-if="editType === 'Kolo' || editType === 'Python'">
+      <div v-if="editType === 'Byzer' || editType === 'Python'">
         <div class="excute-result" v-if="status !== 'NEW'">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
@@ -88,7 +88,7 @@ export default {
       showExcuteDetails: true,
       startTime: 0,
       showAddCode: false,
-      editType: this.cellInfo.editType || 'Kolo', // 编辑器类型
+      editType: this.cellInfo.editType || 'Byzer', // 编辑器类型
       mdMode: 'preview',
       innerMaxHeight: ''
     }
@@ -130,7 +130,7 @@ export default {
     cellInfo: {
       handler (newVal) {
         this.content = this.cellInfo.content
-        this.editType = this.cellInfo.editType || 'Kolo'
+        this.editType = this.cellInfo.editType || 'Byzer'
         if (!newVal.job_id) {
           this.excuteResult = {}
           this.status = 'NEW'
