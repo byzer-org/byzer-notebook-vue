@@ -40,7 +40,9 @@
     "home": "主页",
     "workspace": "工作区",
     "jobs": "任务",
-    "settings": "设置"
+    "settings": "设置",
+    "give_feedback": "反馈",
+    "Kolo_docs": "Byzer 手册"
   },
   "home": {
     "quick_start": "快速开始",
@@ -228,7 +230,7 @@
     "inputOtherName": "请输入其他名称。",
     "check": "检查",
     "clear": "清除",
-    "saveTipText": "当前节点 Kolo 语法错误，是否确认暂存该节点?",
+    "saveTipText": "当前节点 Byzer 语法错误，是否确认暂存该节点?",
     "readOnlyTip": "只读。要进一步编辑，请单击",
     "saveAsNotebook": "另存为笔记本",
     "createWorkflow": "创建工作流",

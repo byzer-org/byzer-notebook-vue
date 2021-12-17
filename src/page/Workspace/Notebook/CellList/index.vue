@@ -42,7 +42,7 @@
             {{ editType }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="Kolo">Kolo</el-dropdown-item>
+            <el-dropdown-item command="Byzer">Byzer</el-dropdown-item>
             <el-dropdown-item command="Python">Python</el-dropdown-item>
             <el-dropdown-item command="Markdown">Markdown</el-dropdown-item>
           </el-dropdown-menu>
@@ -222,7 +222,7 @@ export default {
           this.editType = newVal.editType || '';
           if (
             editType === 'Markdown' &&
-            (oldEditType === 'Kolo' || oldEditType === 'Python')
+            (oldEditType === 'Byzer' || oldEditType === 'Python')
           ) {
             const mdEditorInstance = this.$refs['cell' + id][0].$refs[
               'cellEditor' + id
@@ -332,7 +332,7 @@ export default {
             }
           })
           const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
-          if (item.editType === 'Kolo' || item.editType === 'Python') {
+          if (item.editType === 'Byzer' || item.editType === 'Python') {
             // ace-editor直接改content来修改文本会导致Ctrl+Z无法undo
             // 并且光标可能会重置在{column:0, row: 0}的位置
             const editor = node.$refs['codeEditor'+ cellId].editor
@@ -433,7 +433,7 @@ export default {
           newValue = PythonTag + '\n' + newValue
           this.setEditorValue(newValue)
         }
-        if (e === 'Kolo') {
+        if (e === 'Byzer') {
           if (index > -1) {
             newValue = newValue.replace(PythonTag, '')
           }
@@ -493,14 +493,14 @@ export default {
       this.changeNotebookMode({notebookId: id, type, mode})
       if (
         mode === 'command' &&
-        (this.selectCell.editType === 'Kolo' ||
+        (this.selectCell.editType === 'Byzer' ||
           this.selectCell.editType === 'Python')
       ) {
         // 切换为command模式后ace editor失焦
         this.handleCodeBlur()
       } else if (
         mode === 'edit' &&
-        (this.selectCell.editType === 'Kolo' ||
+        (this.selectCell.editType === 'Byzer' ||
           this.selectCell.editType === 'Python')
       ) {
         // 切换为edit模式后ace editor聚焦
@@ -588,7 +588,7 @@ export default {
           const temp = this.oldCellList.find(i => i.id === item.id) || {};
           item.editType = temp.editType || 'Markdown';
         } else {
-          item.editType = 'Kolo'
+          item.editType = 'Byzer'
           if (
             (item.content || '').split('\n').map(i => i.trim()).indexOf(PythonTag) > -1
           ) {
@@ -726,7 +726,7 @@ export default {
       const ids = this.newCellList.map(v => v.id)
       const id = ids[this.runningIndex]
       if (
-        id && 
+        id &&
         this.runToIndex >= this.runningIndex
       ) {
         const domRef = `cell${id}`
@@ -775,7 +775,7 @@ export default {
     changeInput: debounce(function ({ value, cellInfo }) {
       const index = this.newCellList.findIndex(v => v.id === cellInfo.id)
       this.newCellList[index].content = value
-      let editType = 'Kolo'
+      let editType = 'Byzer'
       // 保存时给markdown添加标记
       if ((value || '').startsWith(MarkdownTag)) {
         editType = 'Markdown'
@@ -842,7 +842,7 @@ export default {
         const res = await this.getNotebookById({ id: this.activeNotebookId })
         this.loadingSave = false
         this.newCellList = this.dataProcess(res.data.cell_list)
-        this.selectCell = Object.assign(newCell.data, { editType: 'Kolo' })
+        this.selectCell = Object.assign(newCell.data, { editType: 'Byzer' })
         this.changeMode('edit')
         this.autoScrollCells(insertIndex, type)
       } catch (e) {

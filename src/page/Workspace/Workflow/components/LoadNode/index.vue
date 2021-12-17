@@ -120,7 +120,7 @@
       </el-form>
     </div>
     <div class="view-sql">
-      <div class="view-sql-label">Kolo VIEWER
+      <div class="view-sql-label">Byzer VIEWER
         <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
