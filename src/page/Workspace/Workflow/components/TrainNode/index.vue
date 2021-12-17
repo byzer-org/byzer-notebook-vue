@@ -69,7 +69,7 @@
     </div>
     <div class="view-sql">
       <div class="view-sql-label">
-        Kolo VIEWER
+        Byzer VIEWER
         <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
@@ -195,7 +195,7 @@ export default class TrainNodeForm extends Vue {
   getCompleteModel ({ target, save_path }) {
     return `${save_path}/${target}`
   }
-  
+
   created () {
     this.getAlgorithms()
     this.getExistTables()
@@ -216,11 +216,11 @@ export default class TrainNodeForm extends Vue {
     const mode = this.getCompleteModel({ target, save_path })
     return `train ${source} as ${algorithm}.\`${mode}\` ${ str ? `where ${str}` : ''};`
   }
-  
+
   initData () {
     const form = this.initRuleForm || {}
     const { algorithm = '', source = '', target = '', save_path = '', train_param = '' } = form
-    this.ruleForm = { 
+    this.ruleForm = {
       algorithm,
       source,
       target,

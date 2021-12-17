@@ -128,7 +128,7 @@
     </div>
     <div class="view-sql">
       <div class="view-sql-label">
-        Kolo VIEWER
+        Byzer VIEWER
         <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
@@ -177,7 +177,7 @@ import CodeEditor from '../CodeEditor'
         ]
       }
     }
-    
+
   },
   methods: {
     ...mapActions({
@@ -239,7 +239,7 @@ export default class SaveNodeForm extends Vue {
       return this.allDataSourceList
     }
   }
-  
+
   mounted () {
     if (!this.isTrial) {
       this.getConnections()
@@ -272,12 +272,12 @@ export default class SaveNodeForm extends Vue {
         return `save ${mode} ${source} as delta.\`${database}.${target}\`;`
     }
   }
-  
+
   initData () {
     const form = this.initRuleForm || {}
     const { mode, datasource_type, connection, data_type, source, database, target } = form
     const connectionItem = this.connectionList.find(v => v.id === connection)
-    this.ruleForm = { 
+    this.ruleForm = {
       mode: mode || 'overwrite',
       datasource_type: datasource_type || '',
       connection: connectionItem ? connection : '',
@@ -297,7 +297,7 @@ export default class SaveNodeForm extends Vue {
     this.ruleForm.target = ''
   }
   changeDatasourceType (value) {
-    const { mode, source } = this.ruleForm 
+    const { mode, source } = this.ruleForm
     this.ruleForm = {
       mode,
       source,
@@ -434,7 +434,7 @@ export default class SaveNodeForm extends Vue {
   onCopy () {
     this.$message.success(this.$t('copySuccess'))
   }
-  
+
   async validateDatabase (rule, value, callback) {
     if (!value) {
       const message = this.databaseMode === 'select' ? this.$t('pleaseSelect') : this.$t('pleaseInput')

@@ -43,7 +43,7 @@
     "jobs": "Jobs",
     "settings": "Settings",
     "give_feedback": "Give Feedback",
-    "Kolo_docs": "Kolo Docs"
+    "Kolo_docs": "Byzer Docs"
   },
   "home": {
     "quick_start": "Quick Start",
@@ -230,7 +230,7 @@
     "inputOtherName": "Please input another name.",
     "check": "Check",
     "clear": "Clear",
-    "saveTipText": "Kolo syntax of the current node is incorrect. Are you sure to save this node?",
+    "saveTipText": "Byzer syntax of the current node is incorrect. Are you sure to save this node?",
     "readOnlyTip": "Read Only. To edit it further, click",
     "saveAsNotebook": " Save As Notebook",
     "createWorkflow": "Add a new Workflow",
