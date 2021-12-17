@@ -32,7 +32,7 @@
     </div>
     <div class="view-sql">
       <div class="view-sql-label">
-        Kolo VIEWER
+        Byzer VIEWER
         <el-tooltip placement="top" :content="$t('copy')">
           <i class="hasEvent copy-icon el-ksd-icon-dup_16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="connectedMlsql"></i>
         </el-tooltip>
@@ -71,7 +71,7 @@ import CodeEditor from '../CodeEditor'
         ]
       }
     }
-    
+
   },
   methods: {
     ...mapActions({
@@ -118,7 +118,7 @@ export default class SaveNodeForm extends Vue {
   get connectedMlsql () {
     return this.getConnectionMlsql(this.ruleForm)
   }
-  
+
   mounted () {
     this.getExistModels()
     this.getExistTables()
@@ -166,13 +166,13 @@ export default class SaveNodeForm extends Vue {
     } = form || {}
     return `register ${source} as ${target};`
   }
-  
+
   initData () {
     const form = this.initRuleForm || {}
     const { source = '', target = '', deploy_mode_param = { url: '', access_token: '' } } = form
     const modelItem = this.modelList.find(v => (v.model === source))
     let source1 = modelItem ? modelItem.model : ''
-    this.ruleForm = { 
+    this.ruleForm = {
       source: source1,
       target,
       deploy_mode_param
