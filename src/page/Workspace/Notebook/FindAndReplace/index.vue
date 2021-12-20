@@ -41,7 +41,7 @@
       <div v-if="results && results.length > 0">
         <div>
           <span class="find-and-replace-sub-title">{{ $t('notebook.findResult') }}</span>
-          <el-button-group size="small">
+          <el-button-group>
             <el-button @click="selectPrevious" plain size="mini" icon="el-ksd-icon-arrow_left_22" >{{ $t('notebook.previous') }}</el-button>
             <el-button @click="selectNext" plain size="mini" >{{ $t('notebook.next') }}<i class="el-ksd-icon-arrow_right_22"></i></el-button>
           </el-button-group>
@@ -76,6 +76,10 @@ import CodeEditor from '../../../../components/CodeEditor'
     results: {
       default: [],
       type: Array
+    },
+    replacedText: {
+      default: '',
+      type: String
     }
   },
   components: { CodeEditor },
@@ -86,6 +90,10 @@ import CodeEditor from '../../../../components/CodeEditor'
         this.locateFindKey()
       },
       deep: true
+    },
+    replacedText (newVal) {
+      this.findKey = newVal
+      this.$emit('handleFindKeyChanged', this.findKey)
     }
   }
 })
@@ -358,6 +366,7 @@ export default class FindAndReplace extends Vue {
     margin-bottom: 16px;
   }
   .find-result-list-container {
+    margin-top: 16px;
     width: 100%;
     max-height: 340px;
     overflow: auto;

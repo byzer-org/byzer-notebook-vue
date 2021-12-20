@@ -29,10 +29,10 @@
         </div>
         <div class="btn">
           <icon-btn v-if="isRunningAll" icon="el-ksd-icon-stop_with_border_22" :text="$t('notebook.cancelAll')" :handler="() => hanldeExcuteAll('stop')" />
-          <icon-btn v-else icon="el-ksd-icon-play_all_outline_22" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
+          <icon-btn v-else icon="el-icon-video-play" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
         </div>
         <div class="btn">
-          <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
+          <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1 || isRunningAll" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
         </div>
         <div class="btn">
           <icon-btn icon="el-ksd-icon-clear_22" :disabled="isRunningAll" :text="$t('notebook.clearAllResult')" :handler="clearAllResult" />
@@ -42,7 +42,7 @@
             {{ editType }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="Kolo">Kolo</el-dropdown-item>
+            <el-dropdown-item command="Byzer">Byzer</el-dropdown-item>
             <el-dropdown-item command="Python">Python</el-dropdown-item>
             <el-dropdown-item command="Markdown">Markdown</el-dropdown-item>
           </el-dropdown-menu>
@@ -79,6 +79,7 @@
               :ref="'cellLi' + cell.id">
               <div class="cell-order"><div class="text">Cell {{index + 1}}</div></div>
               <cell-box
+                class="editor-extra-header"
                 :key="'cell_'+ cell.id"
                 :isRunningAll="isRunningAll"
                 :disableDelete="newCellList.length <= 1"
@@ -93,6 +94,8 @@
                 @handleAddCell="(data) => handleAddCell(data, cell)"
                 @handleDeleteCell="() => handleDeleteCell(cell)"
                 @handleSave="handleSave"
+                @handleRunToHere="handleRunToHere"
+                @handleStopHere="hanldeExcuteAll('stop')"
                 :mode="mode"
                 @gotoNextCell="gotoNextCell"
                 @changeMode="changeMode"
@@ -104,6 +107,7 @@
     </div>
     <ShortcutPrompt ref="shortcutPrompt" class="shortcut-wrap"></ShortcutPrompt>
     <FindAndReplace
+      :replacedText="replacedText"
       ref="findAndReplace"
       :results="results"
       @handleReplace="handleReplace"
@@ -133,6 +137,7 @@ export default {
       initList: [{ id: '1', content: '' }],
       someIsRunning: false,
       runningIndex: -1,
+      runToIndex: -1, // index of run to here cell
       exuteType: 'run',
       isRunningAll: false,
       draggableOptions: {
@@ -217,7 +222,7 @@ export default {
           this.editType = newVal.editType || '';
           if (
             editType === 'Markdown' &&
-            (oldEditType === 'Kolo' || oldEditType === 'Python')
+            (oldEditType === 'Byzer' || oldEditType === 'Python')
           ) {
             const mdEditorInstance = this.$refs['cell' + id][0].$refs[
               'cellEditor' + id
@@ -327,7 +332,7 @@ export default {
             }
           })
           const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
-          if (item.editType === 'Kolo' || item.editType === 'Python') {
+          if (item.editType === 'Byzer' || item.editType === 'Python') {
             // ace-editor直接改content来修改文本会导致Ctrl+Z无法undo
             // 并且光标可能会重置在{column:0, row: 0}的位置
             const editor = node.$refs['codeEditor'+ cellId].editor
@@ -373,7 +378,7 @@ export default {
         // editor元素
         const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
         // 包裹editor的li
-        const containerNode = this.$refs['cellLi' + item.id][0]
+        const containerNode = this.$refs['cell' + item.id][0].$el
         // 每个li的左侧拖拽和添加icon
         const btnNode = this.$refs['cell' + item.id][0].$refs['cellBtn' + item.id]
         // 运行和折叠按钮
@@ -428,7 +433,7 @@ export default {
           newValue = PythonTag + '\n' + newValue
           this.setEditorValue(newValue)
         }
-        if (e === 'Kolo') {
+        if (e === 'Byzer') {
           if (index > -1) {
             newValue = newValue.replace(PythonTag, '')
           }
@@ -488,14 +493,14 @@ export default {
       this.changeNotebookMode({notebookId: id, type, mode})
       if (
         mode === 'command' &&
-        (this.selectCell.editType === 'Kolo' ||
+        (this.selectCell.editType === 'Byzer' ||
           this.selectCell.editType === 'Python')
       ) {
         // 切换为command模式后ace editor失焦
         this.handleCodeBlur()
       } else if (
         mode === 'edit' &&
-        (this.selectCell.editType === 'Kolo' ||
+        (this.selectCell.editType === 'Byzer' ||
           this.selectCell.editType === 'Python')
       ) {
         // 切换为edit模式后ace editor聚焦
@@ -583,7 +588,7 @@ export default {
           const temp = this.oldCellList.find(i => i.id === item.id) || {};
           item.editType = temp.editType || 'Markdown';
         } else {
-          item.editType = 'Kolo'
+          item.editType = 'Byzer'
           if (
             (item.content || '').split('\n').map(i => i.trim()).indexOf(PythonTag) > -1
           ) {
@@ -696,6 +701,7 @@ export default {
             this.confirmExcuteAll(true)
           })
         } else {
+          this.runToIndex = this.newCellList.length - 1
           this.confirmExcuteAll(true)
         }
       } catch (e) {
@@ -710,11 +716,19 @@ export default {
         this.confirmStopAll(isFirst)
       }
     },
+    handleRunToHere (cellId) {
+      this.runToIndex = this.newCellList.findIndex(i => i.id === cellId)
+      this.exuteType = 'run'
+      this.confirmExcuteAll(true)
+    },
     confirmRunAll () {
       this.runningIndex++
       const ids = this.newCellList.map(v => v.id)
       const id = ids[this.runningIndex]
-      if (id) {
+      if (
+        id &&
+        this.runToIndex >= this.runningIndex
+      ) {
         const domRef = `cell${id}`
         if (this.$refs[domRef] && this.$refs[domRef][0].content) {
           // 运行到哪个，哪个就切换为选中状态
@@ -727,6 +741,7 @@ export default {
       } else {
         this.changeRunAll(false)
         this.runningIndex = -1
+        this.runToIndex = -1
       }
     },
     confirmStopAll (isFirst) {
@@ -760,7 +775,7 @@ export default {
     changeInput: debounce(function ({ value, cellInfo }) {
       const index = this.newCellList.findIndex(v => v.id === cellInfo.id)
       this.newCellList[index].content = value
-      let editType = 'Kolo'
+      let editType = 'Byzer'
       // 保存时给markdown添加标记
       if ((value || '').startsWith(MarkdownTag)) {
         editType = 'Markdown'
@@ -789,6 +804,9 @@ export default {
       this.handleSave()
     },
     async handleDeleteCell (item) {
+      if (this.isRunningAll) {
+        return
+      }
       const params = {
         id: this.activeNotebookId,
         cell_id: item.id
@@ -824,7 +842,7 @@ export default {
         const res = await this.getNotebookById({ id: this.activeNotebookId })
         this.loadingSave = false
         this.newCellList = this.dataProcess(res.data.cell_list)
-        this.selectCell = Object.assign(newCell.data, { editType: 'Kolo' })
+        this.selectCell = Object.assign(newCell.data, { editType: 'Byzer' })
         this.changeMode('edit')
         this.autoScrollCells(insertIndex, type)
       } catch (e) {
@@ -929,6 +947,15 @@ export default {
           margin-top: 12px;
           background-color: $--color-white;
           position: relative;
+          .editor-extra-header {
+            .ace_gutter-layer {
+              width: 60px !important;
+            }
+            // md
+            .CodeMirror-sizer > div:first-child {
+              padding-top: 19px !important;
+            }
+          }
           &.active::before {
             content: '';
             position: absolute;

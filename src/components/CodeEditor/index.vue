@@ -1,7 +1,7 @@
 
 <template>
   <div
-    class="Kolo-editor"
+    class="Byzer-editor"
     :class="{ 'active-editor': isSelected && !readOnly }"
   >
     <editor
@@ -67,7 +67,7 @@ export default {
         this.content = newVal
       }
       this.checkLang()
-      
+
       ;(oldVal || '').split('').forEach(i => {
         newVal = newVal.replace(i, '')
       })

@@ -41,7 +41,9 @@
     "workspace": "Workspace",
     "catalog": "Data Catalog",
     "jobs": "Jobs",
-    "settings": "Settings"
+    "settings": "Settings",
+    "give_feedback": "Give Feedback",
+    "Kolo_docs": "Byzer Docs"
   },
   "home": {
     "quick_start": "Quick Start",
@@ -89,7 +91,7 @@
     "validDupFile": "Please remove duplicate file.",
     "validSingleSize": "Max file size is 200M",
     "validTotalSize": "Max file total size is 500M",
-    "validFile": "File must ends with .mlnb or .mlwf",
+    "validFile": "File must ends with .bznb or .bzwf",
     "importTitle": "Import Notebook/Workflow"
   },
   "notebook": {
@@ -134,6 +136,7 @@
     "viewLargerImage": "View larger image",
     "nologs": "No logs available",
     "run": "Run",
+    "runToHere": "Run to here",
     "addCell": "Add Cell",
     "runNext": "Run Next",
     "runAll": "Run All",
@@ -227,7 +230,7 @@
     "inputOtherName": "Please input another name.",
     "check": "Check",
     "clear": "Clear",
-    "saveTipText": "Kolo syntax of the current node is incorrect. Are you sure to save this node?",
+    "saveTipText": "Byzer syntax of the current node is incorrect. Are you sure to save this node?",
     "readOnlyTip": "Read Only. To edit it further, click",
     "saveAsNotebook": " Save As Notebook",
     "createWorkflow": "Add a new Workflow",

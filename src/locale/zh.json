@@ -40,7 +40,9 @@
     "home": "主页",
     "workspace": "工作区",
     "jobs": "任务",
-    "settings": "设置"
+    "settings": "设置",
+    "give_feedback": "反馈",
+    "Kolo_docs": "Byzer 手册"
   },
   "home": {
     "quick_start": "快速开始",
@@ -88,7 +90,7 @@
     "validDupFile": "请删除重复文件。",
     "validSingleSize": "最大文件大小为 200M",
     "validTotalSize": "最大文件总大小为 500M",
-    "validFile": "文件必须以 .mlnb 或 .mlwf 结尾",
+    "validFile": "文件必须以 .bznb 或 .bzwf 结尾",
     "importTitle": "导入笔记本/工作流"
   },
   "notebook": {
@@ -132,6 +134,7 @@
     "nologs": "暂无可用日志",
     "addCell": "新增单元格",
     "run": "运行",
+    "runToHere": "运行至此",
     "runNext": "运行下一个",
     "runAll": "运行所有",
     "stop": "停止",
@@ -227,7 +230,7 @@
     "inputOtherName": "请输入其他名称。",
     "check": "检查",
     "clear": "清除",
-    "saveTipText": "当前节点 Kolo 语法错误，是否确认暂存该节点?",
+    "saveTipText": "当前节点 Byzer 语法错误，是否确认暂存该节点?",
     "readOnlyTip": "只读。要进一步编辑，请单击",
     "saveAsNotebook": "另存为笔记本",
     "createWorkflow": "创建工作流",

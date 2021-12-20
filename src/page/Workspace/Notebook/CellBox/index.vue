@@ -7,7 +7,8 @@
     </div>
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
       <!-- Code编辑器 & log -->
-      <span v-if="editType === 'Kolo' || editType === 'Python'">
+      <div v-if="editType === 'Byzer' || editType === 'Python'">
+        <div class="mock-editor" :class="!(mode === 'edit' && selectCell.id === cellId) && 'preview'"><div class="mock-editor-gutter"></div><div class="mock-editor-content"></div></div>
         <CodeEditor
           @changeMode="changeMode"
           :cellId="cellId"
@@ -20,36 +21,37 @@
           @gotoNextCell="gotoNextCell"
           :isSelected="selectCell.id===cellId"
         />
-      </span>
+      </div>
       <div class="cell-btns" :ref="'cellHover' + cellId">
         <ActionButton :actions="actions" />
       </div>
-      <span v-if="editType === 'Kolo' || editType === 'Python'">
+      <div v-if="editType === 'Byzer' || editType === 'Python'">
         <div class="excute-result" v-if="status !== 'NEW'">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
-              <ExcuteResult :result="excuteResult" :status="status" />
+              <ExcuteResult :result="excuteResult" :status="status" :innerMaxHeight="innerMaxHeight" />
             </el-tab-pane>
             <el-tab-pane label="Job Details" name="details">
-              <ExcuteDetail :result="excuteResult" :jobId="jobId"/>
+              <ExcuteDetail :result="excuteResult" :jobId="jobId" :innerMaxHeight="innerMaxHeight" />
             </el-tab-pane>
             <el-tab-pane label="Log Message" name="logs">
-              <LogMessage :result="excuteResult" v-if="jobId" :status="status" :jobId="jobId"/>
+              <LogMessage :result="excuteResult" v-if="jobId" :status="status" :jobId="jobId" :innerMaxHeight="innerMaxHeight" />
             </el-tab-pane>
           </el-tabs>
         </div>
-      </span>
+      </div>
       <!-- markdown编辑器 -->
-      <CodeMarkdownEditor
-        v-else-if="editType === 'Markdown'"
-        :cellId="cellId"
-        :readOnly="mode !== 'edit'"
-        :ref="'cellEditor' + cellId"
-        :value="content"
-        :mode="mode"
-        :isSelected="selectCell.id === cellId"
-        @changeContent="changeContent"
-      />
+      <template v-else-if="editType === 'Markdown'">
+        <CodeMarkdownEditor
+          :cellId="cellId"
+          :ref="'cellEditor' + cellId"
+          :value="content"
+          :mode="mode"
+          :isSelected="selectCell.id === cellId"
+          @changeContent="changeContent"
+          @changeMdMode="changeMdMode"
+        />
+      </template>
     </div>
     <div class="cell-box-container" v-else>
       <div class="cell-btns hide-mode" :ref="'cellHover' + cellId">
@@ -86,7 +88,9 @@ export default {
       showExcuteDetails: true,
       startTime: 0,
       showAddCode: false,
-      editType: this.cellInfo.editType || 'Kolo' // 编辑器类型
+      editType: this.cellInfo.editType || 'Byzer', // 编辑器类型
+      mdMode: 'preview',
+      innerMaxHeight: ''
     }
   },
   components: {
@@ -102,12 +106,15 @@ export default {
     if (this.cellInfo.job_id) { // cell cell 状态获取
       this.getStatus(this.cellInfo.job_id)
     }
+    this.calInnerMaxHeight()
   },
   computed: {
     actions () {
       return [
         { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('run'), iconClass: 'el-ksd-icon-play_outline_22', handler: this.handleRun },
         { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStop },
+        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('notebook.runToHere'), isSvg: true, handler: this.handleRunToHere },
+        // { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStopToHere },
         { disabled: this.isRunningAll, isShow: !this.showCode, label: this.$t('notebook.showCode'), iconClass: 'el-ksd-icon-arrow_down_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: this.showCode, label: this.$t('notebook.hideCode'), iconClass: 'el-ksd-icon-arrow_up_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: true, label: this.$t('notebook.addAbove'), iconClass: '', handler: this.handleAddAbove },
@@ -123,7 +130,7 @@ export default {
     cellInfo: {
       handler (newVal) {
         this.content = this.cellInfo.content
-        this.editType = this.cellInfo.editType || 'Kolo'
+        this.editType = this.cellInfo.editType || 'Byzer'
         if (!newVal.job_id) {
           this.excuteResult = {}
           this.status = 'NEW'
@@ -140,6 +147,30 @@ export default {
       getJobStatus: 'GET_JOB_STATUS',
       cancelExcuteCell: 'CANCEL_EXCUTE_CELL'
     }),
+    changeMdMode (mode) {
+      this.mdMode = mode
+    },
+    /**
+     * @description: cal the max-height of the inner elements in px
+     * @return {*} string
+     * @Date: 2021-12-14 14:15:37
+     */
+    calInnerMaxHeight () {
+      let avlHeight = 0
+      if (window.innerHeight) {
+        avlHeight = window.innerHeight
+      } else if (document.body && document.body.clientHeight) {
+        avlHeight = document.body.clientHeight
+      }
+      if (
+        document.documentElement &&
+        document.documentElement.clientHeight &&
+        document.documentElement.clientWidth
+      ) {
+        avlHeight = document.documentElement.clientHeight
+      }
+      this.innerMaxHeight = Math.round(avlHeight * 0.53) + 'px'
+    },
     changeStatus (status) {
       this.status = JOB_STATUS[status]
       this.$emit('changeStatus', this.status)
@@ -153,6 +184,12 @@ export default {
       if (this.cellInfo.id === this.selectCell.id) {
         this.handleRun()
       }
+    },
+    handleRunToHere () {
+      this.$emit('handleRunToHere', this.cellId)
+      },
+    handleStopToHere () {
+      this.$emit('handleStopHere')
     },
     async handleRun () {
       if (this.editType === 'Markdown') {
@@ -322,6 +359,26 @@ export default {
     &:hover {
       box-shadow: 0px 1px 4px rgba(63, 89, 128, 0.16);
     }
+    .mock-editor {
+      display: flex;
+      height: 19px;
+      &.preview {
+        .mock-editor-gutter {
+          background-color: $--color-white;
+        }
+        .mock-editor-content {
+          background-color: $--color-white;
+        }
+      }
+      &-gutter {
+        width: 60px;
+        background-color: $--background-color-hover;
+      }
+      &-content {
+        flex: 1;
+        background-color: $--background-color-secondary;
+      }
+    }
     &.is-md-cell {
       border: none;
     }
@@ -335,14 +392,14 @@ export default {
     }
     .cell-btns {
       z-index: 999;
-      height: 30px;
+      // height: 30px;
       padding: 4px 5px;
       padding-top: 0;
       display: none;
       background-color: transparent;
       position: absolute;
       right: 8px;
-      top: 12px;
+      top: 10px;
     }
     .excute-result {
       margin-top: 15px;

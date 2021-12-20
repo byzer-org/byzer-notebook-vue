@@ -1,17 +1,18 @@
 <template>
   <div class="action-button">
-    <span class="action-element" v-for="(item, index) in iconActions" :key="index">
-      <el-tooltip effect="dark" placement="top" :content="item.label" popper-class="action-item">
-        <el-button size="small" :disabled="item.disabled" @click="handleAction(item)">
-          <i class="font-22" :class="item.iconClass"></i>
-        </el-button>
-      </el-tooltip>
-    </span>
+    <div class="action-element" v-for="(item, index) in iconActions" :key="index">
+      <span @click="handleAction(item)">
+        <icon-btn v-if="!item.isSvg" class="opr-btn" :disabled="item.disabled" :icon="item.iconClass" :text="item.label" />
+        
+        <el-tooltip v-else effect="dark" placement="top" :content="item.label" popper-class="action-item">
+          <svg-icon :iconClass="'run_to_here_16'" :className="'font-22 hasEvent'" :class="{'action-disabled': item.disabled}"></svg-icon>
+        </el-tooltip> 
+      </span>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
   props: {
     actions: {
@@ -22,7 +23,7 @@ export default {
     },
     maxIconCount: {
       type: Number,
-      default: 3
+      default: 4
     }
   },
   computed: {
@@ -45,7 +46,9 @@ export default {
       return item.label
     },
     handleAction (action) {
-      action.handler()
+      if (!action.disabled) {
+        action.handler()
+      }
     }
   }
 }
@@ -53,8 +56,16 @@ export default {
 
 <style lang="scss" scoped>
 .action-button {
+  display: flex;
+  align-items: center;
+  height: 17px;
   .action-element {
     margin-left: 10px;
+    height: 22px;
+    line-height: 22px;
+    .action-disabled {
+      cursor: no-drop;
+    }
     &:first-child {
       margin-left: 0px;
     }

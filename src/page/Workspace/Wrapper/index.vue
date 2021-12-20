@@ -41,7 +41,7 @@
           @tab-remove="confirmCloseTab"
           @tab-click="handleClickTab">
           <el-tab-pane
-            :label="tab.name + (tab.type === 'workflow' ? '.mlwf' : '.mlnb')"
+            :label="tab.name + (tab.type === 'workflow' ? '.bzwf' : '.bznb')"
             :name="`${tab.type}_${tab.id}`"
             v-for="tab in notebookTab"
             :key="'tab_' + tab.id + tab.type">

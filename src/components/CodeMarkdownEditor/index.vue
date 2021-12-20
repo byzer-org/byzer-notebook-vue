@@ -133,6 +133,11 @@ export default class CodeMarkdownEditor extends Vue {
     }
   }
 
+  @Watch('mdMode') 
+  onMdModeChange (newVal) {
+    this.$emit('changeMdMode', newVal)
+  }
+
   @Watch('isSelected')
   isSelectedHandler (newValue) {
     if (!newValue) {
