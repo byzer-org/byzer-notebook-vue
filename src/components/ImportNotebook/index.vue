@@ -90,7 +90,7 @@ export default class FileUploadModal extends Vue {
     if (!value.length) {
       return callback(new Error(this.$t('workspace.fileRequired')))
     } else {
-      const isValid = value.every(v => v.name.endsWith('.mlnb') || v.name.endsWith('.mlwf'))
+      const isValid = value.every(v => v.name.endsWith('.bznb') || v.name.endsWith('.bzwf'))
       const newList = uniqBy(this.fileList, 'name')
       const isDuplicate = this.fileList.length !== newList.length
       if (!isValid) {

@@ -91,7 +91,7 @@
     "validDupFile": "Please remove duplicate file.",
     "validSingleSize": "Max file size is 200M",
     "validTotalSize": "Max file total size is 500M",
-    "validFile": "File must ends with .mlnb or .mlwf",
+    "validFile": "File must ends with .bznb or .bzwf",
     "importTitle": "Import Notebook/Workflow"
   },
   "notebook": {

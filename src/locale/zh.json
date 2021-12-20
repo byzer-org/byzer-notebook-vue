@@ -90,7 +90,7 @@
     "validDupFile": "请删除重复文件。",
     "validSingleSize": "最大文件大小为 200M",
     "validTotalSize": "最大文件总大小为 500M",
-    "validFile": "文件必须以 .mlnb 或 .mlwf 结尾",
+    "validFile": "文件必须以 .bznb 或 .bzwf 结尾",
     "importTitle": "导入笔记本/工作流"
   },
   "notebook": {
