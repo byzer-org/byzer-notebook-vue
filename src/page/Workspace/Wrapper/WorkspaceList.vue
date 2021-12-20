@@ -150,9 +150,9 @@ export default class WorkspaceList extends Vue {
   getEnding (node) {
     const { type } = node.data
     if (type === 'notebook') {
-      return '.mlnb'
+      return '.bznb'
     } else if (type === 'workflow') {
-      return '.mlwf'
+      return '.bzwf'
     } else {
       return ''
     }
