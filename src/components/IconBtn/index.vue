@@ -50,5 +50,8 @@ export default class IconBtn extends Vue {
     background-color: $--background-color-hover;
     border-radius: 6px;
   }
+  &.is-disabled {
+    color: $--font-color-disabled-base;
+  }
 }
 </style>

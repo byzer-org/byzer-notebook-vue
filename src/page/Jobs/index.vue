@@ -30,7 +30,7 @@
         <template slot-scope="scope">
           <div class="job-id-wrap">
             <span>{{ scope.row.job_id }}</span>
-            <icon-btn icon="el-ksd-icon-dup_16" :text="$t('copy')" class="font-16" v-clipboard:success="onCopy" v-clipboard:copy="scope.row.job_id" />
+            <icon-btn icon="el-ksd-icon-dup_16" :text="$t('copy')" style="fontSize: 16px;" v-clipboard:success="onCopy" v-clipboard:copy="scope.row.job_id" />
           </div>
         </template>
       </el-table-column>
@@ -82,7 +82,7 @@
       </el-table-column>
       <el-table-column :label="$t('action')" width="100">
         <template slot-scope="scope">
-          <icon-btn icon="el-ksd-icon-view_22" :text="$t('view')" :handler="() => getCode(scope.row)" />
+          <icon-btn icon="el-ksd-icon-view_22" class="mr-10" :text="$t('view')" :handler="() => getCode(scope.row)" />
           <icon-btn icon="el-ksd-icon-stop_with_border_22" :text="$t('discard')" :disabled="scope.row.status !== '0'" :handler="() => handleStop(scope.row)" />
           <!-- <icon-btn icon="el-icon-ksd-delete_22" :disabled="scope.row.status === '0'" :text="$t('delete')" :handler="() => handleDelete(scope.row)" /> -->
         </template>

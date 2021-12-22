@@ -58,8 +58,8 @@
           <el-table-column
             :label="$t('settings.action')">
             <template slot-scope="scope">
-              <icon-btn icon="el-ksd-icon-edit_22" :text="$t('copy')" :handler="() => handleCreateConnection(scope.row)" />
-              <icon-btn icon="el-ksd-icon-delete_22" :text="$t('copy')" :handler="() => handleDeleteConnection(scope.row)" />
+              <icon-btn icon="el-ksd-icon-edit_22" class="mr-10" :text="$t('edit')" :handler="() => handleCreateConnection(scope.row)" />
+              <icon-btn icon="el-ksd-icon-delete_22" :text="$t('delete')" :handler="() => handleDeleteConnection(scope.row)" />
             </template>
           </el-table-column>
         </el-table>

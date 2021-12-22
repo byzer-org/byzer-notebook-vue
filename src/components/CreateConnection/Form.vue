@@ -47,8 +47,8 @@
               </el-form-item>
             </div>
             <div class="connection-parameters-container-btns">
-              <el-button @click="addParams(item)" type="text" icon="el-ksd-icon-add_16" size="small"></el-button>
-              <el-button @click="removeParams(item)" :disabled="form.parameter.length < 2" type="text" icon="el-ksd-icon-minus_16" size="small"></el-button>
+              <icon-btn @click.native="addParams(item)" icon="el-ksd-icon-add_16" />
+              <icon-btn @click.native="removeParams(item)" :disabled="form.parameter.length < 2" icon="el-ksd-icon-minus_16" />
             </div>
           </div>
         </div>
@@ -196,9 +196,11 @@ export default class CreateConnectionForm extends Vue {
         }
         &-key {
           width: 137px;
+          text-align: left;
         }
         &-value {
           width: 135px;
+          text-align: left;
         }
         &-btns {
           margin-left: 6px;
