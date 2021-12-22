@@ -19,10 +19,10 @@
       </span>
     </div>
     <el-tabs v-model="activeName" class="tabs_button" @tab-click="handleClick">
-      <el-tab-pane label="Notebook" name="notebook">
+      <el-tab-pane :label="$t('workspace.notebook')" name="notebook">
         <WorkflowPreview @saveAsNotebook="saveAsNotebook" v-if="activeName === 'notebook'" />
       </el-tab-pane>
-      <el-tab-pane label="Workflow" name="workflow">
+      <el-tab-pane :label="$t('workspace.workflow')" name="workflow">
         <div class="notebook-workflow-container" :class="showNodeEditor && 'right-bar'">
           <div class="notebook-workflow-container-l">
             <Workflow
@@ -193,10 +193,8 @@ export default class WorkflowWrapper extends Vue {
   padding-top: 10px;
   position: relative;
   > .el-tabs.tabs_button > .el-tabs__header {
-    width: 180px;
-    display: inline-block;
-    margin-left: calc(100% - 196px);
-    margin-bottom: 10px;
+    margin-left: calc(100% - 20px);
+    transform: translateX(-100%);
   }
   &-actions {
     height: 22px;

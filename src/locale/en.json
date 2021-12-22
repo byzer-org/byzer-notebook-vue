@@ -7,6 +7,7 @@
   "open": "Open",
   "rename": "Rename",
   "clone": "Duplicate",
+  "edit": "Edit",
   "delete": "Delete",
   "import": "Import",
   "export": "Export",
