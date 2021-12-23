@@ -79,8 +79,10 @@ export default class CloneNoteBookModal extends Vue {
   async onDialogShow (newVal, oldVal) {
     // 关闭弹窗时，重置弹窗信息
     if (!newVal && oldVal) {
-      this.resetModal()
-      this.$refs.$form.clearValidate()
+      setTimeout(() => {
+        this.resetModal()
+        this.$refs.$form.clearValidate()
+      }, 500)
     }
   }
   // 校验参数名称

@@ -45,8 +45,6 @@ vuex.registerModule(['modals', 'CreateNoteBookModal'], store)
       isShow: state => state.isShow,
       form: state => state.form,
       callback: state => state.callback
-    }),
-    ...mapState({
     })
   },
   methods: {
@@ -94,8 +92,10 @@ export default class CreateNoteBookModal extends Vue {
   async onDialogShow (newVal, oldVal) {
     // 关闭弹窗时，重置弹窗信息
     if (!newVal && oldVal) {
-      this.resetModal()
-      this.$refs.$form.clearValidate()
+      setTimeout(() => {
+        this.resetModal()
+        this.$refs.$form.clearValidate()
+      }, 500)
     }
   }
 
@@ -123,7 +123,6 @@ export default class CreateNoteBookModal extends Vue {
   }
 
   async handleSubmit () {
-    console.log('submit')
     try {
       await this.$refs.$form.validate()
       let params = {
