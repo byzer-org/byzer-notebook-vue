@@ -2,11 +2,7 @@
   <div class="action-button">
     <div class="action-element" v-for="(item, index) in iconActions" :key="index">
       <span @click="handleAction(item)">
-        <icon-btn v-if="!item.isSvg" class="opr-btn" :disabled="item.disabled" :icon="item.iconClass" :text="item.label" />
-        
-        <el-tooltip v-else effect="dark" placement="top" :content="item.label" popper-class="action-item">
-          <svg-icon :iconClass="'run_to_here_16'" :className="'font-22 hasEvent'" :class="{'action-disabled': item.disabled}"></svg-icon>
-        </el-tooltip> 
+        <icon-btn class="opr-btn" :disabled="item.disabled" :icon="item.iconClass" :text="item.label" />
       </span>
     </div>
   </div>

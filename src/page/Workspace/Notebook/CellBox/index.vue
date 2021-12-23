@@ -2,7 +2,7 @@
 <template>
   <div class="cell-box" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" >
     <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode ? 'block' : 'none'}">
-      <div><icon-btn icon="el-ksd-icon-grab_dots_22" class="move-cell" :disabled="isRunningAll" /></div>
+      <div><icon-btn icon="el-ksd-icon-grab_dots_16" class="move-cell" :disabled="isRunningAll" /></div>
       <div class="mt-5"><icon-btn icon="el-ksd-icon-add_22" :handler="handleAddBelow" /></div>
     </div>
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
@@ -113,7 +113,7 @@ export default {
       return [
         { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('run'), iconClass: 'el-ksd-icon-play_outline_22', handler: this.handleRun },
         { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStop },
-        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('notebook.runToHere'), isSvg: true, handler: this.handleRunToHere },
+        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('notebook.runToHere'), iconClass: 'el-ksd-icon-run_to_here_16', handler: this.handleRunToHere },
         // { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStopToHere },
         { disabled: this.isRunningAll, isShow: !this.showCode, label: this.$t('notebook.showCode'), iconClass: 'el-ksd-icon-arrow_down_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: this.showCode, label: this.$t('notebook.hideCode'), iconClass: 'el-ksd-icon-arrow_up_2_22', handler: this.toggleShowCode },
