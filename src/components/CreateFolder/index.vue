@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item class="dialog-btns">
           <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
-          <el-button type="primary" :loading="isSubmiting" size="medium" native-type="submit" @click.prevent="handleSubmit">{{$t('clone')}}</el-button>
+          <el-button type="primary" :loading="isSubmiting" size="medium" native-type="submit" @click.prevent="handleSubmit">{{$t('create')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -77,8 +77,10 @@ export default class CreateFolderModal extends Vue {
   async onDialogShow (newVal, oldVal) {
     // 关闭弹窗时，重置弹窗信息
     if (!newVal && oldVal) {
-      this.resetModal()
-      this.$refs.$form.clearValidate()
+      setTimeout(() => {
+        this.resetModal()
+        this.$refs.$form.clearValidate()
+      }, 500)
     }
   }
 

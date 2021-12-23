@@ -93,8 +93,10 @@ export default class MoveNotebookModal extends Vue {
   @Watch('isShow')
   async onDialogShow (newVal, oldVal) {
     if (!newVal && oldVal) {
-      this.resetModal()
-      this.$refs.$form.clearValidate()
+      setTimeout(() => {
+        this.resetModal()
+        this.$refs.$form.clearValidate()
+      }, 500)
     }
   }
   @Watch('notebookList', { deep: true })
