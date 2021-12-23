@@ -22,7 +22,7 @@
         </el-form-item>
         <el-form-item class="dialog-btns">
           <el-button @click="closeModal" size="medium">{{$t('cancel')}}</el-button>
-          <el-button type="primary" :loading="isSubmiting" size="medium" native-type="submit" @click="handleSubmit">{{$t('create')}}</el-button>
+          <el-button type="primary" :loading="isSubmiting" size="medium" native-type="submit" @click.prevent="handleSubmit">{{$t('create')}}</el-button>
         </el-form-item>
       </el-form>
     </div>

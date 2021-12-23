@@ -17,7 +17,7 @@
           </div>
           <el-form-item class="login-btn" :class="isTrial && 'hide-sign'">
             <el-button v-if="!isTrial" size="medium" @click.native="checkForm('sign-up')" :disabled="loadingLogin" :loading="loadingSign">{{$t('login.signUp')}}</el-button>
-            <el-button type="primary" size="medium" native-type="submit" @click.native="checkForm('login')" :disabled="loadingSign" :loading="loadingLogin">{{$t('login.signIn')}}</el-button>
+            <el-button type="primary" size="medium" native-type="submit" @click.native.prevent="checkForm('login')" :disabled="loadingSign" :loading="loadingLogin">{{$t('login.signIn')}}</el-button>
           </el-form-item>
         </el-form>
       </div>
