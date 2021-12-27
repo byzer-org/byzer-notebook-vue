@@ -9,7 +9,7 @@
     "test": "BABEL_ENV=test && jest --config test/jest.conf.js --watchAll"
   },
   "dependencies": {
-    "@kangc/v-md-editor": "^1.7.7",
+    "@kangc/v-md-editor": "^1.7.9-beta.1",
     "axios": "^0.24.0",
     "babel-core": "^7.0.0-bridge.0",
     "brace": "0.10.0",
