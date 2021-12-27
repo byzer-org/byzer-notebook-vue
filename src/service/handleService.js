@@ -6,8 +6,12 @@ import router from '../router'
 import store from '../store'
 import { actionsTypes } from '../store'
 
-var instance = axios.create()
-instance.withCrendentials = true
+const { VUE_APP_API_URL } = process.env
+
+var instance = axios.create({
+  baseURL: window.location.origin + VUE_APP_API_URL,
+  withCrendentials: true
+})
 
 instance.interceptors.request.use(function (config) {
   config.headers.common['Accept-Language'] = localStorage.getItem('kycloud_lang') || 'en'
