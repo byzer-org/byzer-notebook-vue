@@ -4,7 +4,7 @@
     <div ref="$layout-left" v-show="sideBarVisible" class="layout-left clearfix" :style="layoutLeftStyle">
       <div class="collapse-btn" @click="toggleSideBarVisible">
         <i class="el-icon-arrow-left arrow-icon"></i>
-      </div> 
+      </div>
       <div class="container-l">
         <div ref="$resize-handler" class="resize-handler" @mousedown="handleStartResize" @mouseup="handleStopResize"></div>
         <WorkspaceList
@@ -58,7 +58,7 @@
                 @handleDelete="handleDelete"
                 @handleCreate="handleCreateNoteBook"
               />
-              <WorkFlow 
+              <WorkFlow
                 v-if="tab.type==='workflow'"
                 :key="'workflow_' + tab.id"
                 :activeNotebookId="curNotebookTab.split('_')[1]"
@@ -75,14 +75,14 @@
         <!-- tab 区 end -->
         <div class="container-r-nodata" v-else>
           <div class="container-r-nodata-text">{{$t('workspace.createTip')}}</div>
-          <el-dropdown>
+          <el-dropdown @command="handleCommand">
             <span class="el-dropdown-link">
               <el-button type="default" plain icon="el-ksd-icon-add_22">{{$t('create')}}</el-button>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item @click="handleCreateNoteBook({type: 'notebook'})">{{$t('workspace.notebook')}}</el-dropdown-item>
-              <el-dropdown-item @click="handleCreateNoteBook({type: 'workflow'})">{{$t('workspace.workflow')}}</el-dropdown-item>
-              <el-dropdown-item @click="handleImport">{{$t('import')}}</el-dropdown-item>
+              <el-dropdown-item :command="'notebook'">{{$t('workspace.notebook')}}</el-dropdown-item>
+              <el-dropdown-item :command="'workflow'">{{$t('workspace.workflow')}}</el-dropdown-item>
+              <el-dropdown-item :command="'import'">{{$t('import')}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -242,6 +242,13 @@ export default {
       list.length && (list[0].active = true)
       this.minusTabList(list)
     },
+    handleCommand (type) {
+      if (['notebook', 'workflow'].includes(type)) {
+        this.handleCreateNoteBook({type})
+      } else {
+        this.handleImport()
+      }
+    },
     async handleCreateNoteBook (data) {
       const { isSubmit, newNotobookInfo } = await this.callCreateNoteBookModal({ folderId: data ? data.folder_id : '', type: data.type})
       if (isSubmit) {
@@ -321,7 +328,7 @@ export default {
         customClass: 'centerButton'
       }).then(() => {
         this.confirmDelete(item)
-      }).catch(() => {      
+      }).catch(() => {
       })
       this.$forceUpdate()
     },
@@ -571,7 +578,7 @@ export default {
         background-color: $--color-primary-light-1;
       }
     }
-    
+
   }
   .layout-right {
     flex: 1;
