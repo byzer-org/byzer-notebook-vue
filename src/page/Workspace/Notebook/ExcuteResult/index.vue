@@ -9,10 +9,10 @@
         <div class="wrapper not-table" v-if="detailType === 'html'">
           <iframe
             class="html"
-            scrolling="no"
+            scrolling="yes"
             ref="htmlDom"
             :srcDoc="detailContent"
-            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight+"px";}(this));' 
+            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight + 20 + "px";}(this));'
             style="height:200px;border:none;overflow:hidden;">
           </iframe>
         </div>
