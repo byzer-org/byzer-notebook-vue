@@ -101,7 +101,7 @@ export default class MoveNotebookModal extends Vue {
   }
   @Watch('notebookList', { deep: true })
   onNotebookListChange (newVal) {
-    this.folderList[0].children = this.getFolderList(_.cloneDeep(newVal))
+    this.$set(this.folderList[0], 'children', this.getFolderList(_.cloneDeep(newVal)))
   }
 
   getChildrenById (id, list) {
