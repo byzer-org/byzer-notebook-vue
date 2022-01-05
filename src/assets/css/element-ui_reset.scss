@@ -57,6 +57,8 @@
   > .el-tabs__header {
     .el-tabs__item {
       font-weight: normal;
+      box-shadow: none !important;
+      border-radius: 0 !important;
       &:not(.is-active) {
         &:hover {
           color: inherit;
@@ -99,7 +101,7 @@
         }
       }
     }
-  } 
+  }
 }
 .el-tooltip__popper {
   max-width: 300px;
