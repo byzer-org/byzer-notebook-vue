@@ -16,7 +16,7 @@
       </el-dropdown>
     </div>
     <div class="notebook-list-tree" @scroll="scrollTree">
-      <el-tree 
+      <el-tree
         ref="notebookTree"
         :data="renderList"
         show-overflow-tooltip
@@ -194,7 +194,7 @@ export default class WorkspaceList extends Vue {
     if (item.data.id) {
       this.$emit('changeActiveTab', this.getNotebookItem(item))
     }
-  } 
+  }
 
   handleWorkspace (command, node) {
     this[command](node)
@@ -262,7 +262,7 @@ export default class WorkspaceList extends Vue {
     }
   }
   getMoveTip (target_folder_name, move_name, type) {
-    const titleType = type === 'notebook' ? this.$t('notebook') : this.$t('folder')
+    const titleType = type === 'notebook' ? this.$t('workspace.notebook') : this.$t('workspace.folder')
     const titleText = titleType.toLowerCase()
     const notebookText = target_folder_name === '' ? this.$t('notebook.moveTipText2', { type: titleText }) : this.$t('notebook.moveTipText1', { type: titleText, folderName: target_folder_name })
     const folderText = target_folder_name === '' ? this.$t('notebook.moveFolderTipText2', { type: titleText }) : this.$t('notebook.moveFolderTipText1', { type: titleText, folderName: target_folder_name })
@@ -308,12 +308,13 @@ export default class WorkspaceList extends Vue {
     let targetFolder = ''
     let targetFolderChildren = []
     if (dropType === 'inner') {
-      targetFolder = dropNode.data || dropNode.parent.data
+      targetFolder = dropNode.data.type === 'folder' ? dropNode.data : dropNode.parent.data
       targetFolderChildren = dropNode.data.children
     } else {
-      targetFolder = Array.isArray(dropNode.parent.data) ? '' : dropNode.parent.data
+      targetFolder = dropNode.parent.data
       targetFolderChildren = Array.isArray(dropNode.parent.data) ? dropNode.parent.data : dropNode.parent.data.children
     }
+    targetFolder = Array.isArray(targetFolder) ? '' : targetFolder
     const { name, type } = draggingNode.data
     let hasExsited = targetFolderChildren.filter(v => v.id && (v.name === name && v.type === type)).length > 1
     const notebookId = draggingNode.data.id
@@ -337,12 +338,13 @@ export default class WorkspaceList extends Vue {
     let targetFolder = ''
     let targetFolderChildren = []
     if (dropType === 'inner') {
-      targetFolder = dropNode.data || dropNode.parent.data
+      targetFolder = dropNode.data.type === 'folder' ? dropNode.data : dropNode.parent.data
       targetFolderChildren = dropNode.data.children
     } else {
-      targetFolder = Array.isArray(dropNode.parent.data) ? '' : dropNode.parent.data
+      targetFolder = dropNode.parent.data
       targetFolderChildren = Array.isArray(dropNode.parent.data) ? dropNode.parent.data : dropNode.parent.data.children
     }
+    targetFolder = Array.isArray(targetFolder) ? '' : targetFolder
     let hasExsited = targetFolderChildren.filter(v => v.folder_id && (v.name === draggingNode.data.name)).length > 1
     const currentFolderId = draggingNode.data.folder_id
     const currentParentFolder = this.findParentFolder(currentFolderId, this.originalList, 'folder')
@@ -386,7 +388,7 @@ export default class WorkspaceList extends Vue {
   allowDrag () {
     return true
   }
-} 
+}
 </script>
 <style lang="scss">
 @import '../../../assets/css/variable.scss';
