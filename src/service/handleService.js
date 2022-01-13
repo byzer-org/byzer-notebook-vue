@@ -5,7 +5,6 @@ import axios from 'axios'
 import router from '../router'
 import store from '../store'
 import { actionsTypes } from '../store'
-
 const { VUE_APP_API_URL } = process.env
 
 var instance = axios.create({
@@ -19,7 +18,11 @@ instance.interceptors.request.use(function (config) {
 })
 instance.interceptors.response.use(
   response => {
-    return response.data
+    if (response.headers['content-disposition']) {
+      return response
+    } else {
+      return response.data
+    }
   },
   error => {
     if (error.response) {

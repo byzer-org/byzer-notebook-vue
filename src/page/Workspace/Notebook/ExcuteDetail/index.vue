@@ -167,6 +167,7 @@ export default class ExcuteDetail extends Vue {
   .complete-jobs {
     margin-top: 10px;
     padding-left: 8px;
+    width: 500px;
     background: $--background-color-secondary;
     border-radius: 6px;
     padding: 8px;
