@@ -31,5 +31,6 @@ export default {
   renameFolder: data => axios.put('/api/folder', data),
   cloneFolder: data => axios.post('/api/folder/clone', data),
   deleteFolder: id => axios.delete(`/api/folder/${id}`),
-  autoComplete: params => axios.post('/api/notebook/code/suggestion', params)
+  autoComplete: params => axios.post('/api/notebook/code/suggestion', params),
+  exportNotebook: ({ type, id }) => axios.get(`/api/file/export/${id}?type=${type}`, { responseType: 'blob' })
 }

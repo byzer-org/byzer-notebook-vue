@@ -99,7 +99,6 @@ import CellList from '../Notebook/CellList'
 import WorkflowSide from '../Workflow/components/SideBar'
 import { getCasAndTree } from '@/util'
 import _ from 'lodash'
-import axios from 'axios'
 import Sortable from 'sortablejs'
 
 export default {
@@ -300,7 +299,8 @@ export default {
       }
     },
     handleExport (item) {
-      axios.get(`/api/file/export/${item.id}?type=${item.type}`, { responseType: 'blob' }).then(res => {
+      const { id, type } = item
+      this.exportNotebook({id, type}).then(res => {
         const disposition = res.headers['content-disposition']
         const fileNameArr = disposition && disposition.split('filename=')
         const filename = fileNameArr.length > 1 && JSON.parse(fileNameArr[1])
