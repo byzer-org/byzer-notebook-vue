@@ -9,13 +9,13 @@
       </div>
     </el-alert>
     <ul class="workflow-preview-cell-list">
-      <li 
+      <li
         v-for="(cell, index) in cellList"
         @click="selectIndex = index"
         :key="index">
         <div class="cell-order"><div class="cell-order-text">Cell {{index + 1}}</div></div>
         <div class="box" :class="selectIndex === index && 'active'">
-          <CodeEditor 
+          <CodeEditor
             :readOnly="true"
             :value="cell.content"
             />
@@ -44,7 +44,7 @@ import { Vue, Component } from 'vue-property-decorator'
   }
 })
 export default class WorkflowPreview extends Vue {
-  
+
   cellList = []
   selectIndex = -1
   isLoading = false
@@ -52,10 +52,10 @@ export default class WorkflowPreview extends Vue {
   mounted () {
     this.loadCellList()
   }
-    
+
   async loadCellList () {
     try {
-      const res = await this.getWorkflowPreview(this.activeNotebook.id)
+      const res = await this.getWorkflowPreview({ workflow_id: this.activeNotebook.id, commit_id: this.activeNotebook.commit_id })
       this.loadingList = false
       this.cellList = res.data.cell_list || []
     } catch (e) {

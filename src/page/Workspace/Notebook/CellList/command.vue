@@ -310,7 +310,7 @@ export default {
       }
     },
     getSelectedText () {
-      const editorType = ['Byzer', 'Python']
+      const editorType = ['Byzer-lang', 'Python']
       const { editType, id } = this.selectCell
       const node = this.$refs['cell' + id][0].$refs['cellEditor' + id]
       if (editorType.includes(editType)) {
@@ -348,10 +348,10 @@ export default {
     changeCurrentEditType () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         let editType = ''
-        if (this.selectCell.editType === 'Byzer' || this.selectCell.editType === 'Python') {
+        if (this.selectCell.editType === 'Byzer-lang' || this.selectCell.editType === 'Python') {
           editType = 'Markdown'
         } else {
-          editType = 'Byzer'
+          editType = 'Byzer-lang'
           if (this.selectCell.content.split('\n').map(i => i.trim()).indexOf(PythonTag) > -1) {
             editType = 'Python'
           }

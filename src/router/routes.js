@@ -24,7 +24,7 @@ const routes = [
   },
   {
     name: 'notebook',
-    path: '/notebook/:id?',
+    path: '/notebook/:uniq?',
     component: () => import('../page/Workspace'),
     meta: {
       needLogin: true

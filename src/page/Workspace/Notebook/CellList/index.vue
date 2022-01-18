@@ -8,55 +8,76 @@
             <i class="el-ksd-icon-document_22 font-22"></i><i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="add">{{ $t('notebook.createNotebook') }}</el-dropdown-item>
-            <el-dropdown-item command="rename">{{ $t('rename') }}</el-dropdown-item>
+            <el-dropdown-item v-if="!isDemo" command="add">{{ $t('notebook.createNotebook') }}</el-dropdown-item>
+            <el-dropdown-item v-if="!isDemo" command="rename">{{ $t('rename') }}</el-dropdown-item>
             <el-dropdown-item command="clone">{{ $t('clone') }}</el-dropdown-item>
-            <el-dropdown-item command="delete"> <span class="txt-danger">{{ $t('notebook.deleteNotebook') }}</span></el-dropdown-item>
+            <el-dropdown-item v-if="!isDemo" command="delete"> <span class="txt-danger">{{ $t('notebook.deleteNotebook') }}</span></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-save_22" :disabled="isRunningAll" :text="$t('save')" :handler="() => handleSave(true)" />
         </div>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-add_22" :disabled="isRunningAll" :text="$t('notebook.addCell')" :handler="() => handleAddCell({ type: 'below' }, selectCell)" />
         </div>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <icon-btn v-if="selectCellStatus !== 'RUNNING' || isRunningAll" icon="el-ksd-icon-play_outline_22" :disabled="isRunningAll" :text="$t('run')" :handler="() => hanldeExcuteSelectCell('run')" />
           <icon-btn v-else icon="el-ksd-icon-stop_with_border_22" :disabled="isRunningAll" :text="$t('notebook.stop')" :handler="() => hanldeExcuteSelectCell('stop')" />
         </div>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-fast_forward_outline_22" :disabled="isRunningAll" :text="$t('notebook.runNext')" :handler="handleRunNext" />
         </div>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <icon-btn v-if="isRunningAll" icon="el-ksd-icon-stop_with_border_22" :text="$t('notebook.cancelAll')" :handler="() => hanldeExcuteAll('stop')" />
           <icon-btn v-else icon="el-icon-video-play" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
         </div>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1 || isRunningAll" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
         </div>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-clear_22" :disabled="isRunningAll" :text="$t('notebook.clearAllResult')" :handler="clearAllResult" />
         </div>
-        <el-dropdown class="btn" trigger="hover" @command="handleChanged">
-          <span class="drop-text">
+        <el-dropdown class="btn" trigger="hover" @command="handleChanged" v-if="!isDemo">
+          <span class="drop-text hasEvent">
             {{ editType }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="Byzer">Byzer</el-dropdown-item>
+            <el-dropdown-item command="Byzer-lang">Byzer-lang</el-dropdown-item>
             <el-dropdown-item command="Python">Python</el-dropdown-item>
             <el-dropdown-item command="Markdown">Markdown</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <div class="btn">
+        <div class="btn" v-if="!isDemo">
           <span class="hasEvent" @click="handleShowShortcutHelp">{{ $t('notebook.showShortcutHelp') }}</span>
         </div>
+        <SetDemo
+          :userInfo="userInfo"
+          :activeNotebook="activeNotebook"
+          @offlineTab="handleOfflineTab"
+          @runAll="handleRunAll"
+          @operateDemoSuccess="handleOperateDemoSuccess"
+        />
       </div>
     </div>
     <div class="cellListPage-container">
       <div class="cellListPage-container-left">
+        <el-alert
+          v-if="isDemo"
+          type="info"
+          show-icon>
+          <div slot="title">
+            {{$t('workflow.readOnlyTip')}}
+            <a
+              href="javascript:;"
+              @click="handleNotebook('clone')"
+            >
+              {{$t('workflow.saveAsNotebook')}}
+            </a>
+          </div>
+        </el-alert>
         <ul
           class="cell-list"
-          :ref="'dragWrapper' + currentNotebook.id"
+          :ref="'dragWrapper' + currentNotebook.uniq"
           @scroll="scrollCell"
         >
           <draggable
@@ -96,7 +117,7 @@
                 @handleSave="handleSave"
                 @handleRunToHere="handleRunToHere"
                 @handleStopHere="hanldeExcuteAll('stop')"
-                :mode="mode"
+                :mode="isDemo ? 'command' : mode"
                 @gotoNextCell="gotoNextCell"
                 @changeMode="changeMode"
               />
@@ -117,10 +138,11 @@
   </div>
 </template>
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import CellBox from '../CellBox'
 import ShortcutPrompt from '../ShortcutPrompt'
 import FindAndReplace from '../FindAndReplace'
+import SetDemo from '@/components/SetDemo'
 import { debounce, cloneDeep } from 'lodash'
 import draggable from 'vuedraggable'
 import cellCommand from './command.vue'
@@ -150,14 +172,14 @@ export default {
       showTree: true,
       loadingList: false,
       loadingSave: false,
-      // mode: 'edit',
       showDragStyle: true,
       draggedIndex: -1,
       selectCellStatus: 'NEW',
       editType: '', // 当前选中cell的类型
       findKey: '',
       replaceKey: '',
-      results: [] // 查找的结果
+      results: [], // 查找的结果
+      setDemoParams: null
     }
   },
   props: ['currentNotebook', 'activeNotebookId'],
@@ -165,14 +187,17 @@ export default {
     CellBox,
     draggable,
     ShortcutPrompt,
-    FindAndReplace
+    FindAndReplace,
+    SetDemo
   },
   computed: {
     ...mapState({
+      userInfo: state => state.user.userInfo,
       activeNotebook: state => state.notebook.activeNotebook,
       mode: state => state.notebook.activeNotebook.mode,
       openedNotebookList: state => state.notebook.openedNotebooks
     }),
+    ...mapGetters(['isDemo']),
     disableCellAction () {
       return Object.keys(this.selectCell).length === 0 || this.newCellList.length === 1 || this.isRunningAll
     },
@@ -202,6 +227,19 @@ export default {
   },
   mixins: [cellCommand],
   watch: {
+    setDemoParams: {
+      async handler (newVal, oldVal) {
+        if (!newVal && oldVal && oldVal.setDemo) {
+          const { params, setDemo, command } = oldVal
+
+          const res = await setDemo(params)
+          if (res?.data === 'success') {
+            this.$message.success(this.$t('notebook.' + command + 'Success'))
+            this.handleOperateDemoSuccess()
+          }
+        }
+      }
+    },
     openedNotebookList: {
       handler () {
         this.clearUnOpenedList()
@@ -222,7 +260,7 @@ export default {
           this.editType = newVal.editType || '';
           if (
             editType === 'Markdown' &&
-            (oldEditType === 'Byzer' || oldEditType === 'Python')
+            (oldEditType === 'Byzer-lang' || oldEditType === 'Python')
           ) {
             const mdEditorInstance = this.$refs['cell' + id][0].$refs[
               'cellEditor' + id
@@ -242,13 +280,16 @@ export default {
       changeNotebookMode: 'CHANGE_NOTEBOOK_MODE' // 修改notebook 模式 edit/command
     }),
     ...mapActions({
-      getNotebookList: 'GET_NOTEBOOK_LIST',
       deleteNotebook: 'DEL_NOTEBOOK',
       saveNotebook: 'SAVE_NOTEBOOK',
       getNotebookById: 'GET_NOTEBOOK_BY_ID',
       createCell: 'CREATE_CELL',
       deleteCell: 'DELETE_CELL',
-      clearResult: 'CLEAR_RESULT'
+      clearResult: 'CLEAR_RESULT',
+      setDemo: 'SET_DEMO'
+    }),
+    ...mapActions('CreateNoteBookModal', {
+      callCreateNoteBookModal: 'CALL_MODAL'
     }),
     initAllData () {
       this.isRunningAll = false
@@ -332,7 +373,7 @@ export default {
             }
           })
           const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
-          if (item.editType === 'Byzer' || item.editType === 'Python') {
+          if (item.editType === 'Byzer-lang' || item.editType === 'Python') {
             // ace-editor直接改content来修改文本会导致Ctrl+Z无法undo
             // 并且光标可能会重置在{column:0, row: 0}的位置
             const editor = node.$refs['codeEditor'+ cellId].editor
@@ -374,6 +415,7 @@ export default {
      * @Date: 2021-09-07 13:30:15
      */
     listenFun (event) {
+      if (this.isDemo) return
       (this.newCellList || []).forEach(item => {
         // editor元素
         const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
@@ -433,7 +475,7 @@ export default {
           newValue = PythonTag + '\n' + newValue
           this.setEditorValue(newValue)
         }
-        if (e === 'Byzer') {
+        if (e === 'Byzer-lang') {
           if (index > -1) {
             newValue = newValue.replace(PythonTag, '')
           }
@@ -493,14 +535,14 @@ export default {
       this.changeNotebookMode({notebookId: id, type, mode})
       if (
         mode === 'command' &&
-        (this.selectCell.editType === 'Byzer' ||
+        (this.selectCell.editType === 'Byzer-lang' ||
           this.selectCell.editType === 'Python')
       ) {
         // 切换为command模式后ace editor失焦
         this.handleCodeBlur()
       } else if (
         mode === 'edit' &&
-        (this.selectCell.editType === 'Byzer' ||
+        (this.selectCell.editType === 'Byzer-lang' ||
           this.selectCell.editType === 'Python')
       ) {
         // 切换为edit模式后ace editor聚焦
@@ -575,6 +617,17 @@ export default {
       }
       this.$emit(handleName, this.currentNotebook)
     },
+    handleOfflineTab (tabId) {
+      this.$emit('handleOfflineTab', tabId)
+    },
+    async handleRunAll ({ params, setDemo, command }) {
+      this.setDemoParams = {
+        params,
+        setDemo,
+        command
+      }
+      await this.hanldeExcuteAll('run')
+    },
     /**
      * @description: 格式化newCellList的格式 获取editType
      * @param {cellList} res.data.cell_list
@@ -592,7 +645,7 @@ export default {
           const temp = this.oldCellList.find(i => i.id === item.id) || {};
           item.editType = temp.editType || 'Markdown';
         } else {
-          item.editType = 'Byzer'
+          item.editType = 'Byzer-lang'
           if (
             (item.content || '').split('\n').map(i => i.trim()).indexOf(PythonTag) > -1
           ) {
@@ -601,6 +654,9 @@ export default {
         }
         return item;
       });
+    },
+    handleOperateDemoSuccess () {
+      this.$emit('handleRefresh')
     },
     /**
      * @description: 加载cell
@@ -611,7 +667,7 @@ export default {
     async reloadCellList (hideLoading, setScroll) {
       this.loadingList = !hideLoading
       try {
-        const res = await this.getNotebookById({ id: this.currentNotebook.id })
+        const res = await this.getNotebookById({ id: this.currentNotebook.id, commit_id: this.currentNotebook.commit_id })
         this.loadingList = false
         this.newCellList = this.dataProcess(res.data.cell_list)
         this.refreshSelectCell()
@@ -744,6 +800,7 @@ export default {
         }
       } else {
         this.changeRunAll(false)
+        this.setDemoParams = null
         this.runningIndex = -1
         this.runToIndex = -1
       }
@@ -779,7 +836,7 @@ export default {
     changeInput: debounce(function ({ value, cellInfo }) {
       const index = this.newCellList.findIndex(v => v.id === cellInfo.id)
       this.newCellList[index].content = value
-      let editType = 'Byzer'
+      let editType = 'Byzer-lang'
       // 保存时给markdown添加标记
       if ((value || '').startsWith(MarkdownTag)) {
         editType = 'Markdown'
@@ -846,7 +903,7 @@ export default {
         const res = await this.getNotebookById({ id: this.activeNotebookId })
         this.loadingSave = false
         this.newCellList = this.dataProcess(res.data.cell_list)
-        this.selectCell = Object.assign(newCell.data, { editType: 'Byzer' })
+        this.selectCell = Object.assign(newCell.data, { editType: 'Byzer-lang' })
         this.changeMode('edit')
         this.autoScrollCells(insertIndex, type)
       } catch (e) {
@@ -922,6 +979,7 @@ export default {
         margin-right: 15px;
         line-height: 22px;
         .drop-text {
+          color: $--color-black;
           i {
             vertical-align: middle;
           }

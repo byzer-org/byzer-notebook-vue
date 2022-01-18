@@ -23,11 +23,11 @@ export default {
     [types.DELETE_WORKFLOW_NODE]: ({getters}, node_id) => {
       return workflow.deleteWorkflowNode(getters.activeNotebookId, node_id)
     },
-    [types.GET_NODE_LIST]: (_, workflow_id) => {
-      return workflow.getNodeList(workflow_id)
+    [types.GET_NODE_LIST]: (_, { workflow_id, commit_id }) => {
+      return workflow.getNodeList(workflow_id, commit_id)
     },
-    [types.GET_WORKFLOW_PREVIEW]: (_, workflow_id) => {
-      return workflow.getWorkflowPreview(workflow_id)
+    [types.GET_WORKFLOW_PREVIEW]: (_, { workflow_id, commit_id }) => {
+      return workflow.getWorkflowPreview(workflow_id, commit_id)
     },
     [types.SAVE_WORKFLOW_AS_NOTEBOOK]: ({ getters }, payload) => {
       return workflow.saveAsNotebook(getters.activeNotebookId, payload)
