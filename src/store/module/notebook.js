@@ -6,7 +6,8 @@ export default {
     notebookList: [],
     openedNotebooks: [],
     notebookDirList: [],
-    activeNotebook: null,
+    activeNotebook: undefined,
+    demoList: [],
     activeSidebar: 'notebook',
     showSideBar: true
   },
@@ -19,6 +20,9 @@ export default {
     },
     [types.SET_ACTIVE_NOTEBOOK]: (state, data) => {
       state.activeNotebook = data
+    },
+    [types.SET_DEMO_LIST]: (state, data) => {
+      state.demoList = data
     },
     [types.CHANGE_ACTIVE_SIDEBAR]: (state, data) => {
       state.activeSidebar = data
@@ -74,8 +78,8 @@ export default {
     [types.SAVE_NOTEBOOK]: (_, payload) => {
       return notebook.saveNotebookById(payload)
     },
-    [types.GET_NOTEBOOK_BY_ID]: (_, { id }) => {
-      return notebook.getNotebookById(id)
+    [types.GET_NOTEBOOK_BY_ID]: (_, { id, commit_id }) => {
+      return notebook.getNotebookById(id, commit_id)
     },
     [types.GET_CURRENT_SCRIPT]: (_, id) => {
       return notebook.getCurrentScript(id)
@@ -124,6 +128,19 @@ export default {
     },
     [types.AUTO_COMPLETE]: (_, payload) => {
       return notebook.autoComplete(payload)
+    },
+    [types.SET_DEMO]: (_, payload) => {
+      return notebook.setDemo(payload)
+    },
+    [types.OFFLINE_DEMO]: (_, payload) => {
+      return notebook.offlineDemo(payload)
+    }
+  },
+  getters: {
+    isDemo: state => {
+      const { activeNotebook = {}, demoList } = state
+      const { id = '', commit_id = '' } = activeNotebook
+      return Boolean(demoList.includes(id) && commit_id)
     }
   }
 }

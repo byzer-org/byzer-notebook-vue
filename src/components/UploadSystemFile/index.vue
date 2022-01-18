@@ -89,7 +89,7 @@ export default class FileUploadModal extends Vue {
     }
   }
   checkFileSize () {
-    return this.fileList.some(v => v.raw.size > 200 * 1024 * 1024) 
+    return this.fileList.some(v => v.raw.size > 200 * 1024 * 1024)
   }
   checkTotalSize () {
     const sizeList = this.fileList.map(v => v.raw.size)
@@ -128,7 +128,6 @@ export default class FileUploadModal extends Vue {
   }
 
   changeFile (file, fileList) {
-    console.log(file, 'file')
     this.fileList = fileList
     this.handleInput('file', this.fileList.map(v => v.raw))
     this.$refs.$form.validateField('file')

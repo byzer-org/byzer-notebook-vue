@@ -22,10 +22,14 @@
 <script>
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { cloneDeep } from 'lodash'
+import { getAllList } from '../../util'
 
 @Component({
+  computed: {
+    ...mapState({ notebookList: state => state.notebookList })
+  },
   methods: {
     ...mapActions('CreateNoteBookModal', {
       callCreateNoteBookModal: 'CALL_MODAL'
@@ -34,7 +38,6 @@ import { cloneDeep } from 'lodash'
       callFileUploadModal: 'CALL_MODAL'
     }),
     ...mapActions({
-      getNotebookList: 'GET_NOTEBOOK_LIST',
       saveOpenedNotebook: 'SAVE_OPEND_NOTEBOOK',
       getOpenedNotebook: 'GET_OPENED_NOTEBOOK',
       getDefaultNotebook: 'GET_DEFAULT_NOTEBOOK'
@@ -66,7 +69,15 @@ export default class HomePage extends Vue {
   async fetchNotebookList () {
     try {
       const res = await this.getOpenedNotebook()
-      this.openedList = res.data?.list ?? []
+
+      const list = getAllList(this.notebookList || [])
+      this.openedList = (res.data?.list || []).map(v => {
+        if (v.commit_id) {
+          return { ...list.find(l => l.id === v.id && l.type === v.type && l.commit_id), active: v.active }
+        } else {
+          return { ...list.find(l => l.id === v.id && l.type === v.type && !l.commit_id), active: v.active }
+        }
+      }).filter(i => i.id)
     } catch (e) {
       console.log(e)
     }
@@ -95,6 +106,12 @@ export default class HomePage extends Vue {
       const defaultNotebook = await this.getDefaultNotebook()
       this.defaultNotebook = defaultNotebook.data
       if (this.defaultNotebook) {
+        const { type, id, commit_id } = this.defaultNotebook
+        const uniq = type + '_' + id
+        this.defaultNotebook = {
+          ...this.defaultNotebook,
+          uniq: commit_id ? uniq + '_' + commit_id : uniq
+        }
         const newList = this.getToSavedList(this.defaultNotebook)
         await this.saveOpenedNotebook({list: newList})
       }
@@ -102,9 +119,9 @@ export default class HomePage extends Vue {
     } catch (e) {
       console.log(e)
     }
-    
+
   }
-  
+
   async handleCreateNotebook () {
     const { isSubmit, newNotobookInfo } = await this.callCreateNoteBookModal({ folderId: '', type: 'notebook'})
     if (isSubmit) {

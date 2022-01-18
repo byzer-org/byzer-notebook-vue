@@ -8,7 +8,9 @@ export function getInitState () {
     form: {
       id: '',
       name: '',
-      type: ''
+      type: '',
+      uniq: '',
+      commit_id: ''
     },
     callback: () => {}
   }

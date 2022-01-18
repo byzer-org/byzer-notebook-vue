@@ -20,3 +20,12 @@ export const notebookNameReg = /^[\u4e00-\u9fa9A-Za-z0-9_]+$/
 export const MarkdownTag = '-- Markdown'
 export const PythonTag = '#%python'
 export const SpecialCodeSuggestKey = ['.', '/', '`', '\'', '"']
+
+/**
+ * key: file type
+ * value: suffix
+ */
+export const FileSuffixMap = {
+  'notebook': '.bznb',
+  'workflow': '.bzwf'
+}

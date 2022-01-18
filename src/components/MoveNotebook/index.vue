@@ -123,9 +123,9 @@ export default class MoveNotebookModal extends Vue {
   }
 
   getFolderList (list) {
-    const temp = list.filter(v => v.children)
+    const temp = list.filter(v => v.children && !v.is_demo)
     temp.forEach(v => {
-      if (v.children) {
+      if (v.children && !v.is_demo) {
         const list = this.getFolderList(v.children)
         if (list.length === 0) {
           delete v.children
@@ -167,7 +167,7 @@ export default class MoveNotebookModal extends Vue {
           const tartget_folder_id = this.form.folder[this.form.folder.length - 1]
           // 目标文件夹中是否含有与被移入文件夹同名的文件
           // 在列表中找到目标文件夹的子级
-          // 被移动的是文件夹 ？ 子集中是否含有被移动的文件夹同名的文件夹 ： 子集中是否含有被移动的 notebook 同名的 notebook 
+          // 被移动的是文件夹 ？ 子集中是否含有被移动的文件夹同名的文件夹 ： 子集中是否含有被移动的 notebook 同名的 notebook
           const originList = [{ name: 'root', label: '', folder_id: '', children: this.notebookList }]
           const targetFolderInfo = this.getChildrenById(tartget_folder_id, originList)
           const targetChildren = targetFolderInfo?.children
@@ -193,7 +193,7 @@ export default class MoveNotebookModal extends Vue {
             }
             await this.moveFolder(params)
           } else if (this.isMoveFolder && index !== -1) {
-            // 移动的是文件夹 并且有重名的 do nothing 
+            // 移动的是文件夹 并且有重名的 do nothing
             return
           } else {
             params = {
@@ -232,7 +232,7 @@ export default class MoveNotebookModal extends Vue {
       customClass: 'centerButton'
     })
   }
-  
+
 }
 </script>
 <style lang="scss">

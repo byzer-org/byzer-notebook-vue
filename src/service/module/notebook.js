@@ -18,7 +18,7 @@ export default {
   excuteCode: params => axios.post('/api/script/execution', params),
   getJobStatus: id => axios.get(`/api/job/${id}`),
   saveNotebookById: ({id, data}) => axios.put(`/api/notebook/${id}`, data),
-  getNotebookById: id => axios.get(`/api/notebook/${id}`),
+  getNotebookById: (id, commit_id) => axios.get(`/api/notebook/${id}${commit_id ? '?commit_id=' + commit_id : ''}`),
   cancelExcuteCell: id => axios.post(`/api/job/${id}/cancel`),
   getExcuteProcess: id => axios.get(`/api/job/${id}/progress`),
   getCurrentScript: id => axios.get(`/api/job/${id}/current_script`),
@@ -32,5 +32,7 @@ export default {
   cloneFolder: data => axios.post('/api/folder/clone', data),
   deleteFolder: id => axios.delete(`/api/folder/${id}`),
   autoComplete: params => axios.post('/api/notebook/code/suggestion', params),
-  exportNotebook: ({ type, id }) => axios.get(`/api/file/export/${id}?type=${type}`, { responseType: 'blob' })
+  exportNotebook: ({ type, id }) => axios.get(`/api/file/export/${id}?type=${type}`, { responseType: 'blob' }),
+  setDemo: params => axios.post('/api/settings/demo', params),
+  offlineDemo: params => axios.post('/api/settings/demo/remove', params)
 }

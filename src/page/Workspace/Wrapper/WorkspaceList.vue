@@ -1,4 +1,3 @@
-
 <template>
   <div ref="notebookListRef" class="notebook-list">
     <div class="header">
@@ -37,18 +36,18 @@
             <svg-icon class="node-label-icon" :icon-class="`file_${data.type}_16`" v-else></svg-icon>
               {{ node.label }}{{getEnding(node)}}
           </span>
-          <el-dropdown class="node-more node-actions" :style="{'left': treeOffsetWidth + 'px'}" @command="(command) => handleWorkspace(command, node)">
+          <el-dropdown v-if="!(data.folder_id && data.is_demo)"  class="node-more node-actions" :style="{'left': treeOffsetWidth + 'px'}" @command="(command) => handleWorkspace(command, node)">
             <span class="el-dropdown-link" @click.stop>
               <el-button class="icon-bg" icon="el-ksd-icon-more_22" type="text" size="small"></el-button>
             </span>
             <el-dropdown-menu slot="dropdown">
               <template v-if="data.id">
                 <el-dropdown-item command="changeActiveTab">{{$t('open')}}</el-dropdown-item>
-                <el-dropdown-item command="handleRename">{{$t('rename')}}</el-dropdown-item>
-                <el-dropdown-item command="handleClone">{{$t('clone')}}</el-dropdown-item>
-                <el-dropdown-item command="handleMove">{{$t('move')}}</el-dropdown-item>
+                <el-dropdown-item command="handleRename" v-if="!data.is_demo">{{$t('rename')}}</el-dropdown-item>
+                <el-dropdown-item command="handleClone" >{{$t('clone')}}</el-dropdown-item>
+                <el-dropdown-item command="handleMove" v-if="!data.is_demo">{{$t('move')}}</el-dropdown-item>
                 <el-dropdown-item command="handleExport">{{$t('export')}}</el-dropdown-item>
-                <el-dropdown-item command="handleDelete">
+                <el-dropdown-item command="handleDelete" v-if="!data.is_demo && !isPublished(data)">
                   <span class="txt-danger">{{$t('delete')}}</span>
                 </el-dropdown-item>
               </template>
@@ -59,7 +58,7 @@
                 <el-dropdown-item command="handleMove">{{$t('move')}}</el-dropdown-item>
                 <el-dropdown-item command="handleRename">{{$t('rename')}}</el-dropdown-item>
                 <el-dropdown-item command="handleClone">{{$t('clone')}}</el-dropdown-item>
-                <el-dropdown-item command="handleDelete" v-if="showDeleteFolderBtn(node)">
+                <el-dropdown-item command="handleDelete"  v-if="showDeleteFolderBtn(node)">
                   <span class="txt-danger">{{$t('delete')}}</span>
                 </el-dropdown-item>
               </template>
@@ -79,11 +78,7 @@ import _ from 'lodash'
   props: ['isCollapse', 'leftWidth', 'defaultWidth'],
   methods: {
     ...mapActions({
-      getNotebookList: 'GET_NOTEBOOK_LIST',
       deleteNotebook: 'DEL_NOTEBOOK',
-      getNotebookById: 'GET_NOTEBOOK_BY_ID',
-      saveOpenedNotebook: 'SAVE_OPEND_NOTEBOOK',
-      getOpenedNotebook: 'GET_OPENED_NOTEBOOK',
       moveNotebook: 'MOVE_NOTEBOOK',
       moveFolder: 'MOVE_FOLDER'
     }),
@@ -101,7 +96,8 @@ import _ from 'lodash'
     ...mapState({
       notebookList: state => state.notebook.notebookList,
       openedNotebooks: state => state.notebook.openedNotebooks,
-      activeNotebook: state => state.notebook.activeNotebook
+      activeNotebook: state => state.notebook.activeNotebook,
+      demoList: state => state.notebook.demoList
     })
   }
 })
@@ -124,8 +120,7 @@ export default class WorkspaceList extends Vue {
   @Watch('activeNotebook', { deep: true })
   onActiveNotebookChange (newVal) {
     if (newVal && newVal.id) {
-      const { type, id } = this.activeNotebook
-      const uniq = `${type}_${id}`
+      const { uniq } = this.activeNotebook
       this.$refs.notebookTree && this.$refs.notebookTree.setCurrentKey(uniq)
     }
   }
@@ -136,8 +131,7 @@ export default class WorkspaceList extends Vue {
 
   get expandNotebooks () {
     if (this.activeNotebook && this.activeNotebook.id) {
-      const { type, id } = this.activeNotebook
-      const uniq = `${type}_${id}`
+      const { uniq } = this.activeNotebook
       return [uniq]
     }
     return []
@@ -220,7 +214,9 @@ export default class WorkspaceList extends Vue {
     return {
       name: node.data.label,
       id: node.data.folder_id ? node.data.folder_id : node.data.id,
-      type: node.data.type
+      type: node.data.type,
+      commit_id: node.data.commit_id || '',
+      uniq: node.data.uniq
     }
   }
   handleRename (node) {
@@ -317,8 +313,8 @@ export default class WorkspaceList extends Vue {
     targetFolder = Array.isArray(targetFolder) ? '' : targetFolder
     const { name, type } = draggingNode.data
     let hasExsited = targetFolderChildren.filter(v => v.id && (v.name === name && v.type === type)).length > 1
-    const notebookId = draggingNode.data.id
-    const currentParentFolder = this.findParentFolder(notebookId, this.originalList, draggingNode.data.type)
+    const notebookUniqId = draggingNode.data.uniq
+    const currentParentFolder = this.findParentFolder(notebookUniqId, this.originalList, draggingNode.data.type)
     const moveToId = currentParentFolder?.folder_id ?? ''
     if (moveToId === (targetFolder && targetFolder.folder_id)) {
       return
@@ -328,7 +324,7 @@ export default class WorkspaceList extends Vue {
       target_folder_name: targetFolder?.name ?? '',
       params: {
         folder_id: targetFolder?.folder_id ?? '',
-        id: notebookId,
+        id: draggingNode.data.id,
         type: draggingNode.data.type
       }
     }
@@ -361,20 +357,20 @@ export default class WorkspaceList extends Vue {
       }
     }
   }
-  findParentFolder (id, list, type) { // 找到 id 所在的父节点的 folder_id, 如果为空则是根目录下的 id
+  findParentFolder (uniq, list, type) { // 找到 uniq 所在的父节点的 folder_id, 如果为空则是根目录下的 uniq
     if (list && !list.length) {
       return null
     }
     let targetItem = null
     // 先找到节点元素
     if (type !== 'folder') {
-      targetItem = list.find(v => (v.children && (v.children.findIndex(child => child.id === id && child.type === type) !== -1)))
+      targetItem = list.find(v => (v.children && (v.children.findIndex(child => child.uniq === uniq && child.type === type) !== -1)))
     } else {
-      targetItem = list.find(v => (v.children && (v.children.findIndex(child => child.folder_id === id) !== -1)))
+      targetItem = list.find(v => (v.children && (v.children.findIndex(child => child.uniq === uniq) !== -1)))
     }
     if (!targetItem){
       list.find(v => {
-        let newItem = v.children && v.children.length && this.findParentFolder(id, v.children)
+        let newItem = v.children && v.children.length && this.findParentFolder(uniq, v.children)
         if (newItem) {
           targetItem = newItem
         }
@@ -382,11 +378,22 @@ export default class WorkspaceList extends Vue {
     }
     return targetItem
   }
-  allowDrop () {
-    return true
+  allowDrop (draggingNode, dropNode) {
+    // 如果目标是文件夹则 is_demo 禁止拖入， 否则判读目标文件的父级（文件夹）的 is_demo 属性
+    if (dropNode.data.folder_id) {
+      return !dropNode.data.is_demo
+    } else {
+      return !dropNode.parent.data.is_demo
+    }
   }
-  allowDrag () {
-    return true
+  allowDrag (node) {
+    const { commit_id = '', id = '' } = node.data
+    const allowDrag = this.demoList.includes(id) ? !commit_id : true
+    const isDemoDir = node.data.folder_id && node.data.is_demo
+    return isDemoDir ? false : allowDrag
+  }
+  isPublished (data) {
+    return this.demoList.includes(data.id)
   }
 }
 </script>
