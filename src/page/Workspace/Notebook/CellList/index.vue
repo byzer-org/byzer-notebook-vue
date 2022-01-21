@@ -582,6 +582,10 @@ export default {
      */
     dataProcess (cellList = []) {
       return cellList.map(item => {
+        // compatible markdown's history mark
+        if (item.content && item.content.startsWith('-- Markdown')) {
+          item.content = item.content.replace('-- Markdown', MarkdownTag)
+        }
         if (item.content && item.content.startsWith(MarkdownTag)) {
           item.content = item.content.replace(MarkdownTag, '')
           // ！！！从备份中取保存前编辑器的模式
