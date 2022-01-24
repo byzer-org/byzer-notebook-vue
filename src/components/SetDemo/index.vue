@@ -77,7 +77,7 @@ export default class SetDemo extends Vue {
       confirmButtonText: title,
       confirmButtonClass: isOffline ? 'el-button--danger' : '',
       cancelButtonText: this.$t('cancel'),
-      type: isOffline ? 'error' : 'warning',
+      type: 'warning',
       customClass: 'centerButton'
     }).then(async () => {
       const params = {
