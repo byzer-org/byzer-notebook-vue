@@ -162,6 +162,7 @@ export default class ExcuteResult extends Vue {
           }
         }
         this.tableList = parsedResult
+        this.pageInfo.page = 1
         this.getRenderList()
       }
     }
