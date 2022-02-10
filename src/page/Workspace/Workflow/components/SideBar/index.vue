@@ -2,7 +2,7 @@
 <template>
   <div class="workflow-side">
     <div class="workflow-side-title">{{$t('workspace.workflow')}}</div>
-    <div class="workflow-side-wrapper" :class="(activeNotebook && activeNotebook.isPreviewMode) && 'disable-drag'">
+    <div class="workflow-side-wrapper" :class="disabledDrag && 'disable-drag'">
       <div v-for="(node, index) in allNodeList" :key="node.type" class="workflow-side-wrapper-node">
         <div class="workflow-side-wrapper-node-header">
           <div class="workflow-side-wrapper-node-header-title">{{node.type}} Node</div>
@@ -16,7 +16,7 @@
             <el-tooltip placement="top" effect="light" popper-class="node-tooltip">
               <div>
                 <div class="workflow-side-wrapper-node-content-item-icon node-icon-item"
-                  :draggable="!disableAction"
+                  :draggable="!disabledDrag"
                   @dragstart="drag($event, item)"
                   :class="getNodeClass(node, item)" >
                   <svg-icon :icon-class="`node_${item.name.toLowerCase()}_24`" class-name="node-style"></svg-icon>
@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
@@ -52,13 +52,18 @@ import { Component, Vue } from 'vue-property-decorator'
   },
   computed: {
     ...mapState({
-      activeNotebook: state => state.notebook.activeNotebook
-    })
+      activeNotebook: state => state.notebook.activeNotebook,
+      demoList: state => state.notebook.demoList
+    }),
+    ...mapGetters(['isDemo']),
+    disabledDrag () {
+      const { isPreviewMode } = this.activeNotebook
+      return this.isDemo || isPreviewMode
+    }
   }
 })
 
 export default class WorkflowSide extends Vue {
-  disableAction = false
   allNodeList = [
     {
       type: 'Basic',

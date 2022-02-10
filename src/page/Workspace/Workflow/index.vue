@@ -6,10 +6,10 @@
           <i class="el-ksd-icon-document_22 font-22"></i><i class="el-ksd-icon-arrow_down_22 font-22"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command='add'>{{$t('workflow.createWorkflow')}}</el-dropdown-item>
-          <el-dropdown-item command='rename'>{{$t('rename')}}</el-dropdown-item>
+          <el-dropdown-item v-if="!isDemo" command='add'>{{$t('workflow.createWorkflow')}}</el-dropdown-item>
+          <el-dropdown-item v-if="!isDemo" command='rename'>{{$t('rename')}}</el-dropdown-item>
           <el-dropdown-item command='clone'>{{$t('clone')}}</el-dropdown-item>
-          <el-dropdown-item command='delete'>
+          <el-dropdown-item v-if="!isDemo" command='delete'>
             <span class="txt-danger">{{$t('workflow.deleteCurrentWorkflow')}}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -17,6 +17,14 @@
       <span class="ml-15">
         <icon-btn icon="el-ksd-icon-save_22" :text="$t('workflow.saveAsNotebook')" :handler="saveAsNotebook" />
       </span>
+      <SetDemo
+        class="set-demo-wrap"
+        v-if="userInfo.is_admin && !isDemo"
+        :userInfo="userInfo"
+        :activeNotebook="activeNotebook"
+        @offlineTab="handleOfflineTab"
+        @operateDemoSuccess="handleOperateDemoSuccess"
+      />
     </div>
     <el-tabs v-model="activeName" class="tabs_button" @tab-click="handleClick">
       <el-tab-pane :label="$t('workspace.notebook')" name="notebook">
@@ -52,19 +60,25 @@
 import Workflow from './workflow'
 import NodeEditor from './components/NodeEditor'
 import WorkflowPreview from './components/WorkflowPreview'
+import SetDemo from '@/components/SetDemo'
 import { Vue, Component } from 'vue-property-decorator'
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex'
+
 @Component({
   props: ['currentNotebook', 'activeNotebookId'],
   components: {
     Workflow,
     NodeEditor,
-    WorkflowPreview
+    WorkflowPreview,
+    SetDemo
   },
   computed: {
     ...mapState({
+      userInfo: state => state.user.userInfo,
+      activeNotebook: state => state.notebook.activeNotebook,
       openedNotebooks: state => state.notebook.openedNotebooks
-    })
+    }),
+    ...mapGetters(['isDemo'])
   },
   methods: {
     ...mapActions('CreateNoteBookModal', {
@@ -78,7 +92,7 @@ import { mapActions, mapMutations, mapState } from 'vuex'
 })
 
 export default class WorkflowWrapper extends Vue {
-  
+
   hideDetail = false
   activeName = 'workflow'
   showNodeEditor = false
@@ -87,8 +101,17 @@ export default class WorkflowWrapper extends Vue {
   selectNodeId = null
   show = true
   disableSaveToNotebook = false
+
   changeNodeList (list) {
     this.disableSaveToNotebook = !list.length
+  }
+
+  handleOperateDemoSuccess () {
+    this.$emit('handleRefresh')
+  }
+
+  handleOfflineTab (tabId) {
+    this.$emit('handleOfflineTab', tabId)
   }
 
   openNodeEditor (node) {
@@ -129,9 +152,9 @@ export default class WorkflowWrapper extends Vue {
     })
   }
   handleClick (tab) {
-    const { id, type } = this.currentNotebook
+    const { uniq, type } = this.currentNotebook
     const temp = [...this.openedNotebooks]
-    const index = temp.findIndex(v => v.id === id && v.type === type)
+    const index = temp.findIndex(v => v.uniq === uniq && v.type === type)
     temp[index].isPreviewMode = tab.name === 'notebook'
     this.changeActiveNotebook(temp[index])
     this.setOpenedNotebook(temp)
@@ -150,12 +173,16 @@ export default class WorkflowWrapper extends Vue {
   }
   async saveAsNotebook () {
     const { isSubmit, newNotobookInfo } = await this.callCreateNoteBookModal({type: 'save-as-notebook'})
+    const newInfo = {
+      ...newNotobookInfo,
+      uniq: 'notebook_' + newNotobookInfo.id
+    }
     if (isSubmit) {
       this.$message({
         type: 'success',
         message: this.$t('workspace.createSuccess')
       })
-      this.changeTabList(newNotobookInfo)
+      this.changeTabList(newInfo)
     }
   }
   handleNotebook (type) {
@@ -197,10 +224,14 @@ export default class WorkflowWrapper extends Vue {
     transform: translateX(-100%);
   }
   &-actions {
-    height: 22px;
     position: absolute;
+    display: flex;
+    height: 22px;
     left: 30px;
     top: 13px;
+    .set-demo-wrap {
+      margin-left: 15px;
+    }
   }
   &-container {
     width: 100%;

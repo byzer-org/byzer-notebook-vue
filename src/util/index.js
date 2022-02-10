@@ -83,20 +83,54 @@ export function setIdinTreeArr (treeArr, pathIdArr) {
   })
 }
 
-export function getCasAndTree (list ) { // 对于指定结构转化成 tree 和 cascader都可以用的结构
+export function getDemoList (list) {
+  const demoList = []
+  list.forEach(v => {
+    if (v.id && v.is_demo) {
+      demoList.push(v.id)
+    }
+
+    if (v.folder_id) {
+      demoList.push(...getDemoList(v.list))
+    }
+  })
+  return demoList
+}
+
+export function getAllList (list) {
+  const result = []
+
+  list.forEach(v => {
+    if (v.folder_id) {
+      result.push(...getAllList(v.list))
+    } else {
+      result.push(v)
+    }
+  })
+
+  return result
+}
+
+export function getCasAndTree (list) { // 对于指定结构转化成 tree 和 cascader都可以用的结构
   return list.map(v => {
     if (v.name) {
       v.label = v.name
       v.type = v.type || 'workflow'
-      v.uniq = v.type + '_' + v.id
+
+      const uniq = v.type + '_' + (v.id || v.folder_id)
+      v.uniq = v.commit_id ? uniq + '_' + v.commit_id : uniq
     }
+
     if (v.folder_id) {
       v.value = v.folder_id
       v.type = 'folder'
-      v.uniq = v.type + '_' + v.folder_id
+
+      const uniq = v.type + '_' + (v.id || v.folder_id)
+      v.uniq = v.commit_id ? uniq + '_' + v.commit_id : uniq
+
       v.showExpandIcon = true
     }
-    
+
     if (v.list) {
       v.children = getCasAndTree(v.list)
     }

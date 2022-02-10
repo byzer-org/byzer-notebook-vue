@@ -5,6 +5,7 @@
     :class="`node${node.id} ` + getNodeClass(node) + (isActive ? ' active' : '')"
     :style="flowNodeContainer"
     @click.native="handleClick"
+    :disabled="isDemo"
     >
     <input ref="inputRef" @keyup.delete="$emit('deleteNode')" type="text" class="click_ele" style="opacity: 0; z-index: -1;position: absolute;">
     <svg-icon :icon-class="`node_${getNodeName(node)}_24`" class-name="node-style">{{node.name}}</svg-icon>
@@ -14,7 +15,7 @@
 <script>
 import ClickOutside from 'vue-click-outside'
 import { Component, Vue } from 'vue-property-decorator'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { basicNodeType } from '../ETNode/config'
 @Component({
   props: ['node', 'isActive'],
@@ -24,7 +25,8 @@ import { basicNodeType } from '../ETNode/config'
   computed: {
     ...mapState({
       allNodeList: state => state.workflow.nodeList
-    })
+    }),
+    ...mapGetters(['isDemo'])
   }
 })
 export default class NodeItem extends Vue {

@@ -43,7 +43,7 @@ keymaster.filter = event => {
   // 是否没有打开的
   const workStatus = result && result.every(i => !i.showMsg)
 
-  return !['INPUT', 'SELECT'].includes(tagName) && workStatus
+  return !['INPUT', 'SELECT'].includes(tagName) && workStatus && !store.getters.isDemo
 }
 export const shortcut = {
   bind: (seed, func) => keymaster(seed, bindKeyHandler(func)),

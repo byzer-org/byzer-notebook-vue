@@ -1,13 +1,13 @@
 
 <template>
   <div class="cell-box" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" >
-    <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode ? 'block' : 'none'}">
+    <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode && !isDemo ? 'block' : 'none'}">
       <div><icon-btn icon="el-ksd-icon-grab_dots_16" class="move-cell" :disabled="isRunningAll" /></div>
       <div class="mt-5"><icon-btn icon="el-ksd-icon-add_22" :handler="handleAddBelow" /></div>
     </div>
     <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
       <!-- Code编辑器 & log -->
-      <div v-if="editType === 'Byzer' || editType === 'Python'">
+      <div v-if="editType === 'Byzer-lang' || editType === 'Python'">
         <div class="mock-editor" :class="!(mode === 'edit' && selectCell.id === cellId) && 'preview'"><div class="mock-editor-gutter"></div><div class="mock-editor-content"></div></div>
         <CodeEditor
           @changeMode="changeMode"
@@ -25,7 +25,7 @@
       <div class="cell-btns" :ref="'cellHover' + cellId">
         <ActionButton :actions="actions" />
       </div>
-      <div v-if="editType === 'Byzer' || editType === 'Python'">
+      <div v-if="editType === 'Byzer-lang' || editType === 'Python'">
         <div class="excute-result" v-if="status !== 'NEW'">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
@@ -69,7 +69,7 @@ import ExcuteResult from '../ExcuteResult'
 import CollapseCode from '../CollapseCode'
 import ExcuteDetail from '../ExcuteDetail'
 import LogMessage from '../LogMessage'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { JOB_STATUS, MarkdownTag } from '@/config'
 
 export default {
@@ -88,7 +88,7 @@ export default {
       showExcuteDetails: true,
       startTime: 0,
       showAddCode: false,
-      editType: this.cellInfo.editType || 'Byzer', // 编辑器类型
+      editType: this.cellInfo.editType || 'Byzer-lang', // 编辑器类型
       mdMode: 'preview',
       innerMaxHeight: ''
     }
@@ -109,17 +109,18 @@ export default {
     this.calInnerMaxHeight()
   },
   computed: {
+    ...mapGetters(['isDemo']),
     actions () {
       return [
-        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('run'), iconClass: 'el-ksd-icon-play_outline_22', handler: this.handleRun },
-        { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStop },
-        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING', label: this.$t('notebook.runToHere'), iconClass: 'el-ksd-icon-run_to_here_16', handler: this.handleRunToHere },
+        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING' && !this.isDemo, label: this.$t('run'), iconClass: 'el-ksd-icon-play_outline_22', handler: this.handleRun },
+        { disabled: this.isRunningAll, isShow: this.status === 'RUNNING' && !this.isDemo, label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStop },
+        { disabled: this.isRunningAll, isShow: this.status !== 'RUNNING' && !this.isDemo, label: this.$t('notebook.runToHere'), iconClass: 'el-ksd-icon-run_to_here_16', handler: this.handleRunToHere },
         // { disabled: this.isRunningAll, isShow: this.status === 'RUNNING', label: this.$t('stop'), iconClass: 'el-ksd-icon-stop_with_border_22', handler: this.handleStopToHere },
         { disabled: this.isRunningAll, isShow: !this.showCode, label: this.$t('notebook.showCode'), iconClass: 'el-ksd-icon-arrow_down_2_22', handler: this.toggleShowCode },
         { disabled: this.isRunningAll, isShow: this.showCode, label: this.$t('notebook.hideCode'), iconClass: 'el-ksd-icon-arrow_up_2_22', handler: this.toggleShowCode },
-        { disabled: this.isRunningAll, isShow: true, label: this.$t('notebook.addAbove'), iconClass: '', handler: this.handleAddAbove },
-        { disabled: this.isRunningAll, isShow: true, label: this.$t('notebook.addBelow'), iconClass: '', handler: this.handleAddBelow },
-        { disabled: this.isRunningAll || this.disableDelete, isShow: true, label: this.$t('notebook.deleteCell'), iconClass: '', type: 'delete', handler: this.handleDelete }
+        { disabled: this.isRunningAll, isShow: !this.isDemo, label: this.$t('notebook.addAbove'), iconClass: '', handler: this.handleAddAbove },
+        { disabled: this.isRunningAll, isShow: !this.isDemo, label: this.$t('notebook.addBelow'), iconClass: '', handler: this.handleAddBelow },
+        { disabled: this.isRunningAll || this.disableDelete, isShow: !this.isDemo, label: this.$t('notebook.deleteCell'), iconClass: '', type: 'delete', handler: this.handleDelete }
       ]
     },
     isActive () {
@@ -130,7 +131,7 @@ export default {
     cellInfo: {
       handler (newVal) {
         this.content = this.cellInfo.content
-        this.editType = this.cellInfo.editType || 'Byzer'
+        this.editType = this.cellInfo.editType || 'Byzer-lang'
         if (!newVal.job_id) {
           this.excuteResult = {}
           this.status = 'NEW'
@@ -148,6 +149,7 @@ export default {
       cancelExcuteCell: 'CANCEL_EXCUTE_CELL'
     }),
     changeMdMode (mode) {
+      if (this.isDemo) return
       this.mdMode = mode
     },
     /**

@@ -1,7 +1,7 @@
 <template>
   <div ref="flowWrap" class="flow-region" @drop="drop($event)" @dragover="allowDrop($event)">
     <div :id="`flow${currentNotebook.id}`" class="flow-region-flow" :class="showNodeEditor && needTranformToLeft && 'transform-left'" @drop="drop($event)" @dragover="allowDrop($event)">
-      <FlowNode 
+      <FlowNode
         v-for="item in data.nodeList"
         :key="item.id"
         :node="item"
@@ -88,7 +88,7 @@ export default {
     },
     async getWorkflowNodeList (notNeedReload) {
       try {
-        const res = await this.getNodeList(this.currentNotebook.id)
+        const res = await this.getNodeList({ workflow_id: this.currentNotebook.id, commit_id: this.currentNotebook.commit_id })
         this.nodeList = res.data.node_list
         this.$emit('changeNodeList', this.nodeList)
         if (!notNeedReload) {
@@ -161,9 +161,9 @@ export default {
       let list = []
       for (let i = 0; i < toList.length; i++) {
         const item = toList[i]
-        list.push({ 
-          from: id, 
-          to: item, 
+        list.push({
+          from: id,
+          to: item,
           id: GenNonDuplicateID(8),
           label: 'Conection Line Name',
           Remark: ''

@@ -46,8 +46,6 @@ vuex.registerModule(['modals', 'CloneNoteBookModal'], store)
       isShow: state => state.isShow,
       form: state => state.form,
       callback: state => state.callback
-    }),
-    ...mapState({
     })
   },
   methods: {
@@ -115,7 +113,8 @@ export default class CloneNoteBookModal extends Vue {
           const params = {
             name: this.form.name.trim(),
             id: this.form.id,
-            type: this.form.type
+            type: this.form.type,
+            commit_id: this.form.commit_id
           }
           let result = null
           if (this.form.type === 'folder') {
