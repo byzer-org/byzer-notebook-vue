@@ -1,20 +1,20 @@
 <template>
   <div class="notebook-workflow">
     <div class="notebook-workflow-actions">
-      <el-dropdown @command="handleNotebook">
+      <el-dropdown v-if="!isDemo" @command="handleNotebook">
         <span class="el-dropdown-link">
           <i class="el-ksd-icon-document_22 font-22"></i><i class="el-ksd-icon-arrow_down_22 font-22"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-if="!isDemo" command='add'>{{$t('workflow.createWorkflow')}}</el-dropdown-item>
-          <el-dropdown-item v-if="!isDemo" command='rename'>{{$t('rename')}}</el-dropdown-item>
+          <el-dropdown-item command='add'>{{$t('workflow.createWorkflow')}}</el-dropdown-item>
+          <el-dropdown-item command='rename'>{{$t('rename')}}</el-dropdown-item>
           <el-dropdown-item command='clone'>{{$t('clone')}}</el-dropdown-item>
-          <el-dropdown-item v-if="!isDemo" command='delete'>
+          <el-dropdown-item command='delete'>
             <span class="txt-danger">{{$t('workflow.deleteCurrentWorkflow')}}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <span class="ml-15">
+      <span class="ml-15" v-if="!isDemo">
         <icon-btn icon="el-ksd-icon-save_22" :text="$t('workflow.saveAsNotebook')" :handler="saveAsNotebook" />
       </span>
       <SetDemo
@@ -28,11 +28,19 @@
     </div>
     <el-tabs v-model="activeName" class="tabs_button" @tab-click="handleClick">
       <el-tab-pane :label="$t('workspace.notebook')" name="notebook">
-        <WorkflowPreview @saveAsNotebook="saveAsNotebook" v-if="activeName === 'notebook'" />
+        <WorkflowPreview @saveAsNotebook="saveAsNotebook" @cloneWorkflow="cloneWorkflow" v-if="activeName === 'notebook'" />
       </el-tab-pane>
       <el-tab-pane :label="$t('workspace.workflow')" name="workflow">
         <div class="notebook-workflow-container" :class="showNodeEditor && 'right-bar'">
           <div class="notebook-workflow-container-l">
+            <el-alert
+              v-if="isDemo"
+              type="info"
+              show-icon>
+              <div slot="title">
+                {{$t('workflow.readOnlyTip')}}<a href="javascript:;" @click="cloneWorkflow">{{$t('workflow.clone')}}</a>
+              </div>
+            </el-alert>
             <Workflow
               ref="workflowWrapper"
               :selectNodeId="selectNodeId"
@@ -184,6 +192,9 @@ export default class WorkflowWrapper extends Vue {
       })
       this.changeTabList(newInfo)
     }
+  }
+  cloneWorkflow () {
+    this.handleNotebook('clone')
   }
   handleNotebook (type) {
     let handleName = ''

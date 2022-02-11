@@ -243,6 +243,7 @@
     "saveTipText": "Byzer syntax of the current node is incorrect. Are you sure to save this node?",
     "readOnlyTip": "Read Only. To edit it further, click",
     "saveAsNotebook": " Save As Notebook",
+    "clone": " Duplicate",
     "createWorkflow": "Add a new Workflow",
     "deleteCurrentWorkflow": "Delete Current Workflow",
     "changeNodeTip": "You will lose unsaved content if you change to another node.",
