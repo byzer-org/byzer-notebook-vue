@@ -71,7 +71,7 @@
               href="javascript:;"
               @click="handleNotebook('clone')"
             >
-              {{$t('workflow.saveAsNotebook')}}
+              {{$t('workflow.clone')}}
             </a>
           </div>
         </el-alert>

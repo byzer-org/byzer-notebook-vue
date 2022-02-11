@@ -4,8 +4,11 @@
     <el-alert
       type="info"
       show-icon>
-      <div slot="title">
+      <div slot="title" v-if="!isDemo">
         {{$t('workflow.readOnlyTip')}}<a href="javascript:;" :class="!this.cellList.length && 'disabled-style is-disabled'" @click="saveAsNotebook">{{$t('workflow.saveAsNotebook')}}</a>
+      </div>
+      <div slot="title" v-else>
+        {{$t('workflow.readOnlyTip')}}<a href="javascript:;" @click="cloneWorkflow">{{$t('workflow.clone')}}</a>
       </div>
     </el-alert>
     <ul class="workflow-preview-cell-list">
@@ -26,7 +29,7 @@
 </template>
 <script>
 import CodeEditor from '@/components/CodeEditor'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { Vue, Component } from 'vue-property-decorator'
 @Component({
   components: {
@@ -35,7 +38,8 @@ import { Vue, Component } from 'vue-property-decorator'
   computed: {
     ...mapState({
       activeNotebook: state => state.notebook.activeNotebook
-    })
+    }),
+    ...mapGetters(['isDemo'])
   },
   methods: {
     ...mapActions({
@@ -67,6 +71,10 @@ export default class WorkflowPreview extends Vue {
     if (this.cellList.length) {
       this.$emit('saveAsNotebook')
     }
+  }
+
+  cloneWorkflow () {
+    this.$emit('cloneWorkflow')
   }
 }
 </script>
