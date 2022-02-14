@@ -8,6 +8,8 @@ export default {
     notebookDirList: [],
     activeNotebook: undefined,
     demoList: [],
+    logMessageList: [],
+    resultList: [],
     activeSidebar: 'notebook',
     showSideBar: true
   },
@@ -23,6 +25,12 @@ export default {
     },
     [types.SET_DEMO_LIST]: (state, data) => {
       state.demoList = data
+    },
+    [types.SET_LOG_MESSAGE_LIST]: (state, cellId) => {
+      state.logMessageList.push(cellId)
+    },
+    [types.SET_RESULT_LIST]: (state, cellId) => {
+      state.resultList.push(cellId)
     },
     [types.CHANGE_ACTIVE_SIDEBAR]: (state, data) => {
       state.activeSidebar = data
