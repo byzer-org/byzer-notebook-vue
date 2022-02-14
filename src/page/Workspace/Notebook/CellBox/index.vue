@@ -26,7 +26,7 @@
         <ActionButton :actions="actions" />
       </div>
       <div v-if="editType === 'Byzer-lang' || editType === 'Python'">
-        <div class="excute-result" v-if="status !== 'NEW'">
+        <div class="excute-result" v-if="status !== 'NEW' || loadingExcute" v-loading="loadingExcute">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
               <ExcuteResult :result="excuteResult" :status="status" :innerMaxHeight="innerMaxHeight" />
@@ -98,7 +98,8 @@ export default {
       showAddCode: false,
       editType: this.cellInfo.editType || 'Byzer-lang', // 编辑器类型
       mdMode: 'preview',
-      innerMaxHeight: ''
+      innerMaxHeight: '',
+      loadingExcute: false
     }
   },
   components: {
@@ -237,10 +238,13 @@ export default {
         cell_id: this.cellInfo.id
       }
       try {
+        this.loadingExcute = true
         const res = await this.excuteCell(params)
+        this.loadingExcute = false
         this.jobId = res.data.job_id
         this.getStatus(this.jobId)
       } catch (err) {
+        this.loadingExcute = false
         this.excuteResult = err.data
         this.loading = false
         this.changeStatus('-1')
