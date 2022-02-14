@@ -169,10 +169,7 @@ export default class ExcuteResult extends Vue {
   }
 
   drawPng () {
-    const location = this.$router.resolve({ name: 'result' })
-    window.filter = {
-      id: this.result.job_id
-    }
+    const location = this.$router.resolve({ name: 'result', params: { id: this.result.job_id }})
     window.open(location.href)
   }
   formatterValue (row, column, cellValue) {

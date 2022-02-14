@@ -31,8 +31,7 @@ export default class IframePage extends Vue {
   detailContent = ''
 
   created () {
-    this.$router.push({name: 'result', params: window.opener.filter})
-    this.getStatus(window.opener.filter.id)
+    this.getStatus(this.$route.params.id)
   }
   
   async getStatus (id) {

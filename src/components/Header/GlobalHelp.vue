@@ -1,11 +1,11 @@
 
 <template>
   <div class="global-help">
-    <el-dropdown>
+    <el-dropdown @command="handleCommand">
       <i class="el-ksd-icon-help_22 drop-icon"></i>
       <el-dropdown-menu slot="dropdown" class="global-help-drop">
-        <el-dropdown-item command=""><a href="https://github.com/byzer-org" target="_blank">{{$t('menu.give_feedback')}}</a></el-dropdown-item>
-        <el-dropdown-item command=""><a href="https://docs.byzer.org/#/byzer-notebook/zh-cn/" target="_blank">{{$t('menu.Kolo_docs')}}</a></el-dropdown-item>
+        <el-dropdown-item command="https://github.com/byzer-org">{{$t('menu.give_feedback')}}</el-dropdown-item>
+        <el-dropdown-item command="https://docs.byzer.org/#/byzer-notebook/zh-cn/">{{$t('menu.Kolo_docs')}}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
@@ -23,6 +23,10 @@ import { mapState } from 'vuex'
   }
 })
 export default class GlobalHelp extends Vue {
+
+  handleCommand (command) {
+    window.open(command)
+  }
 }
 </script>
 <style lang="scss">
