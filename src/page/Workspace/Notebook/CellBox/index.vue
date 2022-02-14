@@ -35,7 +35,15 @@
               <ExcuteDetail :result="excuteResult" :jobId="jobId" :innerMaxHeight="innerMaxHeight" />
             </el-tab-pane>
             <el-tab-pane label="Log Message" name="logs">
-              <LogMessage :result="excuteResult" v-if="jobId" :status="status" :jobId="jobId" :innerMaxHeight="innerMaxHeight" />
+              <LogMessage
+                :cellId="cellId"
+                :currentNotebook="currentNotebook"
+                :result="excuteResult"
+                v-if="jobId"
+                :status="status"
+                :jobId="jobId"
+                :innerMaxHeight="innerMaxHeight"
+              />
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -69,7 +77,7 @@ import ExcuteResult from '../ExcuteResult'
 import CollapseCode from '../CollapseCode'
 import ExcuteDetail from '../ExcuteDetail'
 import LogMessage from '../LogMessage'
-import { mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import { JOB_STATUS, MarkdownTag } from '@/config'
 
 export default {
@@ -103,12 +111,12 @@ export default {
     LogMessage
   },
   created () {
-    if (this.cellInfo.job_id) { // cell cell 状态获取
-      this.getStatus(this.cellInfo.job_id)
-    }
     this.calInnerMaxHeight()
   },
   computed: {
+    ...mapState({
+      resultList: state => state.notebook.resultList
+    }),
     ...mapGetters(['isDemo']),
     actions () {
       return [
@@ -140,6 +148,16 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    currentNotebook: {
+      handler (newVal) {
+        if (this.cellInfo.job_id && newVal && newVal.active === 'true' && !this.resultList.includes(this.cellId)) {
+          this.addResult(this.cellId)
+          this.getStatus(this.cellInfo.job_id)
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
   methods: {
@@ -147,6 +165,9 @@ export default {
       excuteCell: 'HANDLE_EXCUTE_CELL',
       getJobStatus: 'GET_JOB_STATUS',
       cancelExcuteCell: 'CANCEL_EXCUTE_CELL'
+    }),
+    ...mapMutations({
+      addResult: 'SET_RESULT_LIST'
     }),
     changeMdMode (mode) {
       if (this.isDemo) return

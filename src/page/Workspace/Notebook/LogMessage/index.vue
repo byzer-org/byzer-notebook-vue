@@ -12,13 +12,21 @@
 <script>
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
-import { mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 @Component({
-  props: ['result', 'jobId', 'status', 'innerMaxHeight'],
+  props: ['cellId', 'currentNotebook', 'result', 'jobId', 'status', 'innerMaxHeight'],
+  computed: {
+    ...mapState({
+      logMessageList: state => state.notebook.logMessageList
+    })
+  },
   methods: {
     ...mapActions({
       getJobLogs: 'GET_JOB_LOGS'
+    }),
+    ...mapMutations({
+      addLogMessage: 'SET_LOG_MESSAGE_LIST'
     })
   }
 })
@@ -40,9 +48,14 @@ export default class ExcuteDetail extends Vue {
     this.getLogs()
   }
 
-  mounted () {
-    this.getLogs()
+  @Watch('currentNotebook', { immediate: true, deep: true })
+  onCurrentNotebookChange (newVal) {
+    if (newVal && newVal.active === 'true' && !this.logMessageList.includes(this.cellId)) {
+      this.addLogMessage(this.cellId)
+      this.getLogs()
+    }
   }
+
   beforeDestroy () {
     window.clearTimeout(this.timer)
   }
@@ -73,7 +86,6 @@ export default class ExcuteDetail extends Vue {
       if (this._isDestroyed) {
         return false
       }
-      console.log(e)
     }
   }
 }
