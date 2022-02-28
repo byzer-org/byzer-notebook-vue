@@ -16,8 +16,9 @@ export default async function beforeEach (to, from, next) {
     next()
   } else if (to.meta.needLogin) {
     store.dispatch(actionsTypes.GET_USER_INFO).then(res => {
-      store.commit('SET_USER_INFO', res.data)
-      next({ name: to.name })
+      let data = res.data
+      store.commit('SET_USER_INFO', data)
+      next({ ...to })
     })
   } else {
     next()

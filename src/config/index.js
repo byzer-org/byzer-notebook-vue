@@ -29,3 +29,17 @@ export const FileSuffixMap = {
   'notebook': '.bznb',
   'workflow': '.bzwf'
 }
+
+export const GRAPH_NODE_ATTRS = {
+  width: 100,
+  height: 26,
+  shape: 'vue-shape',
+  component: 'graph-node'
+}
+
+export const GRAPH_EDGE_ATTRS = {
+  line: {
+    stroke: '#8B99AE',
+    strokeWidth: 2
+  }
+}

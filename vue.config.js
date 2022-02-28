@@ -40,7 +40,7 @@ module.exports = {
       .use('i18n')
       .loader('@kazupon/vue-i18n-loader')
       .end()
-    // 配置项目标题 
+    // 配置项目标题
     config
       .plugin('html')
       .tap(args => {
