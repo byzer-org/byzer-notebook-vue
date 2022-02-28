@@ -29,6 +29,10 @@ export default {
     [types.SET_LOG_MESSAGE_LIST]: (state, cellId) => {
       state.logMessageList.push(cellId)
     },
+    [types.RESET_LIST]: state => {
+      state.logMessageList = []
+      state.resultList = []
+    },
     [types.SET_RESULT_LIST]: (state, cellId) => {
       state.resultList.push(cellId)
     },
