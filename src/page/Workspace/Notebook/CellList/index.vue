@@ -1,4 +1,3 @@
-
 <template>
   <div class="cellListPage" v-loading="isLoading || isLoadingResult">
     <div class="cellListPage-header">
@@ -57,6 +56,20 @@
           @runAll="handleRunAll"
           @operateDemoSuccess="handleOperateDemoSuccess"
         />
+        <div class="btn">
+          <span v-if="added" class="add-to-schedule" @click="viewDAG">
+            <i class="el-ksd-icon-confirm_22"></i>
+            {{ $t('schedules.addedToSchedule') }}
+          </span>
+          <span
+            v-else
+            class="add-to-schedule"
+            @click="addToSchedule"
+          >
+            <i class="el-ksd-icon-add_22"></i>
+            {{ $t('schedules.addToSchedule') }}
+          </span>
+        </div>
       </div>
     </div>
     <div class="cellListPage-container">
@@ -148,6 +161,7 @@ import draggable from 'vuedraggable'
 import cellCommand from './command.vue'
 import { MarkdownTag } from '@/config'
 import { PythonTag } from '../../../../config'
+import { formatGetParams } from '../../../../util'
 
 export default {
   name: 'cellList',
@@ -197,6 +211,9 @@ export default {
       mode: state => state.notebook.activeNotebook.mode,
       openedNotebookList: state => state.notebook.openedNotebooks
     }),
+    ...mapState('DAGViewModal', {
+      taskInfo: state => state.taskInfo
+    }),
     ...mapGetters(['isDemo']),
     disableCellAction () {
       return Object.keys(this.selectCell).length === 0 || this.newCellList.length === 1 || this.isRunningAll
@@ -212,6 +229,9 @@ export default {
     },
     isLoadingResult () {
       return this.newCellList.some(v => v.loadingResult)
+    },
+    added () {
+      return this.taskInfo && this.taskInfo.scheduleInfo
     }
   },
   created () {
@@ -246,18 +266,24 @@ export default {
       },
       deep: true
     },
-    activeNotebookId () {
-      this.initAllData()
-      this.shouldGetScrollTop()
-      this.changeMode('edit')
-      this.bindAllKey()
+    activeNotebookId: {
+      handler () {
+        this.initAllData()
+        if (this.activeNotebookId === this.currentNotebook?.id) {
+          this.shouldGetScrollTop()
+          this.changeMode('edit')
+          this.bindAllKey()
+          this.checkNotebook()
+        }
+      },
+      immediate: true
     },
     selectCell: {
       handler (newVal, oldValue) {
         const {id, editType} = newVal
         const {editType: oldEditType} = oldValue
         if (id) {
-          this.editType = newVal.editType || '';
+          this.editType = newVal.editType || ''
           if (
             editType === 'Markdown' &&
             (oldEditType === 'Byzer-lang' || oldEditType === 'Python')
@@ -279,6 +305,15 @@ export default {
     ...mapMutations({
       changeNotebookMode: 'CHANGE_NOTEBOOK_MODE' // 修改notebook 模式 edit/command
     }),
+    ...mapActions('AddScheduleModal', {
+      callAddScheduleModal: 'CALL_MODAL'
+    }),
+    ...mapActions('DAGViewModal', {
+      callDAGViewModal: 'CALL_MODAL'
+    }),
+    ...mapMutations('DAGViewModal', {
+      setTaskInfo: 'SET_TASK_INFO'
+    }),
     ...mapActions({
       deleteNotebook: 'DEL_NOTEBOOK',
       saveNotebook: 'SAVE_NOTEBOOK',
@@ -286,7 +321,8 @@ export default {
       createCell: 'CREATE_CELL',
       deleteCell: 'DELETE_CELL',
       clearResult: 'CLEAR_RESULT',
-      setDemo: 'SET_DEMO'
+      setDemo: 'SET_DEMO',
+      getNotebookInfo: 'GET_NOTEBOOK_INFO'
     }),
     ...mapActions('CreateNoteBookModal', {
       callCreateNoteBookModal: 'CALL_MODAL'
@@ -294,6 +330,18 @@ export default {
     initAllData () {
       this.isRunningAll = false
       this.selectCellStatus = 'NEW'
+    },
+    async checkNotebook () {
+      const params = formatGetParams({
+        entity_type: 'notebook',
+        entity_id: this.activeNotebookId
+      })
+      try {
+        const res = await this.getNotebookInfo(params)
+        this.setTaskInfo({ taskInfo: { scheduleInfo: res.data, currentNotebook: this.currentNotebook }})
+      } catch (e) {
+        this.setTaskInfo({ taskInfo: undefined })
+      }
     },
     /**
      * @description: 运行下一个
@@ -353,7 +401,7 @@ export default {
      * @Date: 2021-09-07 13:46:28
      */
     handleReplaceKeyChanged (e) {
-      this.replaceKey = e;
+      this.replaceKey = e
     },
     /**
      * @description: 修改content
@@ -397,7 +445,7 @@ export default {
       if (!this.findKey) {
         return
       }
-      const type = Object.prototype.toString.call(param).slice(8, -1);
+      const type = Object.prototype.toString.call(param).slice(8, -1)
       if (type === 'String') {
         // 单个替换
         this.doReplace(param)
@@ -443,7 +491,7 @@ export default {
               if (item.editType === 'Markdown') {
                 // markdown变为编辑模式并聚焦
                 node.mdMode = 'edit'
-                node.handleFocus();
+                node.handleFocus()
               }
             }
           }
@@ -456,21 +504,21 @@ export default {
      * @Date: 2021-08-27 10:22:54
      */
     handleChanged (e) {
-      this.editType = e;
+      this.editType = e
       this.refreshSelectCell()
-      let newValue = this.selectCell?.content || '';
-      const index = this.newCellList.findIndex(i => i.id === this.selectCell.id);
+      let newValue = this.selectCell?.content || ''
+      const index = this.newCellList.findIndex(i => i.id === this.selectCell.id)
       this.$set(this.newCellList, index, Object.assign(this.newCellList[index], {
         editType: e
-      }));
+      }))
       if (e === 'Markdown') {
-        newValue = `${MarkdownTag}${newValue}`;
+        newValue = `${MarkdownTag}${newValue}`
         this.handleSave()
       } else {
         if (newValue.startsWith(MarkdownTag)) {
           newValue = newValue.replace(MarkdownTag, '')
         }
-        const index = newValue.split('\n').map(i => i.trim()).indexOf(PythonTag);
+        const index = newValue.split('\n').map(i => i.trim()).indexOf(PythonTag)
         if (e === 'Python' && index < 0) {
           newValue = PythonTag + '\n' + newValue
           this.setEditorValue(newValue)
@@ -500,7 +548,7 @@ export default {
      * @Date: 2021-08-27 10:56:49
      */
     refreshSelectCell () {
-      this.selectCell = this.newCellList.find(i => i.id === this.selectCell.id) || {};
+      this.selectCell = this.newCellList.find(i => i.id === this.selectCell.id) || {}
     },
     /**
      * @description: ace editor失焦
@@ -510,7 +558,7 @@ export default {
       this.$nextTick(() => {
         const cellRef = this.$refs['cell' + this.selectCell.id] && (this.$refs['cell' + this.selectCell.id][0])
         const codeEditor = cellRef?.$refs['cellEditor' + this.selectCell.id]?.$refs['codeEditor'+this.selectCell.id]
-        codeEditor?.editor.textInput.blur();
+        codeEditor?.editor.textInput.blur()
       })
     },
     /**
@@ -642,8 +690,8 @@ export default {
         if (item.content && item.content.startsWith(MarkdownTag)) {
           item.content = item.content.replace(MarkdownTag, '')
           // ！！！从备份中取保存前编辑器的模式
-          const temp = this.oldCellList.find(i => i.id === item.id) || {};
-          item.editType = temp.editType || 'Markdown';
+          const temp = this.oldCellList.find(i => i.id === item.id) || {}
+          item.editType = temp.editType || 'Markdown'
         } else {
           item.editType = 'Byzer-lang'
           if (
@@ -652,8 +700,8 @@ export default {
             item.editType = 'Python'
           }
         }
-        return item;
-      });
+        return item
+      })
     },
     handleOperateDemoSuccess () {
       this.$emit('handleRefresh')
@@ -680,7 +728,6 @@ export default {
         }
       } catch (e) {
         this.loadingList = false
-        console.log(e)
       }
     },
     /**
@@ -688,7 +735,8 @@ export default {
      * @param {showMessage} 是否出loading
      * @Date: 2021-08-31 14:09:51
      */
-    handleSave (showMessage) { // 保存所有的cell
+    handleSave (showMessage) {
+      // 保存所有的cell
       Promise.resolve(this.autoSaveCell(showMessage))
     },
     async clearAllResult () {
@@ -710,14 +758,14 @@ export default {
         this.loadingSave = showMessage ? true : false
         // 处理content并保存
         this.oldCellList = cloneDeep(this.newCellList).map(item => {
-          item.content = item.content || '';
+          item.content = item.content || ''
           if (item.editType === 'Markdown') {
             if (!(item.content || '').startsWith(MarkdownTag)) {
-              item.content = MarkdownTag + item.content;
+              item.content = MarkdownTag + item.content
             }
           }
-          return item;
-        });
+          return item
+        })
         const params = {
           id: this.activeNotebookId,
           data: {
@@ -741,9 +789,13 @@ export default {
       if (type === 'delete') {
         this.handleDeleteCell(this.selectCell)
       } else {
-        const selectCellRef = this.selectCell && this.$refs['cell' + this.selectCell.id][0] || null
+        const selectCellRef =
+          (this.selectCell && this.$refs['cell' + this.selectCell.id][0]) ||
+          null
         if (selectCellRef) {
-          type === 'run' ? selectCellRef.handleRun() : selectCellRef.handleStop()
+          type === 'run'
+            ? selectCellRef.handleRun()
+            : selectCellRef.handleStop()
         }
       }
     },
@@ -752,12 +804,16 @@ export default {
         await this.autoSaveCell()
         this.exuteType = type
         if (this.exuteType === 'stop') {
-          this.$confirm(this.$t('notebook.discardAllJob'), this.$t('notebook.discardTitle'), {
+          this.$confirm(
+            this.$t('notebook.discardAllJob'),
+            this.$t('notebook.discardTitle'),
+            {
               confirmButtonText: this.$t('discard'),
               cancelButtonText: this.$t('cancel'),
               type: 'warning',
               customClass: 'centerButton'
-            }).then(() => {
+            }
+          ).then(() => {
             this.confirmExcuteAll(true)
           })
         } else {
@@ -785,10 +841,7 @@ export default {
       this.runningIndex++
       const ids = this.newCellList.map(v => v.id)
       const id = ids[this.runningIndex]
-      if (
-        id &&
-        this.runToIndex >= this.runningIndex
-      ) {
+      if (id && this.runToIndex >= this.runningIndex) {
         const domRef = `cell${id}`
         if (this.$refs[domRef] && this.$refs[domRef][0].content) {
           // 运行到哪个，哪个就切换为选中状态
@@ -809,7 +862,9 @@ export default {
       if (!isFirst) {
         this.runningIndex++
       } else {
-        let firstIndex = this.newCellList.findIndex(v => v.status === 'RUNNING')
+        let firstIndex = this.newCellList.findIndex(
+          v => v.status === 'RUNNING'
+        )
         this.runningIndex = firstIndex
       }
       const ids = this.newCellList.map(v => v.id)
@@ -841,7 +896,10 @@ export default {
       if ((value || '').startsWith(MarkdownTag)) {
         editType = 'Markdown'
       } else if (
-        (value || '').split('\n').map(i => i.trim()).indexOf(PythonTag) > -1
+        (value || '')
+          .split('\n')
+          .map(i => i.trim())
+          .indexOf(PythonTag) > -1
       ) {
         editType = 'Python'
       }
@@ -885,8 +943,8 @@ export default {
     },
     async handleAddCell (data, cell) {
       const { type } = data
-      const index = this.newCellList.findIndex(v => v.id === cell.id);
-      const insertIndex = type === 'below' ? index + 1 : index;
+      const index = this.newCellList.findIndex(v => v.id === cell.id)
+      const insertIndex = type === 'below' ? index + 1 : index
       if (this.activeNotebookId !== this.currentNotebook.id) {
         return
       }
@@ -903,7 +961,9 @@ export default {
         const res = await this.getNotebookById({ id: this.activeNotebookId })
         this.loadingSave = false
         this.newCellList = this.dataProcess(res.data.cell_list)
-        this.selectCell = Object.assign(newCell.data, { editType: 'Byzer-lang' })
+        this.selectCell = Object.assign(newCell.data, {
+          editType: 'Byzer-lang'
+        })
         this.changeMode('edit')
         this.autoScrollCells(insertIndex, type)
       } catch (e) {
@@ -912,13 +972,16 @@ export default {
     },
     autoScrollCells (insertIndex, type) {
       this.selectCell = this.newCellList[insertIndex]
-      const scrollTop = this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
+      const scrollTop =
+        this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
       this.$nextTick(() => {
-        const autoScrollHeight = this.$refs['cellLi' + this.selectCell.id][0].offsetHeight
+        const autoScrollHeight =
+          this.$refs['cellLi' + this.selectCell.id][0].offsetHeight
         const plusHeight = scrollTop + autoScrollHeight
         const minusHeight = scrollTop - 60
         const scrollHeight = type === 'below' ? plusHeight : minusHeight
-        this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop = scrollHeight
+        this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop =
+          scrollHeight
       })
     },
     setScrollTopToLocal () {
@@ -928,10 +991,13 @@ export default {
         if (!wrapper) {
           return
         }
-        const curScrollTop = this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
-        const index = scrollList.findIndex(v => v.id === this.currentNotebook.id)
+        const curScrollTop =
+          this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
+        const index = scrollList.findIndex(
+          v => v.id === this.currentNotebook.id
+        )
         if (index === -1) {
-          scrollList.push({...this.currentNotebook, scrollTop: curScrollTop })
+          scrollList.push({ ...this.currentNotebook, scrollTop: curScrollTop })
         } else {
           scrollList[index].scrollTop = curScrollTop
         }
@@ -952,8 +1018,26 @@ export default {
     },
     clearUnOpenedList () {
       const scrollList = JSON.parse(localStorage.getItem('scrollList')) || []
-      const newList = scrollList.filter(v => this.openedNotebookList.map(v => v.id).includes(v.id))
+      const newList = scrollList.filter(v =>
+        this.openedNotebookList.map(v => v.id).includes(v.id)
+      )
       localStorage.setItem('scrollList', JSON.stringify(newList))
+    },
+    async addToSchedule () {
+      try {
+        const { finished } = await this.callAddScheduleModal(
+          this.activeNotebook
+        )
+        if (finished) {
+          await this.checkNotebook()
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async viewDAG () {
+      await this.callDAGViewModal(cloneDeep(this.taskInfo))
+      this.checkNotebook()
     }
   }
 }
@@ -983,6 +1067,11 @@ export default {
           i {
             vertical-align: middle;
           }
+        }
+        .add-to-schedule {
+          display: inline-flex;
+          align-items: center;
+          cursor: pointer;
         }
       }
     }

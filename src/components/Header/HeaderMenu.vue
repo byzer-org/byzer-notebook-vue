@@ -19,6 +19,12 @@
         <span>{{$t('menu.jobs')}}</span>
       </template>
     </el-menu-item>
+    <el-menu-item index="schedules">
+      <template slot="title">
+        <svg-icon class="menu-icon font-24" icon-class="nav_process_24"></svg-icon>
+        <span>{{$t('menu.schedules')}}</span>
+      </template>
+    </el-menu-item>
     <el-menu-item index="settings" v-if="!isTrial">
       <template slot="title">
         <svg-icon class="menu-icon font-24" icon-class="nav_setting_24"></svg-icon>
@@ -38,7 +44,7 @@ export default {
       isTrial: state => state.global.is_trial
     }),
     activeIndex () {
-      return this.$route.name
+      return this.$route.meta.menuIndex
     }
   },
   methods: {
@@ -70,7 +76,7 @@ export default {
         vertical-align: middle;
         margin-right: 5px;
       }
-    } 
+    }
   }
 }
 </style>

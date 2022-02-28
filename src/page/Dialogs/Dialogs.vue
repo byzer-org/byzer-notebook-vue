@@ -12,6 +12,13 @@
     <MoveNotebook />
     <CreateConnection />
     <CreateNode />
+    <AddSchedule />
+    <SetSchedule />
+    <FailureDetail />
+    <DAGView />
+    <EditTask />
+    <CheckAction />
+    <CheckSubmit />
   </div>
 </template>
 
@@ -28,6 +35,13 @@ import CreateFolder from '../../components/CreateFolder'
 import MoveNotebook from '../../components/MoveNotebook'
 import CreateConnection from '../../components/CreateConnection'
 import CreateNode from '../../components/CreateNode'
+import AddSchedule from '../../components/AddSchedule'
+import SetSchedule from '../../components/SetSchedule'
+import FailureDetail from '../../components/FailureDetail'
+import DAGView from '../../components/DAGView'
+import EditTask from '../../components/EditTask'
+import CheckAction from '../../components/CheckAction'
+import CheckSubmit from '../../components/CheckSubmit'
 
 @Component({
   components: {
@@ -40,7 +54,14 @@ import CreateNode from '../../components/CreateNode'
     MoveNotebook,
     ImportNotebook,
     CreateConnection,
-    CreateNode
+    CreateNode,
+    AddSchedule,
+    SetSchedule,
+    FailureDetail,
+    DAGView,
+    EditTask,
+    CheckAction,
+    CheckSubmit
   }
 })
 export default class Dialogs extends Vue {

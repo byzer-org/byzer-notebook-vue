@@ -9,6 +9,8 @@
   "clone": "Duplicate",
   "edit": "Edit",
   "delete": "Delete",
+  "remove": "Remove",
+  "update": "Update",
   "import": "Import",
   "export": "Export",
   "move": "Move",
@@ -36,12 +38,13 @@
   "nodata": "No Data",
   "hideDetails": "Hide Details",
   "viewAll": "View All",
-  "copySuccess": "Successfully Copied!" ,
+  "copySuccess": "Successfully Copied!",
   "menu": {
     "home": "Home",
     "workspace": "Workspace",
     "catalog": "Data Catalog",
     "jobs": "Jobs",
+    "schedules": "Schedules",
     "settings": "Settings",
     "give_feedback": "Give Feedback",
     "Kolo_docs": "Byzer Notebook Docs"
@@ -76,6 +79,7 @@
     "folderClone": "Clone Folder",
     "workflowClone": "Clone Workflow",
     "nameHolder": "Please enter a name",
+    "taskHolder": "Please select a task",
     "saveAsNotebook": "Save as Notebook",
     "notebookCreate": "Create Notebook",
     "workflowCreate": "Create Workflow",
@@ -277,13 +281,87 @@
     "viewCode": "View Running Code",
     "confirmDeleteJobs": "Are you sure you want to delete the selected X job record(s)?",
     "deleteTitle": "Delete Job Records",
-    "jobId": "Job Id",
+    "jobId": "Job ID",
     "user": "User",
     "notebook": "Notebook",
     "startTime": "Start Time",
     "duration": "Duration",
     "engine": "Engine",
     "status": "Status"
+  },
+  "schedules": {
+    "viewDAG": "View DAG",
+    "DAGViewTitle": "View Task",
+    "viewInstance": "View Instance",
+    "dag_task_name": "Task Name: ",
+    "dag_task_description": "Task Description: ",
+    "dag_schedule_name": "Schedule Name: ",
+    "editTaskTitle": "Edit Task",
+    "remove_task": "Remove Task",
+    "onlineSchedule": "Online Schedule",
+    "actionSuccessMsg": "{action} scheduled task succeeded.",
+    "editTaskConfirmInfo": "Are you sure you want to {action} the task? The schedule to which the current task belongs is \"online\", and {action} tasks on this schedule will cause it to be \"offline\". If you need to re-launch the schedule, please check \"Online Schedule\" in the lower left corner, or go to \"Schedules\" to set it later.",
+    "editTaskConfirmTitle": "{action} Task",
+    "title": "Schedules",
+    "filterHolder": "Search By Schedule Name",
+    "schId": "Schedule ID",
+    "name": "Schedule Name",
+    "status": "Status",
+    "createTime": "Creation time",
+    "updateTime": "Update time",
+    "type": "Type",
+    "action": "Action",
+    "settings": "Settings",
+    "online": "Online",
+    "offline": "Offline",
+    "more": "More",
+    "confirmDeleteschedule": "Are you sure you want to delete this schedule? Please note this action can’t be reverted.",
+    "deleteTitle": "Delete Schedule",
+    "addToSchedule": "Add to Schedule",
+    "addedToSchedule": "Added to Schedule",
+    "failureNode": "Failed Node",
+    "failureLog": "Failed Log",
+    "taskName": "Task Name",
+    "taskDesc": "Task Description",
+    "scheduleDesc": "Schedule Description",
+    "addSchedule": "Add Schedule",
+    "setSchedule": "Set Schedule",
+    "failureDetail": "Failure Details",
+    "schedule": "Schedule",
+    "createSchedule": "Create Schedule",
+    "addToExistSchedule": "Add To Exist Schedule",
+    "scheduleName": "Schedule Name",
+    "dateSelect": "Start and End Time",
+    "timing": "Timing",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "cronHolder": "Please select a time",
+    "dateRequired": "Start and end time is required",
+    "cronRequired": "Cron Expression is required",
+    "cronIsWrong": "Cron expression is malformed",
+    "taskNameRequired": "Task Name is required",
+    "taskDescRequired": "Task Description is required",
+    "excuteTime": "Execution Time",
+    "futureExcuteTime": "Next 5 execution times",
+    "futureExcuteTimeHolder": "Please click the \"Execution Time\" button",
+    "executionTime": "Execution Time",
+    "toBeCalculated": "To be calculated",
+    "previousTask": "Previous Task",
+    "previousInfo": "The current task will be added after the selected task",
+    "addScheduleSuccess": "Join the schedule successfully.",
+    "clickToView": "Click to view",
+    "confirmInfo": "Are you sure you want to add the task to the selected schedule? The selected schedule is \"online\" and adding a new task on that schedule will cause it to go \"offline\". If you need to re-launch the schedule, please go to \"Schedule\" to set it up.",
+    "confirmTitle": "Join the schedule",
+    "instanceTitle": "Schedule Instance",
+    "ins_schName": "Schedule Name",
+    "ins_status": "Status",
+    "ins_schTime": "Schedule Time",
+    "ins_executeUser": "Execute User",
+    "viewDetail": "View details",
+    "success": "Success",
+    "failure": "Failure",
+    "running_execution": "Executing",
+    "pending": "Waiting"
   },
   "settings": {
     "timeoutSetting": "Timeout Settings",
@@ -314,5 +392,140 @@
     "success": "Connected",
     "validator1": "Only supports letters, numbers and _, and can't starts with _",
     "validator2": "Can't excced 50 characters"
+  },
+  "crontab": {
+    "noResult": "No matching results!",
+    "msg": "There is only {len} result above until the end date.",
+    "weekList": {
+      "1": "Sunday",
+      "2": "Monday",
+      "3": "Tuesday",
+      "4": "Wednesday",
+      "5": "Thursday",
+      "6": "Friday",
+      "7": "Saturday"
+    },
+    "tabTitles": {
+      "second": "Second",
+      "minute": "Minute",
+      "hour": "Hour",
+      "day": "Day",
+      "month": "Month",
+      "week": "Week",
+      "year": "Year"
+    },
+    "second": {
+      "every": "Every second",
+      "cycle": [
+        "Cycle from",
+        "to",
+        "second"
+      ],
+      "step": [
+        "Every",
+        "second carried out",
+        "Start"
+      ],
+      "specific": "Specific second(Multiple)",
+      "placeholder": "Please enter a specific second"
+    },
+    "minute": {
+      "every": "Every minute",
+      "cycle": [
+        "Cycle from",
+        "to",
+        "minute"
+      ],
+      "step": [
+        "Every",
+        "minute carried out",
+        "Start"
+      ],
+      "specific": "Specific minute(Multiple)",
+      "placeholder": "Please enter a specific minute"
+    },
+    "hour": {
+      "every": "Every hour",
+      "cycle": [
+        "Cycle from",
+        "to",
+        "hour"
+      ],
+      "step": [
+        "Every",
+        "hour carried out",
+        "Start"
+      ],
+      "specific": "Specific hour(Multiple)",
+      "placeholder": "Please enter a specific hour"
+    },
+    "day": {
+      "every": "Every day",
+      "cycle": [
+        "Cycle from",
+        "to",
+        "day"
+      ],
+      "step": [
+        "Every",
+        "day carried out",
+        "Start"
+      ],
+      "specific": "Specific day(Multiple)",
+      "placeholder": "Please enter a specific day",
+      "workday": [
+        "The most recent business day (Monday to Friday) to this month",
+        "day"
+      ],
+      "lastDay": "The last day of the month"
+    },
+    "month": {
+      "every": "Every month",
+      "cycle": [
+        "Cycle from",
+        "to",
+        "month"
+      ],
+      "step": [
+        "Every",
+        "month carried out",
+        "Start"
+      ],
+      "specific": "Specific month(Multiple)",
+      "placeholder": "Please enter a specific month"
+    },
+    "week": {
+      "every": "Every week",
+      "cycle": [
+        "Cycle from",
+        "to"
+      ],
+      "specific": "Specific week(Multiple)",
+      "placeholder": "Please enter a specific week",
+      "noSpecify": "No Specify",
+      "calc": [
+        "week",
+        "'s"
+      ],
+      "last": [
+        "The last",
+        "of the month"
+      ]
+    },
+    "year": {
+      "every": "Every year",
+      "cycle": [
+        "Cycle from",
+        "to",
+        "year"
+      ],
+      "step": [
+        "Every",
+        "year carried out",
+        "Start"
+      ],
+      "specific": "Specific year(Multiple)",
+      "placeholder": "Please enter a specific year"
+    }
   }
 }
