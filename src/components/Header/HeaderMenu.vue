@@ -34,7 +34,8 @@
   </el-menu>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
+import { actionsTypes } from '../../store'
 export default {
   data () {
     return {}
@@ -48,7 +49,11 @@ export default {
     }
   },
   methods: {
+    ...mapMutations ({
+      resetList: actionsTypes.RESET_LIST
+    }),
     handleSelect (key) {
+      this.resetList()
       this.$router.push({name: key})
     }
   }

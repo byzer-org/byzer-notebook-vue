@@ -31,7 +31,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
   }
 })
 
-export default class ExcuteDetail extends Vue {
+export default class LogMessage extends Vue {
   logList = []
   timer = null
 
@@ -51,13 +51,17 @@ export default class ExcuteDetail extends Vue {
   @Watch('currentNotebook', { immediate: true, deep: true })
   onCurrentNotebookChange (newVal) {
     if (newVal && newVal.active === 'true' && !this.logMessageList.includes(this.cellId)) {
-      this.addLogMessage(this.cellId)
-      this.getLogs()
+      this.initLog()
     }
   }
 
   beforeDestroy () {
     window.clearTimeout(this.timer)
+  }
+
+  initLog () {
+    this.addLogMessage(this.cellId)
+    this.getLogs()
   }
 
   pollingData () {
