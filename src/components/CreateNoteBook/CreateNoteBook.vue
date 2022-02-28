@@ -139,10 +139,13 @@ export default class CreateNoteBookModal extends Vue {
       } else {
         res = await this.createNotebook(params)
       }
+      const type = this.form.type.includes('notebook') ? 'notebook' : 'workflow'
+      const id = res.data.id
       const newNotobookInfo = {
-        id: res.data.id,
+        id,
         name: this.form.name.trim(),
-        type: this.form.type.includes('notebook') ? 'notebook' : 'workflow'
+        type,
+        uniq: type + '_' + id
       }
       this.callback({ isSubmit: true, newNotobookInfo })
 

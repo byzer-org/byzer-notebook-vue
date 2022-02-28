@@ -242,7 +242,6 @@ export default {
           type: 'success',
           message: this.$t('workspace.createSuccess')
         })
-
         this.changeTabList(newNotobookInfo)
       }
     },
@@ -440,12 +439,10 @@ export default {
             openedList.push(v)
           }
         })
-        const toSaveList = openedList.map(v => {
-          return {
-            ...v,
-            active: v.uniq === activeNotebook.uniq
-          }
-        })
+        const toSaveList = openedList.map(v => ({
+          ...v,
+          active: v.uniq === activeNotebook.uniq
+        }))
         await this.saveOpenedNotebook({list: toSaveList})
         notNeedGet ? this.getNotebookTab() : this.fetchNotebookList()
       } catch (e){
