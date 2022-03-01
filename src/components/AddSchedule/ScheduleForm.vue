@@ -57,7 +57,7 @@
     >
       <span slot="label">
         {{ $t(`schedules.previousTask`) }}
-        <el-tooltip placement="top" :content="$t('schedules.previousInfo')">
+        <el-tooltip effect="dark" placement="top" :content="$t('schedules.previousInfo')">
           <i class="el-ksd-icon-more_info_16 hasEvent"></i>
         </el-tooltip>
       </span>
