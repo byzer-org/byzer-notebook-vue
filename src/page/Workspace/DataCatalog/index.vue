@@ -1,6 +1,14 @@
 <template>
   <div class="dataCatalog">
-    <div class="header">{{$t('catalog.dataCatalog')}}</div>
+    <div class="header">
+      <div class="header-text">{{$t('catalog.dataCatalog')}}</div>
+      <icon-btn
+        class="refresh-btn"
+        :icon="'el-ksd-icon-refresh_22'"
+        :text="$t('refresh')"
+        :handler="refreshHive"
+      ></icon-btn>
+    </div>
     <div class="catalog-wrapper" ref="catalogWrapper" @scroll="scrollTree">
       <el-tree
         class="catalog-tree"
@@ -121,6 +129,14 @@ export default class DataCataLog extends Vue {
     return this.originalWidth + this.nodeScrollWidth - 55
   }
 
+  refreshHive () {
+    this.$refs['tableTree'].getNode(this.allDataList[0]).parent.childNodes.forEach(i => {
+      this.$refs['tableTree'].remove(i.id)
+      i.expanded = false
+      i.loaded = false
+    })
+  }
+
   getTextWidth (str, fontSize) {
     let result = 10
     let ele = document.createElement('span')
@@ -225,7 +241,7 @@ export default class DataCataLog extends Vue {
       const tableList = list.map(v => {
         return {
           label: v,
-          id: 'Database_Table_' + data.label,
+          id: 'Database_Table_' + data.id + v,
           isLeaf: true,
           children: []
         }
@@ -250,12 +266,20 @@ export default class DataCataLog extends Vue {
   .header {
     padding: 0 16px;
     padding-right: 0;
-    line-height: 58px;
-    height: 58px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     overflow: hidden;
-    font-size: 20px;
-    font-weight: 600;
-    color: $--color-black;
+    .header-text {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 58px;
+      height: 58px;
+      color: $--color-black;
+    }
+    .refresh-btn {
+      color: $--color-text-regular;
+    }
   }
   .catalog-wrapper {
     width: 100%;

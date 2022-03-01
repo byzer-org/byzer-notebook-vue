@@ -151,7 +151,7 @@ export default {
   getters: {
     isDemo: state => {
       const { activeNotebook = {}, demoList } = state
-      const { id = '', commit_id = '' } = activeNotebook
+      const { id = '', commit_id = '' } = (activeNotebook || {})
       return Boolean(demoList.includes(id) && commit_id)
     }
   }

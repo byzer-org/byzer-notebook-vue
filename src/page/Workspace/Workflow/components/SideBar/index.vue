@@ -57,7 +57,7 @@ import { Component, Vue } from 'vue-property-decorator'
     }),
     ...mapGetters(['isDemo']),
     disabledDrag () {
-      const { isPreviewMode } = this.activeNotebook
+      const isPreviewMode = this.activeNotebook ? this.activeNotebook.isPreviewMode : false
       return this.isDemo || isPreviewMode
     }
   }

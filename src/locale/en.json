@@ -11,6 +11,7 @@
   "delete": "Delete",
   "remove": "Remove",
   "update": "Update",
+  "refresh": "Refresh",
   "import": "Import",
   "export": "Export",
   "move": "Move",
