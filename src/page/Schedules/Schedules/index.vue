@@ -167,11 +167,16 @@
 <script>
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { debounce, cloneDeep } from 'lodash'
 import moment from 'moment'
 
 @Component({
+  computed: {
+    ...mapState({
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled
+    })
+  },
   methods: {
     ...mapActions({
       getSchedulesList: 'GET_SCHEDULE_LIST',
@@ -250,6 +255,9 @@ export default class Schedules extends Vue {
   }
 
   async querySchedules () {
+    if (!this.is_scheduler_enabled) {
+      return
+    }
     this.startLoading()
     try {
       const res = await this.getSchedulesList()

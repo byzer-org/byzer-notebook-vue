@@ -1,22 +1,33 @@
 <template>
   <div class="cell-result-page">
-    <iframe
-      class="result-html"
-      ref="htmlDom"
-      sandbox="allow-scripts"
+    <section
       style="width: 100%; height: 100%;"
-      :srcDoc="detailContent"
-      frameBorder="0"
-      scrolling="yes"
-      v-if="detailType === 'html'"
-    />
-    <img v-else ref="jobImage" id="jobImage" :src="`data:image/png;base64,${detailContent}`" alt="">
+      v-for="(detail, index) in detailContent"
+      :key="index"
+    >
+      <iframe
+        class="result-html"
+        sandbox="allow-scripts"
+        style="width: 100%; height: 100%;"
+        v-if="detailType === 'html'"
+        :srcDoc="detail"
+        frameBorder="0"
+        scrolling="yes"
+      />
+      <img
+        class="html"
+        v-else
+        :src="`data:image/png;base64,${detail}`"
+        alt=""
+      >
+    </section>
   </div>
 </template>
 <script>
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { mapActions } from 'vuex'
+import { hasOwnProperty } from '../../util'
 
 @Component({
   methods: {
@@ -28,7 +39,7 @@ import { mapActions } from 'vuex'
 export default class IframePage extends Vue {
   excuteResult = ''
   detailType = 'html'
-  detailContent = ''
+  detailContent = []
 
   created () {
     this.getStatus(this.$route.params.id)
@@ -43,15 +54,24 @@ export default class IframePage extends Vue {
       const { status, result } = res.data
       if (status === '1') {
         let parsedResult =result && result ? JSON.parse(result) : ''
-        const length = parsedResult.length
+        const schema = (parsedResult.schema?.fields || [])
+        const dataList = (parsedResult.data || []).map(item => {
+          schema.forEach(s => {
+            if (!Object.prototype.hasOwnProperty.call(item, s.name)) {
+              item[s.name] = ''
+            }
+          })
+          return item
+        })
         this.detailType = 'table'
-        if (length === 1) {
-          const details = parsedResult[0]
-          if (Object.prototype.hasOwnProperty.call(details, 'mime') && Object.prototype.hasOwnProperty.call(details, 'content')) {
-            this.detailType = details.mime
-            this.detailContent = details.content
-          }
-        } 
+        const isIframeOrImage = dataList.some(i => hasOwnProperty(i, 'mime') && hasOwnProperty(i,'content'))
+        if (isIframeOrImage) {
+          this.detailType = dataList[0].mime
+          this.detailContent = []
+          dataList.forEach(item => {
+            this.detailContent.push(item.content)
+          })
+        }
       }
     } catch (err) {
       console.log(err)

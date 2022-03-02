@@ -19,7 +19,7 @@
         <span>{{$t('menu.jobs')}}</span>
       </template>
     </el-menu-item>
-    <el-menu-item index="schedules">
+    <el-menu-item v-if="is_scheduler_enabled" index="schedules">
       <template slot="title">
         <svg-icon class="menu-icon font-24" icon-class="nav_process_24"></svg-icon>
         <span>{{$t('menu.schedules')}}</span>
@@ -42,7 +42,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isTrial: state => state.global.is_trial
+      isTrial: state => state.global.is_trial,
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled
     }),
     activeIndex () {
       return this.$route.meta.menuIndex

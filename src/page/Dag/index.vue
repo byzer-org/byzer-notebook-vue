@@ -20,10 +20,15 @@ import { Graph } from '@antv/x6'
 import GraphNode from '../../components/GraphNode'
 import '@antv/x6-vue-shape'
 import { GridLayout } from '@antv/layout'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { GRAPH_EDGE_ATTRS, GRAPH_NODE_ATTRS } from '../../config'
 
 @Component({
+  computed: {
+    ...mapState({
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled
+    })
+  },
   methods: {
     ...mapActions({
       getSchedulesList: 'GET_SCHEDULE_LIST'
@@ -73,6 +78,9 @@ export default class DAG extends Vue {
   }
 
   async queryData () {
+    if (!this.is_scheduler_enabled) {
+      return
+    }
     try {
       const res = await this.getSchedulesList()
       if (res && res.data) {

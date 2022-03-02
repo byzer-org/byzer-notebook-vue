@@ -6,8 +6,8 @@ import store, { actionsTypes } from '../store'
 export default async function beforeEach (to, from, next) {
   try {
     const res = await store.dispatch(actionsTypes.GET_ENV)
-    const is_trial = res.data.is_trial
-    store.commit('SET_CURRENT_ENV', is_trial)
+    store.commit('SET_CURRENT_ENV', res.data.is_trial)
+    store.commit('SET_SCHEDULE_ENABLE', res.data.is_scheduler_enabled)
     document.title = 'Byzer Notebook'
   } catch (e) {
     console.log(e)
