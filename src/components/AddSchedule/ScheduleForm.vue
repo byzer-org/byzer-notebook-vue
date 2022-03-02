@@ -155,7 +155,8 @@ import ExecuteTime from './ExecuteTime.vue'
   mixins: [ExecuteTime],
   computed: {
     ...mapState({
-      lang: state => state.global.lang
+      lang: state => state.global.lang,
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled
     })
   },
   methods: {
@@ -250,6 +251,9 @@ export default class Addschedule extends Vue {
   }
 
   async querySchedules () {
+    if (!this.is_scheduler_enabled) {
+      return
+    }
     try {
       this.loadingScheduleList = true
       const res = await this.getSchedulesList()

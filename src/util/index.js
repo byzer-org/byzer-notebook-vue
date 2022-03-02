@@ -59,7 +59,7 @@ export function getChildren (arr, parentPath) {
     if (index !== -1) {
       v.children = getChildren(v.children, v.path + '/')
     } else {
-      v.children = v.children.map(child => ({label: child[0], children: [], path: v.path + '/' + child[0] }))
+      v.children = v.children.map(child => ({ label: child[0], children: [], path: v.path + '/' + child[0] }))
     }
   })
   return nodeArr
@@ -143,8 +143,8 @@ export function getCasAndTree (list) { // 对于指定结构转化成 tree 和 c
 export function GenNonDuplicateID (randomLength) {
   return Number(
     Math.random()
-    .toString()
-    .substr(3, randomLength) + Date.now()
+      .toString()
+      .substr(3, randomLength) + Date.now()
   ).toString(36);
 }
 
@@ -203,4 +203,15 @@ export function findChildren (list = {}, refName = '') {
     }
   }
   return result
+}
+
+export function hasOwnProperty (obj, key) {
+  if (!obj || !key) {
+    return false
+  }
+  if (Object.prototype.toString.call(obj).slice(8, -1) === 'Object') {
+    return Object.prototype.hasOwnProperty.call(obj, key)
+  } else {
+    return false
+  }
 }

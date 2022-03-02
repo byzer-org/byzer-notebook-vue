@@ -56,7 +56,7 @@
           @runAll="handleRunAll"
           @operateDemoSuccess="handleOperateDemoSuccess"
         />
-        <div class="btn">
+        <div class="btn" v-if="is_scheduler_enabled">
           <span v-if="added" class="add-to-schedule" @click="viewDAG">
             <i class="el-ksd-icon-confirm_22"></i>
             {{ $t('schedules.addedToSchedule') }}
@@ -209,7 +209,8 @@ export default {
       userInfo: state => state.user.userInfo,
       activeNotebook: state => state.notebook.activeNotebook,
       mode: state => state.notebook.activeNotebook.mode,
-      openedNotebookList: state => state.notebook.openedNotebooks
+      openedNotebookList: state => state.notebook.openedNotebooks,
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled
     }),
     ...mapState('DAGViewModal', {
       taskInfo: state => state.taskInfo
@@ -332,6 +333,9 @@ export default {
       this.selectCellStatus = 'NEW'
     },
     async checkNotebook () {
+      if (!this.is_scheduler_enabled) {
+        return
+      }
       const params = formatGetParams({
         entity_type: 'notebook',
         entity_id: this.activeNotebookId

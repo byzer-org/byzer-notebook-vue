@@ -114,6 +114,9 @@ vuex.registerModule(['modals', 'EditTaskModal'], store)
       taskInfo: state => state.taskInfo,
       form: state => state.form,
       callback: state => state.callback
+    }),
+    ...mapState({
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled
     })
   },
   methods: {
@@ -170,6 +173,9 @@ export default class EditTask extends Vue {
   }
 
   async querySchedules () {
+    if (!this.is_scheduler_enabled) {
+      return
+    }
     try {
       this.loadingScheduleList = true
       const res = await this.getSchedulesList()

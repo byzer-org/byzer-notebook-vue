@@ -6,18 +6,29 @@
         <div class="empty-table">{{$t('nodata')}}</div>
       </div>
       <div class="container" v-else-if="excuteSuccess">
-        <div class="wrapper not-table" v-if="detailType === 'html'">
-          <iframe
-            class="html"
-            scrolling="yes"
-            ref="htmlDom"
-            :srcDoc="detailContent"
-            onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight + 20 + "px";}(this));'
-            style="height:200px;border:none;overflow:hidden;">
-          </iframe>
-        </div>
-        <div class="wrapper not-table" v-if="detailType === 'image'">
-          <img ref="jobImage" id="jobImage" class="html" :src="`data:image/png;base64,${detailContent}`" alt="">
+        <div
+          class="wrapper not-table"
+          v-if="detailType === 'html' || detailType === 'image'"
+        >
+          <section
+            v-for="(detail, index) in detailContent"
+            :key="index"
+          >
+            <iframe
+              class="html"
+              scrolling="yes"
+              v-if="detailType === 'html'"
+              :srcDoc="detail"
+              onload='javascript:(function(o){o.style.height=o.contentWindow.document.body.scrollHeight + 20 + "px";}(this));'
+              style="height:200px;border:none;overflow:hidden;">
+            </iframe>
+            <img
+              class="html"
+              v-else
+              :src="`data:image/png;base64,${detail}`"
+              alt=""
+            >
+          </section>
         </div>
         <div class="table wrapper" v-else-if="detailType === 'table'">
           <template v-if="tableList.length">
@@ -100,6 +111,7 @@ import { Watch, Component } from 'vue-property-decorator'
 import { saveAs } from 'file-saver'
 import { Parser } from 'json2csv'
 import moment from 'moment'
+import { hasOwnProperty } from '../../../../util'
 
 @Component({
   props: ['result', 'status', 'innerMaxHeight']
@@ -119,7 +131,7 @@ export default class ExcuteResult extends Vue {
   showDetail = false
   root_cause = ''
   detailType = 'table'
-  detailContent = ''
+  detailContent = []
 
   get headerList () {
     let keys = []
@@ -152,16 +164,25 @@ export default class ExcuteResult extends Vue {
       this.excuteSuccess = this.result.status === '1'
       if (this.result.status !== '0') {
         let parsedResult = this.result && this.result.result ? JSON.parse(this.result.result) : ''
-        const length = parsedResult.length
+        const schema = (parsedResult.schema?.fields || [])
+        const dataList = (parsedResult.data || []).map(item => {
+          schema.forEach(s => {
+            if (!Object.prototype.hasOwnProperty.call(item, s.name)) {
+              item[s.name] = null
+            }
+          })
+          return item
+        })
         this.detailType = 'table'
-        if (length === 1) {
-          const details = parsedResult[0]
-          if (Object.prototype.hasOwnProperty.call(details, 'mime') && Object.prototype.hasOwnProperty.call(details, 'content')) {
-            this.detailType = details.mime
-            this.detailContent = details.content
-          }
+        const isIframeOrImage = dataList.some(i => hasOwnProperty(i, 'mime') && hasOwnProperty(i,'content'))
+        if (isIframeOrImage) {
+          this.detailType = dataList[0].mime
+          this.detailContent = []
+          dataList.forEach(item => {
+            this.detailContent.push(item.content)
+          })
         }
-        this.tableList = parsedResult
+        this.tableList = dataList
         this.pageInfo.page = 1
         this.getRenderList()
       }
@@ -239,7 +260,7 @@ export default class ExcuteResult extends Vue {
       .html {
         display: block;
         width: 90%;
-        margin: 0 auto;
+        margin: 10px auto;
         height: auto;
         box-shadow: 1px 1px 4px rgba(63, 89, 128, 0.16);
         border-top: 1px solid $--border-color-light;

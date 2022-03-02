@@ -427,9 +427,9 @@ export default {
         const temp = _.cloneDeep(this.notebookTab)
         if (!tabClicked) {
           const { id, type, commit_id = ''} = activeNotebook
+          activeNotebook['uniq'] = `${type}_${id}${commit_id && `_${commit_id}`}`
           const newNotebook = {
-            ...activeNotebook,
-            uniq: `${type}_${id}${commit_id && `_${commit_id}`}`
+            ...activeNotebook
           }
           temp.unshift(newNotebook)
         }
