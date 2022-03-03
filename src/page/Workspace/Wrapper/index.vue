@@ -53,6 +53,7 @@
                 class="tab-content-cells"
                 :ref="'cellList' + tab.uniq"
                 :currentNotebook="tab"
+                :removeTabId="removeTabId"
                 @changeTabList="changeTabList"
                 @handleRename="handleRename"
                 @handleClone="handleClone"
@@ -125,7 +126,8 @@ export default {
       },
       isCollapse: false,
       loadingList: false,
-      defaultLeftWidth: 268
+      defaultLeftWidth: 268,
+      removeTabId: ''
     }
   },
   components: {
@@ -223,8 +225,8 @@ export default {
       }
     },
     confirmCloseTab (tabTypeId) {
-      const tabUniq = tabTypeId
-      const list = this.notebookTab.filter(v => v.uniq !== tabUniq)
+      this.removeTabId = tabTypeId
+      const list = this.notebookTab.filter(v => v.uniq !== tabTypeId)
       list.length && (list[0].active = true)
       this.minusTabList(list)
     },

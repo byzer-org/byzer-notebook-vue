@@ -196,7 +196,7 @@ export default {
       setDemoParams: null
     }
   },
-  props: ['currentNotebook', 'activeNotebookId'],
+  props: ['removeTabId', 'currentNotebook', 'activeNotebookId'],
   components: {
     CellBox,
     draggable,
@@ -300,11 +300,19 @@ export default {
         }
       },
       deep: true
+    },
+    removeTabId : {
+      handler (newVal) {
+        if (newVal === this.currentNotebook.uniq) {
+          this.removeResultLogList(this.newCellList.map(i => i.id))
+        }
+      }
     }
   },
   methods: {
     ...mapMutations({
-      changeNotebookMode: 'CHANGE_NOTEBOOK_MODE' // 修改notebook 模式 edit/command
+      changeNotebookMode: 'CHANGE_NOTEBOOK_MODE', // 修改notebook 模式 edit/command
+      removeResultLogList: 'REMOVE_RESULT_LOG_LIST'
     }),
     ...mapActions('AddScheduleModal', {
       callAddScheduleModal: 'CALL_MODAL'

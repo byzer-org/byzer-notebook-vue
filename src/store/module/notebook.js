@@ -29,12 +29,16 @@ export default {
     [types.SET_LOG_MESSAGE_LIST]: (state, cellId) => {
       state.logMessageList.push(cellId)
     },
+    [types.SET_RESULT_LIST]: (state, cellId) => {
+      state.resultList.push(cellId)
+    },
     [types.RESET_LIST]: state => {
       state.logMessageList = []
       state.resultList = []
     },
-    [types.SET_RESULT_LIST]: (state, cellId) => {
-      state.resultList.push(cellId)
+    [types.REMOVE_RESULT_LOG_LIST]: (state, cellIdList) => {
+      state.logMessageList = state.logMessageList.filter(i => !cellIdList.includes(i))
+      state.resultList = state.resultList.filter(i => !cellIdList.includes(i))
     },
     [types.CHANGE_ACTIVE_SIDEBAR]: (state, data) => {
       state.activeSidebar = data
