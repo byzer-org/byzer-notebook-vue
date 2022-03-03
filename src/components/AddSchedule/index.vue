@@ -219,7 +219,7 @@ export default class Addschedule extends Vue {
       ) {
         const { submit, online } = await this.callCheckSubmitModal()
         if (submit) {
-          this.joinSchedule()
+          await this.joinSchedule()
         }
         if (online) {
           const id = selectedSchedule.id

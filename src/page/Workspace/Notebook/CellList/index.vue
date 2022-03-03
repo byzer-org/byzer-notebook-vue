@@ -56,7 +56,7 @@
           @runAll="handleRunAll"
           @operateDemoSuccess="handleOperateDemoSuccess"
         />
-        <div class="btn" v-if="is_scheduler_enabled">
+        <div class="btn" v-if="is_scheduler_enabled && !isDemo">
           <span v-if="added" class="add-to-schedule" @click="viewDAG">
             <i class="el-ksd-icon-confirm_22"></i>
             {{ $t('schedules.addedToSchedule') }}

@@ -4,6 +4,7 @@
       <div class="header-text">{{$t('catalog.dataCatalog')}}</div>
       <icon-btn
         class="refresh-btn"
+        :class="{'in-refresh': refreshing}"
         :icon="'el-ksd-icon-refresh_22'"
         :text="$t('refresh')"
         :handler="refreshHive"
@@ -74,6 +75,7 @@ import { mapState, mapActions } from 'vuex'
 export default class DataCataLog extends Vue {
   showTree = false
   type = 'hive'
+  refreshing = false
   defaultProps = {
     children: 'children',
     label: 'label',
@@ -129,12 +131,16 @@ export default class DataCataLog extends Vue {
     return this.originalWidth + this.nodeScrollWidth - 55
   }
 
-  refreshHive () {
-    this.$refs['tableTree'].getNode(this.allDataList[0]).parent.childNodes.forEach(i => {
-      this.$refs['tableTree'].remove(i.id)
-      i.expanded = false
-      i.loaded = false
-    })
+  async refreshHive () {
+    this.refreshing = true
+    await setTimeout(() => {
+      this.$refs['tableTree'].getNode(this.allDataList[0]).parent.childNodes.forEach(i => {
+        this.$refs['tableTree'].remove(i.id)
+        i.expanded = false
+        i.loaded = false
+      })
+      this.refreshing = false
+    }, 1000)
   }
 
   getTextWidth (str, fontSize) {
@@ -279,6 +285,27 @@ export default class DataCataLog extends Vue {
     }
     .refresh-btn {
       color: $--color-text-regular;
+    }
+    .in-refresh {
+      color: $pattern-blue-400;
+      animation: revolve 1s linear infinite;
+    }
+    @keyframes revolve {
+      0% {
+        -webkit-transform: rotate(0deg);
+      }
+      25% {
+        -webkit-transform: rotate(90deg);
+      }
+      50% {
+        -webkit-transform: rotate(180deg);
+      }
+      75% {
+        -webkit-transform: rotate(270deg);
+      }
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
     }
   }
   .catalog-wrapper {
