@@ -62,19 +62,10 @@
       ></el-table-column>
       <el-table-column
         show-overflow-tooltip
-        :prop="'executeUser'"
+        :prop="'owner'"
         :min-width="'80'"
-        :column-key="'release_type'"
-        :filter-multiple="true"
-        :filters="releaseTypeFiltersList"
-        :filter-placement="'bottom-end'"
+        :label="$t('schedules.ins_executeUser')"
       >
-        <template slot="header">
-          <div class="schedule-type-header">
-            <span>{{ $t('schedules.ins_executeUser') }}</span>
-            <i class="el-ksd-icon-filter_22 hasEvent"></i>
-          </div>
-        </template>
       </el-table-column>
     </el-table>
     <div class="text-center pt-15">
@@ -125,13 +116,6 @@ export default class Instance extends Vue {
     prop: '',
     order: ''
   }
-  releaseTypeFilters = []
-  releaseTypeFiltersList = [
-    {
-      text: 'ETL',
-      value: 'ETL'
-    }
-  ]
 
   params = {}
 
@@ -204,7 +188,6 @@ export default class Instance extends Vue {
 
   async handleViewDetail ({ id }) {
     const res = await this.getInstanceById(id)
-    console.log(res.data[0].log.indexOf('\n'))
     this.callAddScheduleModal(res.data[0])
   }
 

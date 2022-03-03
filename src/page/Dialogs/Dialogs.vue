@@ -12,13 +12,15 @@
     <MoveNotebook />
     <CreateConnection />
     <CreateNode />
-    <AddSchedule />
-    <SetSchedule />
-    <FailureDetail />
-    <DAGView />
-    <EditTask />
-    <CheckAction />
-    <CheckSubmit />
+    <section v-if="is_scheduler_enabled">
+      <AddSchedule />
+      <SetSchedule />
+      <FailureDetail />
+      <DAGView />
+      <EditTask />
+      <CheckAction />
+      <CheckSubmit />
+    </section>
   </div>
 </template>
 
@@ -42,6 +44,7 @@ import DAGView from '../../components/DAGView'
 import EditTask from '../../components/EditTask'
 import CheckAction from '../../components/CheckAction'
 import CheckSubmit from '../../components/CheckSubmit'
+import { mapState } from 'vuex'
 
 @Component({
   components: {
@@ -62,7 +65,12 @@ import CheckSubmit from '../../components/CheckSubmit'
     EditTask,
     CheckAction,
     CheckSubmit
-  }
+  },
+  computed: {
+    ...mapState({
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled
+    })
+    }
 })
 export default class Dialogs extends Vue {
 }

@@ -92,7 +92,7 @@
     </el-form-item>
     <el-form-item prop="cron" :label="$t(`schedules.timing`)">
       <div class="schedule-form-crontab-wrap">
-        <el-popover v-model="showCron">
+        <el-popover v-model="showCron" v-if="scheduleType === 'new'">
           <Crontab
             @hide="showCron = false"
             @fill="crontabFill"
@@ -102,9 +102,7 @@
             slot="reference"
             style="width: 100%"
             v-model="scheduleForm.cron"
-            v-if="scheduleType === 'new'"
             :placeholder="$t('schedules.cronRequired')"
-            @click="showCron = true"
           ></el-input>
         </el-popover>
         <el-input
@@ -113,7 +111,6 @@
           v-model="scheduleForm.cron"
           disabled
           :placeholder="$t('schedules.cronRequired')"
-          @click="showCron = true"
         ></el-input>
         <el-button
           type="primary"
