@@ -47,6 +47,7 @@
               :scheduleForm="scheduleForm"
               @changeScheduleValue="changeScheduleValue"
               @onTaskListChange="handleTaskListChange"
+              @clearValidate="handleClearValidate"
             />
           </div>
         </div>
@@ -178,19 +179,23 @@ export default class Addschedule extends Vue {
     this.setModalForm({ [key]: value })
   }
 
-  clearValidate () {
+  handleClearValidate () {
     this.$refs.$form.clearValidate()
+    this.$refs.scheduleForm.$refs.$form.clearValidate()
+  }
+
+  clearValidate () {
     this.scheduleForm = {
       schedule_name: '',
       schedule_desc: '',
       previous_task: '',
-      date: '',
+      date: [],
       cron: ''
     }
     this.$refs.scheduleForm.executionTimeResult = this.$t(
       'schedules.toBeCalculated'
     )
-    this.$refs.scheduleForm.$refs.$form.clearValidate()
+    this.handleClearValidate()
   }
 
   checkForm () {

@@ -8,8 +8,7 @@ export default {
     return {
       dayRule: '',
       dayRuleSup: '',
-      dateArr: [],
-      executionTimeResult: ''
+      dateArr: []
     }
   },
   methods: {
@@ -334,7 +333,7 @@ export default {
                       YY + '-' + MM + '-' + DD + ' ' + hh + ':' + mm + ':' + ss
                     ) <=
                     new Date(
-                      (this.scheduleForm.date
+                      (this.scheduleForm.date[1]
                         ? this.scheduleForm.date[1]
                         : '2099-12-31') + ' 23:59:59'
                     )
@@ -343,6 +342,18 @@ export default {
                       YY + '-' + MM + '-' + DD + ' ' + hh + ':' + mm + ':' + ss
                     )
                     nums++
+                  }
+                  if (
+                    new Date(
+                      YY + '-' + MM + '-' + DD + ' ' + hh + ':' + mm + ':' + ss
+                    ) >
+                    new Date(
+                      (this.scheduleForm.date[1]
+                        ? this.scheduleForm.date[1]
+                        : '2099-12-31') + ' 23:59:59'
+                    )
+                  ) {
+                    break goYear
                   }
                   // 如果条数满了就退出循环
                   if (nums === 5) break goYear
