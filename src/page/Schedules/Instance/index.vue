@@ -65,8 +65,7 @@
         :prop="'owner'"
         :min-width="'80'"
         :label="$t('schedules.ins_executeUser')"
-      >
-      </el-table-column>
+      ></el-table-column>
     </el-table>
     <div class="text-center pt-15">
       <el-pagination
@@ -187,8 +186,15 @@ export default class Instance extends Vue {
   }
 
   async handleViewDetail ({ id }) {
-    const res = await this.getInstanceById(id)
-    this.callAddScheduleModal(res.data[0])
+    let failureDetailList = {}
+    try {
+      const res = await this.getInstanceById(id)
+      failureDetailList = res.data
+    } catch (err) {
+      console.log(err)
+    } finally {
+      this.callAddScheduleModal(failureDetailList)
+    }
   }
 
   /**

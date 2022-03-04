@@ -180,6 +180,7 @@ export default class Addschedule extends Vue {
     if (this.scheduleType === 'old') {
       this.querySchedules()
     }
+    this.clearValidate()
   }
 
   @Watch('lang')
@@ -192,6 +193,7 @@ export default class Addschedule extends Vue {
     if (newVal === 'old') {
       this.querySchedules()
     }
+    this.clearValidate()
   }
 
   get rules () {
@@ -218,6 +220,10 @@ export default class Addschedule extends Vue {
         }
       ]
     }
+  }
+
+  clearValidate () {
+    this.$emit('clearValidate')
   }
 
   handleScheduleNameChange (value) {
