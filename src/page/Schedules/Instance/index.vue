@@ -186,14 +186,14 @@ export default class Instance extends Vue {
   }
 
   async handleViewDetail ({ id }) {
-    let failureDetailList = {}
+    let failureDetail = {}
     try {
       const res = await this.getInstanceById(id)
-      failureDetailList = res.data
+      failureDetail = res.data.find(i => i.state === 'FAILURE')
     } catch (err) {
       console.log(err)
     } finally {
-      this.callAddScheduleModal(failureDetailList)
+      this.callAddScheduleModal(failureDetail)
     }
   }
 

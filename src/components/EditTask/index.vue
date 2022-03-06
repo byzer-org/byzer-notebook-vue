@@ -63,6 +63,7 @@
                 filterable
                 :loading="loadingScheduleList"
                 :placeholder="$t('pleaseSelect')"
+                :clearable="true"
                 @change="(value) => handleInput('previousTask', value)"
               >
                 <el-option
@@ -202,16 +203,16 @@ export default class EditTask extends Vue {
     this.hideModal()
   }
 
-  async checkAction (type) {
+  async checkAction (actionType) {
     if (this.taskInfo.scheduleInfo.release_state === 'ONLINE') {
-      await this.callCheckActionModal({
-        type,
-        ...cloneDeep(this.formatParams(type))
+      const { type } = await this.callCheckActionModal({
+        type: actionType,
+        ...cloneDeep(this.formatParams(actionType))
       })
       this.closeModal()
-      this.callback()
+      this.callback({ type })
     } else {
-      this[type]()
+      this[actionType]()
     }
   }
 
@@ -224,7 +225,7 @@ export default class EditTask extends Vue {
           this.$t('schedules.actionSuccessMsg', { action: this.$t('update') })
         )
       }
-      this.callback()
+      this.callback({ type: 'update' })
     } catch (err) {
       console.log(err)
     } finally {
@@ -242,7 +243,7 @@ export default class EditTask extends Vue {
           this.$t('schedules.actionSuccessMsg', { action: this.$t('remove') })
         )
       }
-      this.callback()
+      this.callback({ type: 'remove' })
     } catch (err) {
       console.log(err)
     } finally {
@@ -275,9 +276,7 @@ export default class EditTask extends Vue {
 
     if (type === 'update') {
       const attach_to = (this.taskList || []).filter(
-        item => {
-          return item.name === this.form.previousTask
-        }
+        item => item.name === this.form.previousTask
       )
       attach_to.length > 0 ? params['modification']['attach_to'] = attach_to : null
     }

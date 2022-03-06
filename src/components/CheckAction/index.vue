@@ -105,7 +105,7 @@ export default class CheckAction extends Vue {
       if (this.checked) {
         await this.checkOnline()
       }
-      this.callback()
+      this.callback({ type: 'update' })
     } catch (err) {
       console.log(err)
     } finally {
@@ -127,7 +127,7 @@ export default class CheckAction extends Vue {
       if (this.checked) {
         await this.checkOnline()
       }
-      this.callback()
+      this.callback({ type: 'remove' })
     } catch (err) {
       console.log(err)
     } finally {

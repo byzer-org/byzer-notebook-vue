@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   data () {
     return {
@@ -21,9 +22,7 @@ export default {
       // 用于暂时存符号时间规则结果的数组
       let resultArr = []
       // 获取当前时间精确至[年、月、日、时、分、秒]
-      let nTime = this.scheduleForm.date[0]
-        ? new Date(this.scheduleForm.date[0] + ' 00:00:00')
-        : new Date()
+      let nTime = this.formatUTCDate()
       let nYear = nTime.getFullYear()
       let nMonth = nTime.getMonth() + 1
       let nDay = nTime.getDate()
@@ -332,11 +331,7 @@ export default {
                     new Date(
                       YY + '-' + MM + '-' + DD + ' ' + hh + ':' + mm + ':' + ss
                     ) <=
-                    new Date(
-                      (this.scheduleForm.date[1]
-                        ? this.scheduleForm.date[1]
-                        : '2099-12-31') + ' 23:59:59'
-                    )
+                    this.formatUTCEndDate()
                   ) {
                     resultArr.push(
                       YY + '-' + MM + '-' + DD + ' ' + hh + ':' + mm + ':' + ss
@@ -347,11 +342,7 @@ export default {
                     new Date(
                       YY + '-' + MM + '-' + DD + ' ' + hh + ':' + mm + ':' + ss
                     ) >
-                    new Date(
-                      (this.scheduleForm.date[1]
-                        ? this.scheduleForm.date[1]
-                        : '2099-12-31') + ' 23:59:59'
-                    )
+                    this.formatUTCEndDate()
                   ) {
                     break goYear
                   }
@@ -588,6 +579,38 @@ export default {
         return -1
       } else {
         return 1
+      }
+    },
+    formatUTCDate () {
+      const startDate = this.scheduleForm.date[0]
+
+      if (!startDate) {
+        return new Date()
+      }
+
+      if (startDate.indexOf('T') >= 0) {
+        // UTC
+        return new Date(moment(moment.utc(startDate).format()).format(
+          'YYYY-MM-DD'
+        ) + ' 00:00:00')
+      } else {
+        return new Date(startDate + ' 00:00:00')
+      }
+    },
+    formatUTCEndDate () {
+      const endDate = this.scheduleForm.date[1]
+
+      if (!endDate) {
+        return new Date('2099-12-31 23:59:59')
+      }
+
+      if (endDate.indexOf('T') >= 0) {
+        // UTC
+        return new Date(moment(moment.utc(endDate).format()).format(
+          'YYYY-MM-DD'
+        ) + ' 23:59:59')
+      } else {
+        return new Date(endDate + ' 23:59:59')
       }
     },
     // 格式化日期格式如：2017-9-19 18:04:33
