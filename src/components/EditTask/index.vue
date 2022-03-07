@@ -192,7 +192,8 @@ export default class EditTask extends Vue {
     this.form[name] = value
   }
 
-  queryTasks () {
+  async queryTasks () {
+    await this.querySchedules()
     this.taskList = this.scheduleList.find(
       item => item.name === this.form.scheduleName
     )?.entities.filter(e => e.entity_id !== Number(this.taskInfo.currentNotebook.id))
@@ -281,10 +282,6 @@ export default class EditTask extends Vue {
       attach_to.length > 0 ? params['modification']['attach_to'] = attach_to : null
     }
     return { id: this.taskInfo.scheduleInfo.id, params }
-  }
-
-  created () {
-    this.querySchedules()
   }
 }
 </script>
