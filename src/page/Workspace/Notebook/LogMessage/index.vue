@@ -18,7 +18,8 @@ import { mapState, mapMutations, mapActions } from 'vuex'
   props: ['cellId', 'currentNotebook', 'result', 'jobId', 'status', 'innerMaxHeight'],
   computed: {
     ...mapState({
-      logMessageList: state => state.notebook.logMessageList
+      logMessageList: state => state.notebook.logMessageList,
+      activeNotebook: state => state.notebook.activeNotebook
     })
   },
   methods: {
@@ -26,7 +27,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
       getJobLogs: 'GET_JOB_LOGS'
     }),
     ...mapMutations({
-      addLogMessage: 'SET_LOG_MESSAGE_LIST'
+      addLogMessage: 'SET_LOADED_CELL_LIST'
     })
   }
 })
@@ -48,9 +49,11 @@ export default class LogMessage extends Vue {
     this.getLogs()
   }
 
-  @Watch('currentNotebook', { immediate: true, deep: true })
+  @Watch('activeNotebook', { immediate: true, deep: true })
   onCurrentNotebookChange (newVal) {
-    if (newVal && newVal.active === 'true' && !this.logMessageList.includes(this.cellId)) {
+    if (newVal && newVal.active === 'true' &&
+      (!this.logMessageList[newVal.id] || (this.logMessageList[newVal.id] && !this.logMessageList[newVal.id].includes(this.cellId)))
+    ) {
       this.initLog()
     }
   }
@@ -60,7 +63,7 @@ export default class LogMessage extends Vue {
   }
 
   initLog () {
-    this.addLogMessage(this.cellId)
+    this.addLogMessage({ name: 'logMessageList', notebookId: this.activeNotebook.id, cellId: this.cellId })
     this.getLogs()
   }
 

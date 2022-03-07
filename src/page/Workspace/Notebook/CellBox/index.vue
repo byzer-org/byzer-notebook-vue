@@ -116,7 +116,8 @@ export default {
   },
   computed: {
     ...mapState({
-      resultList: state => state.notebook.resultList
+      resultList: state => state.notebook.resultList,
+      activeNotebook: state => state.notebook.activeNotebook
     }),
     ...mapGetters(['isDemo']),
     actions () {
@@ -150,11 +151,13 @@ export default {
       immediate: true,
       deep: true
     },
-    currentNotebook: {
+    activeNotebook: {
       handler (newVal) {
-        if (this.cellInfo.job_id && newVal && newVal.active === 'true' && !this.resultList.includes(this.cellId)) {
-          this.addResult(this.cellId)
+        if (this.cellInfo.job_id && newVal.uniq === this.currentNotebook.uniq && 
+          (!this.resultList[newVal.id] || (this.resultList[newVal.id] && !this.resultList[newVal.id].includes(this.cellId)))
+        ) {
           this.getStatus(this.cellInfo.job_id)
+          this.addResult({ name: 'resultList', notebookId: newVal.id, cellId: this.cellId })
         }
       },
       immediate: true,
@@ -168,7 +171,7 @@ export default {
       cancelExcuteCell: 'CANCEL_EXCUTE_CELL'
     }),
     ...mapMutations({
-      addResult: 'SET_RESULT_LIST'
+      addResult: 'SET_LOADED_CELL_LIST'
     }),
     changeMdMode (mode) {
       if (this.isDemo) return

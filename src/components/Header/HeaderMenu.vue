@@ -51,10 +51,10 @@ export default {
   },
   methods: {
     ...mapMutations ({
-      resetList: actionsTypes.RESET_LIST
+      resetLoadedCellList: actionsTypes.RESET_LOADED_CELL_LIST
     }),
     handleSelect (key) {
-      this.resetList()
+      this.resetLoadedCellList()
       this.$router.push({name: key})
     }
   }

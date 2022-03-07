@@ -304,7 +304,16 @@ export default {
     removeTabId : {
       handler (newVal) {
         if (newVal === this.currentNotebook.uniq) {
-          this.removeResultLogList(this.newCellList.map(i => i.id))
+          this.removeLoadedCellList({
+            name: 'logMessageList',
+            notebookId: this.currentNotebook.id,
+            cellIdList: this.newCellList.map(i => i.id)
+          })
+          this.removeLoadedCellList({
+            name: 'resultList',
+            notebookId: this.currentNotebook.id,
+            cellIdList: this.newCellList.map(i => i.id)
+          })
         }
       }
     }
@@ -312,7 +321,7 @@ export default {
   methods: {
     ...mapMutations({
       changeNotebookMode: 'CHANGE_NOTEBOOK_MODE', // 修改notebook 模式 edit/command
-      removeResultLogList: 'REMOVE_RESULT_LOG_LIST'
+      removeLoadedCellList: 'REMOVE_LOADED_CELL_LIST'
     }),
     ...mapActions('AddScheduleModal', {
       callAddScheduleModal: 'CALL_MODAL'

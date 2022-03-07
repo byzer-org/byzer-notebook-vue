@@ -8,8 +8,8 @@ export default {
     notebookDirList: [],
     activeNotebook: undefined,
     demoList: [],
-    logMessageList: [],
-    resultList: [],
+    logMessageList: {},
+    resultList: {},
     activeSidebar: 'notebook',
     showSideBar: true
   },
@@ -26,19 +26,24 @@ export default {
     [types.SET_DEMO_LIST]: (state, data) => {
       state.demoList = data
     },
-    [types.SET_LOG_MESSAGE_LIST]: (state, cellId) => {
-      state.logMessageList.push(cellId)
+    [types.SET_LOADED_CELL_LIST]: (state, { name, notebookId, cellId }) => {
+      if (state[name][notebookId]) {
+        state[name][notebookId].push(cellId)
+      } else {
+        state[name] = Object.assign({}, state[name], {
+          [notebookId]: [cellId]
+        })
+      }
     },
-    [types.SET_RESULT_LIST]: (state, cellId) => {
-      state.resultList.push(cellId)
-    },
-    [types.RESET_LIST]: state => {
+    [types.RESET_LOADED_CELL_LIST]: state => {
       state.logMessageList = []
       state.resultList = []
     },
-    [types.REMOVE_RESULT_LOG_LIST]: (state, cellIdList) => {
-      state.logMessageList = state.logMessageList.filter(i => !cellIdList.includes(i))
-      state.resultList = state.resultList.filter(i => !cellIdList.includes(i))
+    [types.REMOVE_LOADED_CELL_LIST]: (state, { name, notebookId, cellIdList }) => {
+      if (!state[name][notebookId]) {
+        return
+      }
+      state[name][notebookId] = state[name][notebookId].filter(i => !cellIdList.includes(i))
     },
     [types.CHANGE_ACTIVE_SIDEBAR]: (state, data) => {
       state.activeSidebar = data
