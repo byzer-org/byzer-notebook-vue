@@ -1,5 +1,5 @@
 <template>
-  <router-view></router-view>
+  <router-view :key="new Date().getTime()"></router-view>
 </template>
 
 <script>
