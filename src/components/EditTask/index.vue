@@ -139,8 +139,6 @@ export default class EditTask extends Vue {
   loadingScheduleList = false
   taskList = []
 
-  scheduleList = []
-
   get rules () {
     return {
       taskName: [
@@ -152,9 +150,11 @@ export default class EditTask extends Vue {
     }
   }
 
-  @Watch('form', { immediate: true, deep: true })
-  onFormChanged () {
-    this.queryTasks()
+  @Watch('isShow')
+  onFormChanged (newVal) {
+    if (newVal) {
+      this.queryTasks()
+    }
   }
 
   async validateName (rule, value, callback) {
@@ -173,30 +173,23 @@ export default class EditTask extends Vue {
     return callback()
   }
 
-  async querySchedules () {
-    if (!this.is_scheduler_enabled) {
-      return
-    }
-    try {
-      this.loadingScheduleList = true
-      const res = await this.getSchedulesList()
-      this.scheduleList = res.data
-    } catch (err) {
-      this.scheduleList = []
-    } finally {
-      this.loadingScheduleList = false
-    }
-  }
-
   handleInput (name, value) {
     this.form[name] = value
   }
 
   async queryTasks () {
-    await this.querySchedules()
-    this.taskList = this.scheduleList.find(
-      item => item.name === this.form.scheduleName
-    )?.entities.filter(e => e.entity_id !== Number(this.taskInfo.currentNotebook.id))
+    try {
+      this.loadingScheduleList = true
+      const res = await this.getSchedulesList()
+      this.taskList = (res.data || []).find(
+        item => item.name === this.form.scheduleName
+      )?.entities.filter(e => e.entity_id !== Number(this.taskInfo.currentNotebook.id))
+    } catch (err) {
+      this.taskList = []
+    } finally {
+      this.loadingScheduleList = false
+    }
+
   }
 
   // 关闭弹窗
