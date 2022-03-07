@@ -4,7 +4,7 @@
     <page-header></page-header>
     <div class="router-view">
       <div class="container">
-        <router-view />
+        <router-view :key="new Date().getTime()" />
       </div>
     </div>
   </div>
