@@ -1048,8 +1048,11 @@ export default {
       }
     },
     async viewDAG () {
-      await this.callDAGViewModal(cloneDeep(this.taskInfo))
+      const { type } = await this.callDAGViewModal(cloneDeep(this.taskInfo))
       this.checkNotebook()
+      if (type === 'update') {
+        this.viewDAG()
+      }
     }
   }
 }

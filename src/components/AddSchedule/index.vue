@@ -139,7 +139,7 @@ export default class Addschedule extends Vue {
   }
 
   @Watch('isShow')
-  async onDialogShow (newVal, oldVal) {
+  onDialogShow (newVal, oldVal) {
     // 关闭弹窗时，重置弹窗信息
     if (!newVal && oldVal) {
       setTimeout(() => {
@@ -147,13 +147,18 @@ export default class Addschedule extends Vue {
         this.clearValidate()
       }, 500)
     }
+    if (newVal) {
+      this.$nextTick(() => {
+        this.handleClearValidate()
+        this.$refs['scheduleForm'].querySchedules()
+      })
+    }
   }
 
   changeScheduleValue (key, value) {
     this.scheduleForm[key] = value
   }
 
-  // 校验参数名称
   async validateName (rule, value, callback) {
     if (!value || value.trim() === '') {
       return callback(new Error(this.$t('schedules.taskNameRequired')))
@@ -162,7 +167,7 @@ export default class Addschedule extends Vue {
     }
     return callback()
   }
-  // 校验参数名称
+
   async validateDesc (rule, value, callback) {
     if (!value || value.trim() === '') {
       return callback(new Error(this.$t('schedules.taskDescRequired')))
@@ -279,14 +284,15 @@ export default class Addschedule extends Vue {
           entity_id: this.notebookInfo.id,
           task_name: this.form.task_name,
           task_desc: this.form.task_desc,
-          action: 'update',
-          attach_to: [
-            this.previousTaskList.find(
-              item => item.name === this.scheduleForm.previous_task
-            )
-          ]
+          action: 'update'
         }
       }
+
+      const attach_to = (this.previousTaskList || []).filter(
+        item => item.name === this.scheduleForm.previous_task
+      )
+      attach_to.length > 0 ? params['modification']['attach_to'] = attach_to : null
+
       const scheduleId = this.scheduleList.find(
         item => item.name === this.scheduleForm.schedule_name
       )?.id

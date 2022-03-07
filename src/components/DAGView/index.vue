@@ -14,9 +14,7 @@
         <span class="des_value">{{ taskName || '' }}</span>
       </div>
       <div class="des_item">
-        <span class="des_label">
-          {{ $t('schedules.dag_task_description') }}
-        </span>
+        <span class="des_label">{{ $t('schedules.dag_task_description') }}</span>
         <span class="des_value">{{ taskDescription || '' }}</span>
       </div>
       <div class="des_item">
@@ -125,7 +123,7 @@ export default class DAGView extends Vue {
   }
 
   async editTask () {
-    await this.callEditTaskModal(
+    const { type } = await this.callEditTaskModal(
       cloneDeep({
         taskInfo: this.taskInfo,
         form: {
@@ -136,7 +134,8 @@ export default class DAGView extends Vue {
         }
       })
     )
-    this.callback()
+    this.closeModal()
+    this.callback({ type })
   }
 
   renderDAG (taskInfo) {

@@ -67,6 +67,7 @@
         filterable
         :loading="loadingScheduleList"
         :placeholder="$t('pleaseSelect')"
+        :clearable="true"
         @change="(value) => handleInput('previous_task', value)"
       >
         <el-option
@@ -201,9 +202,6 @@ export default class Addschedule extends Vue {
       schedule_name: [
         { required: true, validator: this.validateName, trigger: 'change' }
       ],
-      previous_task: [
-        { required: true, validator: this.validateTask, trigger: 'change' }
-      ],
       date: [
         {
           required: this.scheduleType === 'new',
@@ -272,15 +270,6 @@ export default class Addschedule extends Vue {
       return callback(new Error(this.$t('workspace.nameHolder')))
     } else if (!notebookNameReg.test(value)) {
       return callback(new Error(this.$t('workspace.nameFormatValidTip')))
-    }
-    return callback()
-  }
-
-  validateTask (rule, value, callback) {
-    if (this.scheduleType === 'old') {
-      if (!value || value.trim() === '') {
-        return callback(new Error(this.$t('workspace.taskHolder')))
-      }
     }
     return callback()
   }
