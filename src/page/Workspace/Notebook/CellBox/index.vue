@@ -36,10 +36,11 @@
             </el-tab-pane>
             <el-tab-pane label="Log Message" name="logs">
               <LogMessage
+                v-if="jobId"
+                :isDemo="isDemo"
                 :cellId="cellId"
                 :currentNotebook="currentNotebook"
                 :result="excuteResult"
-                v-if="jobId"
                 :status="status"
                 :jobId="jobId"
                 :innerMaxHeight="innerMaxHeight"
@@ -154,10 +155,12 @@ export default {
     activeNotebook: {
       handler (newVal) {
         if (this.cellInfo.job_id && newVal.uniq === this.currentNotebook.uniq && 
-          (!this.resultList[newVal.id] || (this.resultList[newVal.id] && !this.resultList[newVal.id].includes(this.cellId)))
+          (this.isDemo || !this.resultList[newVal.id] || (this.resultList[newVal.id] && !this.resultList[newVal.id].includes(this.cellId)))
         ) {
           this.getStatus(this.cellInfo.job_id)
-          this.addResult({ name: 'resultList', notebookId: newVal.id, cellId: this.cellId })
+          if (!this.isDemo) {
+            this.addResult({ name: 'resultList', notebookId: newVal.id, cellId: this.cellId })
+          }
         }
       },
       immediate: true,

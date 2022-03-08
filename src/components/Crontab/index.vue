@@ -307,6 +307,44 @@ export default {
       for (let j in this.contabValueObj) {
         this.changeRadio(j, this.contabValueObj[j])
       }
+
+      this.$refs['cronsecond'].cycle01 = 1
+      this.$refs['cronsecond'].cycle02 = 2
+      this.$refs['cronsecond'].average01 = 0
+      this.$refs['cronsecond'].average02 = 1
+      this.$refs['cronsecond'].checkboxList = []
+
+      this.$refs['cronmin'].cycle01 = 1
+      this.$refs['cronmin'].cycle02 = 2
+      this.$refs['cronmin'].average01 = 0
+      this.$refs['cronmin'].average02 = 1
+      this.$refs['cronmin'].checkboxList = []
+
+      this.$refs['cronhour'].cycle01 = 0
+      this.$refs['cronhour'].cycle02 = 1
+      this.$refs['cronhour'].average01 = 0
+      this.$refs['cronhour'].average02 = 1
+      this.$refs['cronhour'].checkboxList = []
+
+      this.$refs['cronday'].workday = 1
+      this.$refs['cronday'].cycle01 = 1
+      this.$refs['cronday'].cycle02 = 2
+      this.$refs['cronday'].average01 = 1
+      this.$refs['cronday'].average02 = 1
+      this.$refs['cronday'].checkboxList = []
+
+      this.$refs['cronmonth'].cycle01 = 1
+      this.$refs['cronmonth'].cycle02 = 2
+      this.$refs['cronmonth'].average01 = 1
+      this.$refs['cronmonth'].average02 = 1
+      this.$refs['cronmonth'].checkboxList = []
+
+      this.$refs['cronyear'].fullYear = Number(new Date().getFullYear())
+      this.$refs['cronyear'].cycle01 = 0
+      this.$refs['cronyear'].cycle02 = 0
+      this.$refs['cronyear'].average01 = 0
+      this.$refs['cronyear'].average02 = 1
+      this.$refs['cronyear'].checkboxList = []
     }
   },
   computed: {

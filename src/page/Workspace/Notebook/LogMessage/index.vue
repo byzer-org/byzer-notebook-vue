@@ -15,7 +15,7 @@ import { Component, Watch } from 'vue-property-decorator'
 import { mapState, mapMutations, mapActions } from 'vuex'
 
 @Component({
-  props: ['cellId', 'currentNotebook', 'result', 'jobId', 'status', 'innerMaxHeight'],
+  props: ['isDemo', 'cellId', 'currentNotebook', 'result', 'jobId', 'status', 'innerMaxHeight'],
   computed: {
     ...mapState({
       logMessageList: state => state.notebook.logMessageList,
@@ -52,7 +52,7 @@ export default class LogMessage extends Vue {
   @Watch('activeNotebook', { immediate: true, deep: true })
   onCurrentNotebookChange (newVal) {
     if (newVal && newVal.active === 'true' &&
-      (!this.logMessageList[newVal.id] || (this.logMessageList[newVal.id] && !this.logMessageList[newVal.id].includes(this.cellId)))
+      (this.isDemo || !this.logMessageList[newVal.id] || (this.logMessageList[newVal.id] && !this.logMessageList[newVal.id].includes(this.cellId)))
     ) {
       this.initLog()
     }
@@ -63,7 +63,9 @@ export default class LogMessage extends Vue {
   }
 
   initLog () {
-    this.addLogMessage({ name: 'logMessageList', notebookId: this.activeNotebook.id, cellId: this.cellId })
+    if (!this.isDemo) {
+      this.addLogMessage({ name: 'logMessageList', notebookId: this.activeNotebook.id, cellId: this.cellId })
+    }
     this.getLogs()
   }
 

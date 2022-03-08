@@ -8,7 +8,7 @@ export default {
   // search file type when open notebook
   getNotebookInfo: params => axios.get(`/api/schedule/task?${params}`),
   // all instance
-  getInstanceList: () => axios.get('/api/schedule/task/instance'),
+  getInstanceList: id => axios.get(`/api/schedule/task/instance?task_id=${id}`),
   // set schedule
   setSchedule: params => axios.post('/api/schedule/task', params),
   // update/remove schedule

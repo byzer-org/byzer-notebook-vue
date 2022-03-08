@@ -47,24 +47,26 @@
     </el-form-item>
 
     <el-form-item>
-      <el-radio :label="5" v-model="radioValue">
-        {{ $t('crontab.year.specific') }}
-        <el-select
-          clearable
-          v-model="checkboxList"
-          multiple
-          style="width: 100%"
-          :placeholder="$t('crontab.year.placeholder')"
-          @change="radioChange"
-        >
-          <el-option
-            v-for="item in 15"
-            :key="item"
-            :value="item - 1 + fullYear"
-            :label="item - 1 + fullYear"
-          />
-        </el-select>
-      </el-radio>
+      <div class="crontab-select-wrap" @keyup="handleDelete">
+        <el-radio :label="5" v-model="radioValue">
+          {{ $t('crontab.year.specific') }}
+          <el-select
+            clearable
+            v-model="checkboxList"
+            multiple
+            style="width: 100%"
+            :placeholder="$t('crontab.year.placeholder')"
+            @change="radioChange"
+          >
+            <el-option
+              v-for="item in 15"
+              :key="item"
+              :value="item - 1 + fullYear"
+              :label="item - 1 + fullYear"
+            />
+          </el-select>
+        </el-radio>
+      </div>
     </el-form-item>
   </el-form>
 </template>
@@ -86,6 +88,12 @@ export default {
   name: 'crontab-year',
   props: ['check', 'month', 'cron'],
   methods: {
+    handleDelete (event) {
+      if (event.keyCode === 8 && this.checkboxList.length > 0) {
+        this.checkboxList.splice(this.checkboxList.length - 1, 1)
+        this.radioChange()
+      }
+    },
     // 单选按钮值变化时
     radioChange () {
       switch (this.radioValue) {

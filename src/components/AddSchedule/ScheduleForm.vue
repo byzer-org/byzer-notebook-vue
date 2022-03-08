@@ -84,6 +84,7 @@
         v-model="scheduleForm.date"
         type="daterange"
         range-separator="-"
+        :unlink-panels="true"
         :disabled="scheduleType === 'old'"
         :start-placeholder="$t('schedules.startDate')"
         :end-placeholder="$t('schedules.endDate')"

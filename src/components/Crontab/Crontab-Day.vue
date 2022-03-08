@@ -47,40 +47,29 @@
     </el-form-item>
 
     <el-form-item>
-      <el-radio v-model="radioValue" :label="5">
-        {{ $t('crontab.day.workday')[0] }}
-        <el-input-number
-          v-model="workday"
-          :min="1"
-          :max="31"
-          @change="radioChange"
-        />
-        {{ $t('crontab.day.workday')[1] }}
-      </el-radio>
-    </el-form-item>
-
-    <el-form-item>
       <el-radio v-model="radioValue" :label="6">
         {{ $t('crontab.day.lastDay') }}
       </el-radio>
     </el-form-item>
 
     <el-form-item>
-      <el-radio v-model="radioValue" :label="7">
-        {{ $t('crontab.day.specific') }}
-        <el-select
-          clearable
-          v-model="checkboxList"
-          multiple
-          style="width: 100%"
-          :placeholder="$t('crontab.day.placeholder')"
-          @change="radioChange"
-        >
-          <el-option v-for="item in 31" :key="item" :value="item">
-            {{ item }}
-          </el-option>
-        </el-select>
-      </el-radio>
+      <div class="crontab-select-wrap" @keyup="handleDelete">
+        <el-radio v-model="radioValue" :label="7">
+          {{ $t('crontab.day.specific') }}
+          <el-select
+            clearable
+            v-model="checkboxList"
+            multiple
+            style="width: 100%;"
+            :placeholder="$t('crontab.day.placeholder')"
+            @change="radioChange"
+          >
+            <el-option v-for="item in 31" :key="item" :value="item">
+              {{ item }}
+            </el-option>
+          </el-select>
+        </el-radio>
+      </div>
     </el-form-item>
   </el-form>
 </template>
@@ -102,6 +91,12 @@ export default {
   name: 'crontab-day',
   props: ['check', 'cron'],
   methods: {
+    handleDelete (event) {
+      if (event.keyCode === 8 && this.checkboxList.length > 0) {
+        this.checkboxList.splice(this.checkboxList.length - 1, 1)
+        this.radioChange()
+      }
+    },
     // 单选按钮值变化时
     radioChange () {
       switch (this.radioValue) {
