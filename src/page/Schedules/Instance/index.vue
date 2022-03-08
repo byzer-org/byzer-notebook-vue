@@ -3,7 +3,7 @@
     <div class="page-inner-header">
       <i
         class="el-ksd-icon-arrow_left_L_22 hasEvent"
-        @click="$router.back()"
+        @click="back"
       ></i>
       <span>{{ $t('schedules.instanceTitle') }}</span>
     </div>
@@ -173,6 +173,10 @@ export default class Instance extends Vue {
   keywordChanged () {
     this.resetPageIndex()
     this.filterSchedules()
+  }
+
+  back () {
+    this.$router.go(-1)
   }
 
   async queryInstance () {
