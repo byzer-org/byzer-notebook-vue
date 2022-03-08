@@ -47,21 +47,23 @@
     </el-form-item>
 
     <el-form-item>
-      <el-radio v-model="radioValue" :label="4">
-        {{ $t('crontab.second.specific') }}
-        <el-select
-          clearable
-          v-model="checkboxList"
-          multiple
-          style="width: 100%"
-          :placeholder="$t('crontab.second.placeholder')"
-          @change="radioChange"
-        >
-          <el-option v-for="item in 60" :key="item" :value="item - 1">
-            {{ item - 1 }}
-          </el-option>
-        </el-select>
-      </el-radio>
+      <div class="crontab-select-wrap" @keyup="handleDelete">
+        <el-radio v-model="radioValue" :label="4">
+          {{ $t('crontab.second.specific') }}
+          <el-select
+            clearable
+            v-model="checkboxList"
+            multiple
+            style="width: 100%"
+            :placeholder="$t('crontab.second.placeholder')"
+            @change="radioChange"
+          >
+            <el-option v-for="item in 60" :key="item" :value="item - 1">
+              {{ item - 1 }}
+            </el-option>
+          </el-select>
+        </el-radio>
+      </div>
     </el-form-item>
   </el-form>
 </template>
@@ -82,6 +84,12 @@ export default {
   name: 'crontab-second',
   props: ['check', 'radioParent'],
   methods: {
+    handleDelete (event) {
+      if (event.keyCode === 8 && this.checkboxList.length > 0) {
+        this.checkboxList.splice(this.checkboxList.length - 1, 1)
+        this.radioChange()
+      }
+    },
     // 单选按钮值变化时
     radioChange () {
       switch (this.radioValue) {

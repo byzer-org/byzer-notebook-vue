@@ -303,6 +303,9 @@ export default {
     },
     removeTabId : {
       handler (newVal) {
+        if (this.isDemo) {
+          return
+        }
         if (newVal === this.currentNotebook.uniq) {
           this.removeLoadedCellList({
             name: 'logMessageList',

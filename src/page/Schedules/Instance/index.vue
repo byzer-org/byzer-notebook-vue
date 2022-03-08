@@ -41,8 +41,16 @@
               v-else-if="checkStatus(scope.row) === 'running_execution'"
               class="el-ksd-icon-loading_22 content-icon running_execution"
             ></i>
+            <i
+              v-else-if="checkStatus(scope.row) === 'stop'"
+              class="el-ksd-icon-stop_with_border_22 content-icon"
+            ></i>
+            <i
+              v-else-if="checkStatus(scope.row) === 'pause'"
+              class="el-ksd-icon-pause_22 content-icon pause"
+            ></i>
             <i v-else class="el-ksd-icon-time_16 content-icon pending"></i>
-            <span>{{ $t(`schedules.${checkStatus(scope.row)}`) }}</span>
+            <span>{{ $t(`schedules.${ checkStatus(scope.row) }`) }}</span>
             <a
               v-if="checkStatus(scope.row) === 'failure'"
               class="view-detail hasEvent"
@@ -58,7 +66,13 @@
         show-overflow-tooltip
         :prop="'start_time'"
         :label="$t('schedules.ins_schTime')"
-        :min-width="'200'"
+        :min-width="'150'"
+      ></el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        :prop="'duration'"
+        :label="$t('schedules.ins_duration')"
+        :min-width="'100'"
       ></el-table-column>
       <el-table-column
         show-overflow-tooltip
@@ -164,8 +178,7 @@ export default class Instance extends Vue {
   async queryInstance () {
     this.startLoading()
     try {
-      const res = await this.getInstanceList()
-      // const res = await this.getInstanceById(this.params.id)
+      const res = await this.getInstanceList(this.params.id)
       this.instanceList = cloneDeep(res.data)
       this.filterSchedules()
     } finally {
@@ -178,7 +191,7 @@ export default class Instance extends Vue {
   }
 
   checkStatus ({ state }) {
-    if (['SUCCESS', 'FAILURE', 'RUNNING_EXECUTION'].includes(state)) {
+    if (['SUCCESS', 'FAILURE', 'RUNNING_EXECUTION', 'STOP', 'PAUSE'].includes(state)) {
       return state.toLowerCase()
     } else {
       return 'pending'
@@ -307,6 +320,9 @@ export default class Instance extends Vue {
         100% {
           transform: rotateZ(360deg);
         }
+      }
+      &.pause {
+        color: $pattern-orange-500;
       }
     }
     .icon-btn {
