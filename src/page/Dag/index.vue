@@ -78,7 +78,7 @@ export default class DAG extends Vue {
   }
 
   back () {
-    this.$router.go(-1)
+    this.$router.push({ name: 'schedulesHome' })
   }
 
   async queryData () {
