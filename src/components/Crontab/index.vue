@@ -195,7 +195,7 @@ export default {
           insVlaue = 3
         } else {
           insVlaue = 4
-          this.$refs[refName].checkboxList = value.split(',')
+          this.$refs[refName].checkboxList = value.split(',').map(i => i * 1)
         }
       } else if (name === 'day') {
         if (value === '*') {
@@ -225,7 +225,7 @@ export default {
         } else if (value === 'L') {
           insVlaue = 6
         } else {
-          this.$refs[refName].checkboxList = value.split(',')
+          this.$refs[refName].checkboxList = value.split(',').map(i => i * 1)
           insVlaue = 7
         }
       } else if (name === 'week') {
@@ -254,7 +254,7 @@ export default {
             : (this.$refs[refName].weekday = indexArr[0])
           insVlaue = 5
         } else {
-          this.$refs[refName].checkboxList = value.split(',')
+          this.$refs[refName].checkboxList = value.split(',').map(i => i * 1)
           insVlaue = 7
         }
       } else if (name === 'year') {
@@ -267,7 +267,7 @@ export default {
         } else if (value.indexOf('/') > -1) {
           insVlaue = 4
         } else {
-          this.$refs[refName].checkboxList = value.split(',')
+          this.$refs[refName].checkboxList = value.split(',').map(i => i * 1)
           insVlaue = 5
         }
       }

@@ -590,11 +590,12 @@ export default {
 
       if (startDate.indexOf('T') >= 0) {
         // UTC
-        return new Date(moment(moment.utc(startDate).format()).format(
+        const utcDate = new Date(moment(moment.utc(startDate).format()).format(
           'YYYY-MM-DD'
         ) + ' 00:00:00')
+        return this.compareDate(utcDate, new Date(), '>')
       } else {
-        return new Date(startDate + ' 00:00:00')
+        return this.compareDate(new Date(startDate + ' 00:00:00'), new Date(), '>')
       }
     },
     formatUTCEndDate () {
@@ -611,6 +612,13 @@ export default {
         ) + ' 23:59:59')
       } else {
         return new Date(endDate + ' 23:59:59')
+      }
+    },
+    compareDate (before, after, rule) {
+      if (rule === '>') {
+        return before >= after ? before : after
+      } else {
+        return before <= after ? before : after
       }
     },
     // 格式化日期格式如：2017-9-19 18:04:33
