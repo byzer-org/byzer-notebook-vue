@@ -176,7 +176,7 @@ export default class Instance extends Vue {
   }
 
   back () {
-    this.$router.go(-1)
+    this.$router.push({ name: 'schedulesHome' })
   }
 
   async queryInstance () {
