@@ -78,6 +78,7 @@ import vuex, { actionsTypes } from '../../store/index'
 import store from './store'
 import { notebookNameReg } from '@/config'
 import ScheduleForm from './ScheduleForm.vue'
+import moment from 'moment'
 
 vuex.registerModule(['modals', 'AddScheduleModal'], store)
 
@@ -256,8 +257,8 @@ export default class Addschedule extends Vue {
         entity_id: this.notebookInfo.id,
         name: this.scheduleForm.schedule_name,
         schedule: {
-          start_time: this.scheduleForm.date[0],
-          end_time: this.scheduleForm.date[1],
+          start_time: moment(new Date(this.scheduleForm.date[0])).format('YYYY-MM-DD') + ' 00:00:00',
+          end_time: moment(new Date(this.scheduleForm.date[1])).format('YYYY-MM-DD') + ' 23:59:59',
           crontab: this.scheduleForm.cron
         },
         description: this.scheduleForm.schedule_desc,

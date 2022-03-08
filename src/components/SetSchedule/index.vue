@@ -38,6 +38,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 import vuex, { actionsTypes } from '../../store/index'
 import store from './store'
 import ScheduleForm from '../AddSchedule/ScheduleForm.vue'
+import moment from 'moment'
 
 vuex.registerModule(['modals', 'SetScheduleModal'], store)
 
@@ -114,8 +115,8 @@ export default class SetSchedule extends Vue {
         name: this.scheduleForm.schedule_name,
         description: this.scheduleForm.schedule_desc,
         schedule: {
-          start_time: this.scheduleForm.date[0],
-          end_time: this.scheduleForm.date[1],
+          start_time: moment(new Date(this.scheduleForm.date[0])).format('YYYY-MM-DD') + ' 00:00:00',
+          end_time: moment(new Date(this.scheduleForm.date[1])).format('YYYY-MM-DD') + ' 23:59:59',
           crontab: this.scheduleForm.cron
         }
       }
