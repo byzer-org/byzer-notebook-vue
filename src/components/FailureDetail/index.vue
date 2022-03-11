@@ -15,8 +15,7 @@
       </div>
       <div class="node-item">
         <div class="label">{{ $t('schedules.failureLog') }}</div>
-        <div class="log" style="white-space: pre-wrap">
-          {{ failureDetail.log }}
+        <div class="log" style="white-space: pre-wrap" v-html="getFailureDetail">
         </div>
       </div>
     </div>
@@ -63,6 +62,10 @@ export default class SetSchedule extends Vue {
         this.resetModal()
       }, 500)
     }
+  }
+
+  getFailureDetail () {
+    return this.failureDetail?.log.replace(/\\n/g, '<br />')
   }
 
   // 关闭弹窗
