@@ -80,22 +80,23 @@ export default class LogMessage extends Vue {
   }
 
   async getLogs () {
-    try {
-      const res = await this.getJobLogs(this.jobId)
-      if (this._isDestroyed) {
-        return false
-      }
-      this.logList = res.data?.logs ?? []
-      if (this.status === 'RUNNING') {
-        this.pollingData()
-      } else {
-        window.clearTimeout(this.timer)
-      }
-    } catch (e) {
-      if (this._isDestroyed) {
-        return false
-      }
-    }
+    // try {
+    //   const res = await this.getJobLogs(this.jobId)
+    //   if (this._isDestroyed) {
+    //     return false
+    //   }
+    //   this.logList = res.data?.logs ?? []
+    //   if (this.status === 'RUNNING') {
+    //     this.pollingData()
+    //   } else {
+    //     window.clearTimeout(this.timer)
+    //   }
+    // } catch (e) {
+    //   if (this._isDestroyed) {
+    //     return false
+    //   }
+    // }
+    this.logList = []
   }
 }
 </script>
