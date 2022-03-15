@@ -80,19 +80,19 @@ export default class NodeCodeEditor extends Vue {
   }
   changeContent (value) {
     this.$emit('changeContent', value)
-    this.queryCompleters(value)
+    // this.queryCompleters(value)
 
-    this.$nextTick(() => {
-      let v = value
-      ;(this.contentBackup || '').split('').forEach(i => {
-        v = v.replace(i, '')
-      })
-      if (SpecialCodeSuggestKey.includes(v)) {
-        const codeEditor = this.$refs['nodeEditor']
-        codeEditor?.editor.execCommand('startAutocomplete')
-      }
-      this.contentBackup = value;
-    })
+    // this.$nextTick(() => {
+    //   let v = value
+    //   ;(this.contentBackup || '').split('').forEach(i => {
+    //     v = v.replace(i, '')
+    //   })
+    //   if (SpecialCodeSuggestKey.includes(v)) {
+    //     const codeEditor = this.$refs['nodeEditor']
+    //     codeEditor?.editor.execCommand('startAutocomplete')
+    //   }
+    //   this.contentBackup = value;
+    // })
   }
   /**
    * @description: 获取文本
@@ -175,7 +175,7 @@ export default class NodeCodeEditor extends Vue {
       editor = this.$refs['nodeEditor'].editor
       editor.commands.addCommand({
         name: 'enter',
-        bindKey: { win: 'Tab',  mac: 'Tab' },
+          bindKey: { win: 'Alt-Space',  mac: 'Option-Space' },
         exec: editor => {
           editor.execCommand('startAutocomplete')
         }

@@ -105,7 +105,10 @@ export default {
         this.lang = lang
       }
       // 每次输入都要重新init代码提示，否则在getCompletions中都是上一次init时的数据
-      this.queryCompleters()
+      // this.queryCompleters()
+      const lnTools = ace.acequire('ace/ext/language_tools')
+      // 覆盖默认代码提示
+      lnTools?.setCompleters([])
     },
     /**
      * @description: 获取代码补全
@@ -218,7 +221,7 @@ export default {
         editor = this.$refs['codeEditor'+ this.cellId].editor
         editor.commands.addCommand({
           name: 'myCommand-handle-show-completer',
-          bindKey: { win: 'Tab',  mac: 'Tab' },
+          bindKey: { win: 'Alt-Space',  mac: 'Option-Space' },
           exec: editor => {
             // 每次输入都要重新init代码提示，否则在getCompletions中都是上一次init时的数据
             this.queryCompleters()
