@@ -67,6 +67,7 @@ export default class LogMessage extends Vue {
     if (!this.isDemo) {
       this.addLogMessage({ name: 'logMessageList', notebookId: this.activeNotebook.id, cellId: this.cellId })
     }
+    this.offset = -1
     this.getLogs()
   }
 
