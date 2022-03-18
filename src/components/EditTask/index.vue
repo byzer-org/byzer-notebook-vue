@@ -52,7 +52,7 @@
                 {{ $t(`schedules.previousTask`) }}
                 <el-tooltip
                   placement="top"
-                  :content="$t('schedules.previousInfo')"
+                  :content="$t('schedules.previousInfo_edit')"
                 >
                   <i class="el-ksd-icon-more_info_16 hasEvent"></i>
                 </el-tooltip>
@@ -79,7 +79,13 @@
       </el-form>
     </div>
     <div slot="footer">
-      <el-button type="danger" size="medium" @click="checkAction('remove')">
+      <el-button
+        type="text"
+        size="medium"
+        class="schedule-form-footer-remove-btn"
+        :loading="isRemoving"
+        @click="checkAction('remove')"
+      >
         {{ $t('schedules.remove_task') }}
       </el-button>
       <el-button size="medium" @click="closeModal">
@@ -88,8 +94,8 @@
       <el-button
         type="primary"
         size="medium"
-        @click="checkAction('update')"
         :loading="isSubmiting"
+        @click="checkAction('update')"
       >
         {{ $t('save') }}
       </el-button>
@@ -129,11 +135,13 @@ vuex.registerModule(['modals', 'EditTaskModal'], store)
     }),
     ...mapActions({
       updateSchedule: actionsTypes.UPDATE_SCHEDULE,
-      getSchedulesList: actionsTypes.GET_SCHEDULE_LIST
+      getSchedulesList: actionsTypes.GET_SCHEDULE_LIST,
+      deleteSchedule: actionsTypes.DELETE_SCHEDULE
     })
   }
 })
 export default class EditTask extends Vue {
+  isRemoving = false
   isSubmiting = false
 
   loadingScheduleList = false
@@ -154,6 +162,9 @@ export default class EditTask extends Vue {
   onFormChanged (newVal) {
     if (newVal) {
       this.queryTasks()
+      this.$nextTick(() => {
+        this.$refs.$form.clearValidate()
+      })
     }
   }
 
@@ -198,16 +209,44 @@ export default class EditTask extends Vue {
   }
 
   async checkAction (actionType) {
-    if (this.taskInfo.scheduleInfo.release_state === 'ONLINE') {
-      const { type } = await this.callCheckActionModal({
-        type: actionType,
-        ...cloneDeep(this.formatParams(actionType))
-      })
-      this.closeModal()
-      this.callback({ type })
-    } else {
-      this[actionType]()
+    let checked = false
+    try {
+      checked = await this.$refs.$form.validate()
+    } catch (err) {
+      checked = false
     }
+    if (!checked && actionType === 'update') {
+      return
+    }
+    try {
+      if (actionType === 'remove' && this.taskInfo?.scheduleInfo?.entities.length === 1) {
+        // 只有一个节点时点击「Rmove」按钮直接删除调度
+        const res = await this.deleteSchedule(this.taskInfo?.scheduleInfo.id)
+        if (res?.msg === 'success') {
+          this.showMessage('remove')
+        }
+        this.closeModal()
+        this.callback({ actionType })
+      } else if (this.taskInfo?.scheduleInfo?.release_state === 'ONLINE') {
+        // 如果调度时上线状态，提示是否需要在「Update」或者「Remove」之后保持上线状态
+        const { type } = await this.callCheckActionModal({
+          type: actionType,
+          ...cloneDeep(this.formatParams(actionType))
+        })
+        this.closeModal()
+        this.callback({ type })
+      } else {
+        this[actionType]()
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  showMessage (actionType) {
+    this.$message.success(
+      this.$t('schedules.actionSuccessMsg', { action: this.$t(actionType) })
+    )
   }
 
   async update () {
@@ -215,9 +254,7 @@ export default class EditTask extends Vue {
     try {
       const res = await this.updateSchedule(this.formatParams('update'))
       if (res?.msg === 'success') {
-        this.$message.success(
-          this.$t('schedules.actionSuccessMsg', { action: this.$t('update') })
-        )
+        this.showMessage('update')
       }
       this.callback({ type: 'update' })
     } catch (err) {
@@ -229,19 +266,17 @@ export default class EditTask extends Vue {
   }
 
   async remove () {
-    this.isSubmiting = true
+    this.isRemoving = true
     try {
       const res = await this.updateSchedule(this.formatParams('remove'))
       if (res?.msg === 'success') {
-        this.$message.success(
-          this.$t('schedules.actionSuccessMsg', { action: this.$t('remove') })
-        )
+        this.showMessage('remove')
       }
       this.callback({ type: 'remove' })
     } catch (err) {
       console.log(err)
     } finally {
-      this.isSubmiting = false
+      this.isRemoving = false
       this.closeModal()
     }
   }
@@ -302,5 +337,8 @@ export default class EditTask extends Vue {
       }
     }
   }
+}
+.schedule-form-footer-remove-btn {
+  color: $--color-danger !important;
 }
 </style>

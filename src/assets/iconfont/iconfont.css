@@ -1,11 +1,11 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3053543 */
-  src: url('iconfont.eot?t=1643169009574'); /* IE9 */
-  src: url('iconfont.eot?t=1643169009574#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1643169009574') format('woff2'),
-       url('iconfont.woff?t=1643169009574') format('woff'),
-       url('iconfont.ttf?t=1643169009574') format('truetype'),
-       url('iconfont.svg?t=1643169009574#iconfont') format('svg');
+  src: url('iconfont.eot?t=1647420692284'); /* IE9 */
+  src: url('iconfont.eot?t=1647420692284#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1647420692284') format('woff2'),
+       url('iconfont.woff?t=1647420692284') format('woff'),
+       url('iconfont.ttf?t=1647420692284') format('truetype'),
+       url('iconfont.svg?t=1647420692284#iconfont') format('svg');
 }
 
 [class^="el-ksd-icon-"], [class*=" el-ksd-icon-"] {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.el-ksd-icon-discarded_22:before {
+  content: "\e606";
 }
 
 .el-ksd-icon-arrow_down_with_border_22:before {

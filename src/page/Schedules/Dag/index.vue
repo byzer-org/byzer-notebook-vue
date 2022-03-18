@@ -16,12 +16,12 @@
 <script>
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { Graph } from '@antv/x6'
-import GraphNode from '../../components/GraphNode'
+import { Graph, Shape,  } from '@antv/x6'
+import GraphNode from '../../../components/GraphNode'
 import '@antv/x6-vue-shape'
-import { GridLayout } from '@antv/layout'
+import { DagreLayout } from '@antv/layout'
 import { mapActions, mapState } from 'vuex'
-import { GRAPH_EDGE_ATTRS, GRAPH_NODE_ATTRS } from '../../config'
+import { Darge_Layout_ATTRS, GRAPH_EDGE_ATTRS, GRAPH_NODE_ATTRS } from '../../../config'
 
 @Component({
   computed: {
@@ -48,11 +48,9 @@ export default class DAG extends Vue {
 
     this.initGraph()
 
-    const gridLayout = new GridLayout({
-      type: 'grid'
-    })
+    const dagreLayout = new DagreLayout(Darge_Layout_ATTRS)
 
-    const newModel = gridLayout.layout(this.formatData())
+    const newModel = dagreLayout.layout(this.formatData())
 
     this.graphIns.fromJSON(newModel)
 
@@ -135,7 +133,7 @@ export default class DAG extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/css/variable.scss';
+@import '../../../assets/css/variable.scss';
 
 .dag-wrap {
   padding: 36px 54px;

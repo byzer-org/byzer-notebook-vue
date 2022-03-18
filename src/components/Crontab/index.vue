@@ -1,9 +1,13 @@
 <template>
   <div class="crontab-wrap">
-    <el-tabs type="border-card">
+    <el-tabs
+      type="border-card"
+      v-model="tabActive"
+    >
       <el-tab-pane
-        :label="$t('crontab.tabTitles.second')"
         v-if="shouldHide('second')"
+        :name="'second'"
+        :label="$t('crontab.tabTitles.second')"
       >
         <CrontabSecond
           @update="updateContabValue"
@@ -13,8 +17,9 @@
       </el-tab-pane>
 
       <el-tab-pane
-        :label="$t('crontab.tabTitles.minute')"
         v-if="shouldHide('min')"
+        :name="'min'"
+        :label="$t('crontab.tabTitles.minute')"
       >
         <CrontabMin
           @update="updateContabValue"
@@ -25,8 +30,9 @@
       </el-tab-pane>
 
       <el-tab-pane
-        :label="$t('crontab.tabTitles.hour')"
         v-if="shouldHide('hour')"
+        :name="'hour'"
+        :label="$t('crontab.tabTitles.hour')"
       >
         <CrontabHour
           @update="updateContabValue"
@@ -37,8 +43,9 @@
       </el-tab-pane>
 
       <el-tab-pane
-        :label="$t('crontab.tabTitles.day')"
         v-if="shouldHide('day')"
+        :name="'day'"
+        :label="$t('crontab.tabTitles.day')"
       >
         <CrontabDay
           @update="updateContabValue"
@@ -49,8 +56,9 @@
       </el-tab-pane>
 
       <el-tab-pane
-        :label="$t('crontab.tabTitles.month')"
         v-if="shouldHide('month')"
+        :name="'month'"
+        :label="$t('crontab.tabTitles.month')"
       >
         <CrontabMonth
           @update="updateContabValue"
@@ -62,8 +70,9 @@
 
 
       <el-tab-pane
-        :label="$t('crontab.tabTitles.year')"
         v-if="shouldHide('year')"
+        :name="'year'"
+        :label="$t('crontab.tabTitles.year')"
       >
         <CrontabYear
           @update="updateContabValue"
@@ -98,6 +107,8 @@ import CrontabMonth from './Crontab-Month.vue'
 import CrontabYear from './Crontab-Year.vue'
 
 export default {
+  name: 'vcrontab',
+  props: ['expression', 'hideComponent'],
   data () {
     return {
       tabTitles: [
@@ -109,12 +120,12 @@ export default {
         this.$t('crontab.tabTitles.week'),
         this.$t('crontab.tabTitles.year')
       ],
-      tabActive: 0,
+      tabActive: 'second',
       myindex: 0,
       contabValueObj: {
-        second: '*',
-        min: '*',
-        hour: '*',
+        second: '0',
+        min: '0',
+        hour: '0',
         day: '*',
         month: '*',
         week: '?',
@@ -122,15 +133,50 @@ export default {
       }
     }
   },
-  name: 'vcrontab',
-  props: ['expression', 'hideComponent'],
+  components: {
+    CrontabSecond,
+    CrontabMin,
+    CrontabHour,
+    CrontabDay,
+    CrontabMonth,
+    CrontabYear
+  },
+  computed: {
+    contabValueString: function () {
+      let obj = this.contabValueObj
+      let str =
+        obj.second +
+        ' ' +
+        obj.min +
+        ' ' +
+        obj.hour +
+        ' ' +
+        obj.day +
+        ' ' +
+        obj.month +
+        ' ' +
+        obj.week +
+        (obj.year === '' ? '' : ' ' + obj.year)
+      return str
+    }
+  },
+  watch: {
+    expression: {
+      handler () {
+        this.$nextTick(() => {
+          this.resolveExp()
+        })
+      },
+      immediate: true
+    }
+  },
   methods: {
     shouldHide (key) {
       if (this.hideComponent && this.hideComponent.includes(key)) return false
       return true
     },
+    // 反解析 表达式
     resolveExp () {
-      // 反解析 表达式
       if (this.expression) {
         let arr = this.expression.split(' ')
         if (arr.length >= 6) {
@@ -155,10 +201,6 @@ export default {
         // 没有传入的表达式 则还原
         this.clearCron()
       }
-    },
-    // tab切换值
-    tabCheck (index) {
-      this.tabActive = index
     },
     // 由子组件触发，更改表达式组成的字段值
     updateContabValue (name, value, from) {
@@ -294,11 +336,12 @@ export default {
       this.hidePopup()
     },
     clearCron () {
+      this.tabActive = 'second'
       // 还原选择项
       this.contabValueObj = {
-        second: '*',
-        min: '*',
-        hour: '*',
+        second: '0',
+        min: '0',
+        hour: '0',
         day: '*',
         month: '*',
         week: '?',
@@ -308,23 +351,24 @@ export default {
         this.changeRadio(j, this.contabValueObj[j])
       }
 
+      // reset form value
       this.$refs['cronsecond'].cycle01 = 1
       this.$refs['cronsecond'].cycle02 = 2
       this.$refs['cronsecond'].average01 = 0
       this.$refs['cronsecond'].average02 = 1
-      this.$refs['cronsecond'].checkboxList = []
+      this.$refs['cronsecond'].checkboxList = [0]
 
       this.$refs['cronmin'].cycle01 = 1
       this.$refs['cronmin'].cycle02 = 2
       this.$refs['cronmin'].average01 = 0
       this.$refs['cronmin'].average02 = 1
-      this.$refs['cronmin'].checkboxList = []
+      this.$refs['cronmin'].checkboxList = [0]
 
       this.$refs['cronhour'].cycle01 = 0
       this.$refs['cronhour'].cycle02 = 1
       this.$refs['cronhour'].average01 = 0
       this.$refs['cronhour'].average02 = 1
-      this.$refs['cronhour'].checkboxList = []
+      this.$refs['cronhour'].checkboxList = [0]
 
       this.$refs['cronday'].workday = 1
       this.$refs['cronday'].cycle01 = 1
@@ -346,36 +390,6 @@ export default {
       this.$refs['cronyear'].average02 = 1
       this.$refs['cronyear'].checkboxList = []
     }
-  },
-  computed: {
-    contabValueString: function () {
-      let obj = this.contabValueObj
-      let str =
-        obj.second +
-        ' ' +
-        obj.min +
-        ' ' +
-        obj.hour +
-        ' ' +
-        obj.day +
-        ' ' +
-        obj.month +
-        ' ' +
-        obj.week +
-        (obj.year === '' ? '' : ' ' + obj.year)
-      return str
-    }
-  },
-  components: {
-    CrontabSecond,
-    CrontabMin,
-    CrontabHour,
-    CrontabDay,
-    CrontabMonth,
-    CrontabYear
-  },
-  mounted: function () {
-    this.resolveExp()
   }
 }
 </script>

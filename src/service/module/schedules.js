@@ -18,5 +18,7 @@ export default {
   // delete schedule
   deleteSchedule: id => axios.delete(`/api/schedule/task/${id}`),
   // toogle schedule release_state to online/offline
-  toggleSchedule: ({id, release_state}) => axios.post(`/api/schedule/task/${id}/${release_state}`)
+  toggleSchedule: ({ id, release_state }) => axios.post(`/api/schedule/task/${id}/${release_state}`),
+  // set state of instance
+  setInstanceState: ({ id, status }) => axios.post(`/api/schedule/task/instance/${id}/status?set_status=${status}`)
 }
