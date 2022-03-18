@@ -76,6 +76,7 @@ export default {
       color: $--color-white;
       &.is-active {
         color: $--color-white;
+        border-bottom: 4px solid $pattern-blue-400;
       }
       .menu-icon {
         font-size: 24px;

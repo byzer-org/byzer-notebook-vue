@@ -58,7 +58,7 @@
         />
         <div class="btn" v-if="is_scheduler_enabled && !isDemo">
           <span v-if="added" class="add-to-schedule" @click="viewDAG">
-            <i class="el-ksd-icon-confirm_22"></i>
+            <i class="el-ksd-icon-right_fill_22"></i>
             {{ $t('schedules.addedToSchedule') }}
           </span>
           <span
@@ -1099,6 +1099,9 @@ export default {
           display: inline-flex;
           align-items: center;
           cursor: pointer;
+          i {
+            margin-right: 3px;
+          }
         }
       }
     }

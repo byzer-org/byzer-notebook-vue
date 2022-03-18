@@ -34,6 +34,9 @@ export default {
     },
     [types.TOGGLE_SCHEDULE]: (_, { id, release_state }) => {
       return schedules.toggleSchedule({ id, release_state })
+    },
+    [types.SET_INSTANCE_STATE]: (_, { id, status }) => {
+      return schedules.setInstanceState({ id, status })
     }
   }
 }

@@ -62,7 +62,7 @@
       <el-table-column
         show-overflow-tooltip
         :prop="'description'"
-        :min-width="'150'"
+        :min-width="'160'"
       >
         <template slot="header">
           <div class="schedule-type-header">
@@ -109,7 +109,7 @@
                   <el-dropdown-item :disabled="!isOnline(scope.row)">
                     <div
                       class="schedules-action-dropdown"
-                      @click="runSchedule(scope.row.id)"
+                      @click="handleRun(scope.row.id)"
                     >
                       <i class="el-ksd-icon-play_outline_16 icon-btn"></i>
                       {{ $t('run') }}
@@ -272,6 +272,15 @@ export default class Schedules extends Vue {
     this.$router.push({ name: 'dag', params: { id } })
   }
 
+  async handleRun (id) {
+    try {
+      await this.runSchedule(id)
+      this.$message.success(this.$t('schedules.runScheduleSuccess'))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   confirmDelete ({ id }) {
     this.$confirm(
       this.$t('schedules.confirmDeleteschedule'),
@@ -393,7 +402,7 @@ export default class Schedules extends Vue {
         color: $--color-success;
       }
       &.offline {
-        color: $--color-danger;
+        color: $--color-text-placeholder;
       }
     }
     .icon-btn {

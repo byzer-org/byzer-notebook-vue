@@ -28,7 +28,7 @@
         {{ $t('close') }}
       </el-button>
       <el-button type="primary" size="medium" @click="editTask">
-        {{ $t('edit') }}
+        {{ $t('schedules.editTaskTitle') }}
       </el-button>
     </div>
   </el-dialog>
@@ -42,10 +42,10 @@ import { cloneDeep } from 'lodash'
 import { Graph } from '@antv/x6'
 import GraphNode from '../GraphNode'
 import '@antv/x6-vue-shape'
-import { GridLayout } from '@antv/layout'
+import { DagreLayout } from '@antv/layout'
 import vuex, { actionsTypes } from '../../store/index'
 import store from './store'
-import { GRAPH_EDGE_ATTRS, GRAPH_NODE_ATTRS } from '../../config'
+import { Darge_Layout_ATTRS, GRAPH_EDGE_ATTRS, GRAPH_NODE_ATTRS } from '../../config'
 vuex.registerModule(['modals', 'DAGViewModal'], store)
 
 @Component({
@@ -183,10 +183,8 @@ export default class DAGView extends Vue {
           attrs: GRAPH_EDGE_ATTRS
         }))
       }
-      const gridLayout = new GridLayout({
-        type: 'grid'
-      })
-      const newModel = gridLayout.layout(model)
+      const dagreLayout = new DagreLayout(Darge_Layout_ATTRS)
+      const newModel = dagreLayout.layout(model)
 
       this.graphIns.fromJSON(newModel)
       this.graphIns.centerContent()
