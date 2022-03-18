@@ -4,10 +4,18 @@
     :class="{ 'active-editor': isSelected && !readOnly }"
   >
     <v-md-editor
-      :ref="'md' + cellId"
+      v-if="mdMode === 'edit'"
       v-model="content"
-      :mode="mdMode"
+      :ref="'md' + cellId"
+      :mode="'edit'"
       @input="changeContent"
+    ></v-md-editor>
+    <v-md-editor
+      v-if="mdMode === 'preview'"
+      v-model="value"
+      :ref="'md' + cellId"
+      :mode="'preview'"
+      :text="value"
     ></v-md-editor>
   </div>
 </template>
@@ -135,6 +143,7 @@ export default class CodeMarkdownEditor extends Vue {
 
   @Watch('mdMode') 
   onMdModeChange (newVal) {
+    this.content = this.value
     this.$emit('changeMdMode', newVal)
   }
 
@@ -142,16 +151,6 @@ export default class CodeMarkdownEditor extends Vue {
   isSelectedHandler (newValue) {
     if (!newValue) {
       this.mdMode = 'preview'
-    }
-  }
-
-  @Watch('value')
-  valuehandler (newValue, oldValue) {
-    if (
-      newValue === (oldValue || '').replace(MarkdownTag, '') ||
-      oldValue === newValue.replace(MarkdownTag, '')
-    ) {
-      return false
     }
   }
 
