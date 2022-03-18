@@ -23,7 +23,6 @@
 <script>
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
-import { MarkdownTag } from '../../config/index'
 
 import VMdEditor from '@kangc/v-md-editor/lib/codemirror-editor'
 import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/npm'

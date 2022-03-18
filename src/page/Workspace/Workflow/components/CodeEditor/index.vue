@@ -175,7 +175,7 @@ export default class NodeCodeEditor extends Vue {
       editor = this.$refs['nodeEditor'].editor
       editor.commands.addCommand({
         name: 'enter',
-        bindKey: { win: 'Tab',  mac: 'Tab' },
+        bindKey: { win: 'Alt-Space', mac: 'Option-Space' },
         exec: editor => {
           editor.execCommand('startAutocomplete')
         }
