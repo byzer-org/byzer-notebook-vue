@@ -1,4 +1,3 @@
-
 <template>
   <div class="log-message" :style="{'max-height': innerMaxHeight}">
     <ul class="log-message-list" v-if="logList.length">
@@ -35,6 +34,7 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default class LogMessage extends Vue {
   logList = []
   timer = null
+  offset = -1
 
   @Watch('status')
   onResultChange (newVal, oldVal) {
@@ -46,6 +46,7 @@ export default class LogMessage extends Vue {
   }
   @Watch('jobId')
   onJobIdChange () {
+    this.offset = -1
     this.getLogs()
   }
 
@@ -66,6 +67,7 @@ export default class LogMessage extends Vue {
     if (!this.isDemo) {
       this.addLogMessage({ name: 'logMessageList', notebookId: this.activeNotebook.id, cellId: this.cellId })
     }
+    this.offset = -1
     this.getLogs()
   }
 
@@ -81,10 +83,11 @@ export default class LogMessage extends Vue {
 
   async getLogs () {
     try {
-      const res = await this.getJobLogs(this.jobId)
+      const res = await this.getJobLogs({ job_id: this.jobId, offset: this.offset })
       if (this._isDestroyed) {
         return false
       }
+      this.offset = res.data?.offset
       this.logList = res.data?.logs ?? []
       if (this.status === 'RUNNING') {
         this.pollingData()

@@ -183,7 +183,7 @@ export default {
         frequency: 1
       },
       {
-        shortcut: 'Tab',
+        shortcut: 'Alt-Space, Option-Space',
         subShortcut: '',
         content: 'hotKeyCodeSuggest',
         frequency: 1
