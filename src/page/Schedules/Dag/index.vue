@@ -16,7 +16,7 @@
 <script>
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { Graph, Shape,  } from '@antv/x6'
+import { Graph } from '@antv/x6'
 import GraphNode from '../../../components/GraphNode'
 import '@antv/x6-vue-shape'
 import { DagreLayout } from '@antv/layout'
