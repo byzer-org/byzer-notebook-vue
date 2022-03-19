@@ -359,7 +359,7 @@ export default class Addschedule extends Vue {
     }
     &-content {
       background: $--background-color-secondary;
-      border: 1px solid #e6ebf4;
+      border: 1px solid $--border-update-schedule;
       box-sizing: border-box;
       border-radius: 6px;
       padding: 16px 24px;

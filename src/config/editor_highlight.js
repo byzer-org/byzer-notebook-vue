@@ -14,7 +14,7 @@ ace.define('ace/mode/sql_highlight_rules', ['require', 'exports', 'module', 'ace
         'select|insert|update|delete|from|where|and|or|group|by|order|limit|offset|having|as|case|' +
         'when|else|end|type|left|right|join|on|outer|desc|asc|union|create|table|primary|key|if|' +
         'foreign|not|references|default|null|inner|cross|natural|database|drop|grant|' +
-        'set|connect|load|train|run|predict|register|save|include|then|' + // Kolo关键字
+        'set|connect|load|train|run|predict|register|save|include|then|' + // Byzer 关键字
         '!show|!hdfs|!kill|!desc|!cache|!unCache|!if|!elif|!then|!else|!fi|!println|!runScript|!last|' +
         '!lastTableName|!tableRepartition|!saveFile|!emptyTable|!profiler|!python|!ray|!delta|!withWartermark|' +
         '!plugin|!kafkaTool|!callback' // 宏语法

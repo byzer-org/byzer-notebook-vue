@@ -28,13 +28,13 @@
           {{ $t('cancel') }}
         </el-button>
         <el-button
-          v-if="formatParams.type === 'update'"
+          v-if="['update', 'save'].includes(formatParams.type)"
           type="primary"
           size="medium"
           :loading="isSubmiting"
           @click="update"
         >
-          {{ $t('update') }}
+          {{ $t(formatParams.type) }}
         </el-button>
         <el-button
           v-if="formatParams.type === 'remove'"
@@ -52,7 +52,7 @@
 
 <script>
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import vuex, { actionsTypes } from '../../store/index'
 import store from './store'
@@ -81,6 +81,13 @@ export default class CheckAction extends Vue {
   isSubmiting = false
   checked = false
 
+  @Watch('isShow')
+  isShowChanged (newVal) {
+    if (newVal) {
+      this.checked = false
+    }
+  }
+
   // 关闭弹窗
   closeModal () {
     this.hideModal()
@@ -94,6 +101,7 @@ export default class CheckAction extends Vue {
   }
 
   async update () {
+    this.isSubmiting = true
     const { id, params, type } = this.formatParams
     try {
       const res = await this.updateSchedule({ id, params })
