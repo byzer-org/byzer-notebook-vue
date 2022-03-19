@@ -368,7 +368,7 @@ export default {
       clearResult: 'CLEAR_RESULT',
       setDemo: 'SET_DEMO',
       getNotebookInfo: 'GET_NOTEBOOK_INFO',
-      updateSchedule: 'UPDATE_SCHEDULE',
+      updateSchedule: 'UPDATE_SCHEDULE'
     }),
     ...mapActions('CreateNoteBookModal', {
       callCreateNoteBookModal: 'CALL_MODAL'
@@ -896,6 +896,7 @@ export default {
           // 运行到哪个，哪个就切换为选中状态
           const index = this.newCellList.findIndex(i => i.id === id)
           this.selectCell = this.newCellList[index]
+          this.scrollToSelectCell(index)
           this.$refs[domRef] && this.$refs[domRef][0].handleRun()
         } else {
           this.confirmRunAll()
@@ -1014,36 +1015,26 @@ export default {
           editType: 'Byzer-lang'
         })
         this.changeMode('edit')
-        this.autoScrollCells(insertIndex, type)
+        this.autoScrollCells(insertIndex)
       } catch (e) {
         this.loadingSave = false
       }
     },
-    autoScrollCells (insertIndex, type) {
+    autoScrollCells (insertIndex) {
       this.selectCell = this.newCellList[insertIndex]
-      const scrollTop =
-        this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
-      this.$nextTick(() => {
-        const autoScrollHeight =
-          this.$refs['cellLi' + this.selectCell.id][0].offsetHeight
-        const plusHeight = scrollTop + autoScrollHeight
-        const minusHeight = scrollTop - 60
-        const scrollHeight = type === 'below' ? plusHeight : minusHeight
-        this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop =
-          scrollHeight
-      })
+      this.scrollToSelectCell(insertIndex)
     },
     setScrollTopToLocal () {
       const scrollList = JSON.parse(localStorage.getItem('scrollList')) || []
       this.$nextTick(() => {
-        const wrapper = this.$refs['dragWrapper' + this.currentNotebook.id]
+        const wrapper = this.$refs['dragWrapper' + this.currentNotebook.uniq]
         if (!wrapper) {
           return
         }
         const curScrollTop =
-          this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
+          this.$refs['dragWrapper' + this.currentNotebook.uniq].scrollTop
         const index = scrollList.findIndex(
-          v => v.id === this.currentNotebook.id
+          v => v.uniq === this.currentNotebook.uniq
         )
         if (index === -1) {
           scrollList.push({ ...this.currentNotebook, scrollTop: curScrollTop })
@@ -1121,7 +1112,7 @@ export default {
     },
     formatParams () {
       const {
-        scheduleInfo: { id, name, connects, entities, description },
+        scheduleInfo: { name, connects, entities, description },
         currentNotebook: { id: currentNotebookId }
       } = this.taskInfo
       const entity = entities.find(e => e.entity_id === Number(currentNotebookId))

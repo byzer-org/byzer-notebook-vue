@@ -230,7 +230,7 @@ export default class EditTask extends Vue {
       } else if (this.taskInfo?.scheduleInfo?.release_state === 'ONLINE') {
         // 如果调度时上线状态，提示是否需要在「Update」或者「Remove」之后保持上线状态
         // save / remove
-        const checkType = actionType === 'update' ? 'save' : actionTyp
+        const checkType = actionType === 'update' ? 'save' : actionType
         const { type } = await this.callCheckActionModal({
           type: checkType,
           ...cloneDeep(this.formatParams(actionType))
