@@ -36,7 +36,7 @@
         <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-clear_22" :disabled="isRunningAll" :text="$t('notebook.clearAllResult')" :handler="clearAllResult" />
         </div>
-        <el-dropdown class="btn" trigger="hover" @command="handleChanged" v-if="!isDemo">
+        <el-dropdown class="btn" @command="handleChanged" v-if="!isDemo">
           <span class="drop-text hasEvent">
             {{ editType }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
@@ -57,10 +57,31 @@
           @operateDemoSuccess="handleOperateDemoSuccess"
         />
         <div class="btn" v-if="is_scheduler_enabled && !isDemo">
-          <span v-if="added" class="add-to-schedule" @click="viewDAG">
-            <i class="el-ksd-icon-right_fill_22"></i>
-            {{ $t('schedules.addedToSchedule') }}
-          </span>
+          <div v-if="added" class="added-to-schedule-wrap">
+            <span class="add-to-schedule add-btn" @click="viewDAG">
+              <i class="el-ksd-icon-confirm_22"></i>
+              {{ $t('schedules.addedToSchedule') }}
+            </span>
+            <el-dropdown @command="handleCommand">
+              <span class="add-to-schedule update-btn">
+                <svg-icon
+                  class="menu-icon font-14"
+                  :icon-class="'schedule_update'"
+                ></svg-icon>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :command="'handleUpdate'">
+                  <div class="update-btn-dropdown-wrap">
+                    <svg-icon
+                      class="menu-icon font-14"
+                      :icon-class="'schedule_update'"
+                    ></svg-icon>
+                    <div class="update-btn-dropdown-text">{{ $t('schedules.updateScheduleTask') }}</div>
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
           <span
             v-else
             class="add-to-schedule"
@@ -335,6 +356,9 @@ export default {
     ...mapMutations('DAGViewModal', {
       setTaskInfo: 'SET_TASK_INFO'
     }),
+    ...mapActions('CheckActionModal', {
+      callCheckActionModal: 'CALL_MODAL'
+    }),
     ...mapActions({
       deleteNotebook: 'DEL_NOTEBOOK',
       saveNotebook: 'SAVE_NOTEBOOK',
@@ -343,7 +367,8 @@ export default {
       deleteCell: 'DELETE_CELL',
       clearResult: 'CLEAR_RESULT',
       setDemo: 'SET_DEMO',
-      getNotebookInfo: 'GET_NOTEBOOK_INFO'
+      getNotebookInfo: 'GET_NOTEBOOK_INFO',
+      updateSchedule: 'UPDATE_SCHEDULE'
     }),
     ...mapActions('CreateNoteBookModal', {
       callCreateNoteBookModal: 'CALL_MODAL'
@@ -871,6 +896,7 @@ export default {
           // 运行到哪个，哪个就切换为选中状态
           const index = this.newCellList.findIndex(i => i.id === id)
           this.selectCell = this.newCellList[index]
+          this.scrollToSelectCell(index)
           this.$refs[domRef] && this.$refs[domRef][0].handleRun()
         } else {
           this.confirmRunAll()
@@ -989,36 +1015,26 @@ export default {
           editType: 'Byzer-lang'
         })
         this.changeMode('edit')
-        this.autoScrollCells(insertIndex, type)
+        this.autoScrollCells(insertIndex)
       } catch (e) {
         this.loadingSave = false
       }
     },
-    autoScrollCells (insertIndex, type) {
+    autoScrollCells (insertIndex) {
       this.selectCell = this.newCellList[insertIndex]
-      const scrollTop =
-        this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
-      this.$nextTick(() => {
-        const autoScrollHeight =
-          this.$refs['cellLi' + this.selectCell.id][0].offsetHeight
-        const plusHeight = scrollTop + autoScrollHeight
-        const minusHeight = scrollTop - 60
-        const scrollHeight = type === 'below' ? plusHeight : minusHeight
-        this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop =
-          scrollHeight
-      })
+      this.scrollToSelectCell(insertIndex)
     },
     setScrollTopToLocal () {
       const scrollList = JSON.parse(localStorage.getItem('scrollList')) || []
       this.$nextTick(() => {
-        const wrapper = this.$refs['dragWrapper' + this.currentNotebook.id]
+        const wrapper = this.$refs['dragWrapper' + this.currentNotebook.uniq]
         if (!wrapper) {
           return
         }
         const curScrollTop =
-          this.$refs['dragWrapper' + this.currentNotebook.id].scrollTop
+          this.$refs['dragWrapper' + this.currentNotebook.uniq].scrollTop
         const index = scrollList.findIndex(
-          v => v.id === this.currentNotebook.id
+          v => v.uniq === this.currentNotebook.uniq
         )
         if (index === -1) {
           scrollList.push({ ...this.currentNotebook, scrollTop: curScrollTop })
@@ -1065,6 +1081,71 @@ export default {
       if (type === 'update') {
         this.viewDAG()
       }
+    },
+    handleCommand (command) {
+      this[command]()
+    },
+    async handleUpdate () {
+      const params = this.formatParams()
+      if (this.taskInfo.scheduleInfo?.release_state === 'ONLINE') {
+        try {
+          await this.callCheckActionModal({
+            type: 'update',
+            ...cloneDeep(params)
+          })
+        } catch (err) {
+          console.log(err)
+        }
+      } else {
+        try {
+          const res = await this.updateSchedule(params)
+          if (res?.msg === 'success') {
+            this.$message.success(
+              this.$t('schedules.actionSuccessMsg', { action: this.$t('update') })
+            )
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      this.checkNotebook()
+    },
+    formatParams () {
+      const {
+        scheduleInfo: { name, connects, entities, description },
+        currentNotebook: { id: currentNotebookId }
+      } = this.taskInfo
+      const entity = entities.find(e => e.entity_id === Number(currentNotebookId))
+
+      const params = {
+        name: name,
+        description: description,
+        modification: {
+          entity_type: entity.entity_type,
+          entity_id: entity.entity_id,
+          task_name: entity.name,
+          task_desc: entity.description,
+          action: 'update'
+        }
+      }
+      /**
+       * c
+       * { endPointSourceId: "notebook-xxxx", endPointTargetId: "notebook-xxxx" }
+       * endPointSourceId 上一个
+       * endPointTargetId 下一个
+       */
+      const previousTaskId = connects.find(
+        c =>
+          c.endPointTargetId === entity.entity_type + '-' + entity.entity_id
+      )?.endPointSourceId
+      const previousTaskName = entities.find(
+        e => e.entity_type + '-' + e.entity_id === previousTaskId
+      )?.name
+      const attach_to = entities.filter(
+        item => item.name === previousTaskName
+      )
+      attach_to.length > 0 ? params['modification']['attach_to'] = attach_to : null
+      return { id: this.taskInfo.scheduleInfo.id, params }
     }
   }
 }
@@ -1093,6 +1174,29 @@ export default {
           color: $--color-black;
           i {
             vertical-align: middle;
+          }
+        }
+        .added-to-schedule-wrap {
+          display: inline-flex;
+          align-items: center;
+          height: 100%;
+          & > span {
+            height: 38px;
+          }
+          .add-btn {
+            padding: 0 5px;
+            border: 1px solid $--border-update-schedule;
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            border-right: none;
+          }
+          .update-btn {
+            padding: 0 4px;
+            height: 38px;
+            background: $pattern-green-100;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            border: 1px solid $--border-update-schedule;
           }
         }
         .add-to-schedule {
@@ -1188,6 +1292,14 @@ export default {
     background: #FFFFFF;
     box-shadow: 0px 0px 32px rgba(53, 72, 100, 0.24);
     border: 1px solid #eeeeee;
+  }
+}
+.update-btn-dropdown-wrap {
+  display: flex;
+  align-items: center;
+  width: 240px;
+  .update-btn-dropdown-text {
+    margin-left: 10px;
   }
 }
 </style>

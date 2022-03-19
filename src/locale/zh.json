@@ -47,7 +47,7 @@
     "schedules": "调度",
     "settings": "设置",
     "give_feedback": "反馈",
-    "Kolo_docs": "Byzer Notebook 手册"
+    "Byzer_docs": "Byzer Notebook 手册"
   },
   "home": {
     "quick_start": "快速开始",
@@ -178,7 +178,7 @@
     "hotKeyAddCellAbove": "在上方添加单元格",
     "hotKeyAddCell": "在下方添加单元格",
     "hotKeyDeleteCell": "删除单元格",
-    "hotKeyCutCell": "切割单元格",
+    "hotKeyCutCell": "剪切单元格",
     "hotKeyCopyCell": "复制单元格",
     "hotKeyPasteCellAbove": "在上方粘贴单元格",
     "hotKeyPasteCell": "在下方粘贴单元格",
@@ -374,7 +374,8 @@
     "action_run": "继续",
     "action_stop": "停止",
     "action_rerun": "重新运行",
-    "runScheduleSuccess": "成功加入运行实例"
+    "runScheduleSuccess": "成功加入运行实例",
+    "updateScheduleTask": "更新调度任务"
   },
   "settings": {
     "timeoutSetting": "超时设置",

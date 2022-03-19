@@ -48,7 +48,7 @@
     "schedules": "Schedules",
     "settings": "Settings",
     "give_feedback": "Give Feedback",
-    "Kolo_docs": "Byzer Notebook Docs"
+    "Byzer_docs": "Byzer Notebook Docs"
   },
   "home": {
     "quick_start": "Quick Start",
@@ -373,7 +373,8 @@
     "action_run": "Resume",
     "action_stop": "Stop",
     "action_rerun": "Repeat Running",
-    "runScheduleSuccess": "Joined the running instance successfully"
+    "runScheduleSuccess": "Joined the running instance successfully",
+    "updateScheduleTask": "Update Schedule Task"
   },
   "settings": {
     "timeoutSetting": "Timeout Settings",

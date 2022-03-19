@@ -229,8 +229,10 @@ export default class EditTask extends Vue {
         this.callback({ actionType })
       } else if (this.taskInfo?.scheduleInfo?.release_state === 'ONLINE') {
         // 如果调度时上线状态，提示是否需要在「Update」或者「Remove」之后保持上线状态
+        // save / remove
+        const checkType = actionType === 'update' ? 'save' : actionType
         const { type } = await this.callCheckActionModal({
-          type: actionType,
+          type: checkType,
           ...cloneDeep(this.formatParams(actionType))
         })
         this.closeModal()
@@ -328,7 +330,7 @@ export default class EditTask extends Vue {
     }
     &-content {
       background: $--background-color-secondary;
-      border: 1px solid #e6ebf4;
+      border: 1px solid $--border-update-schedule;
       box-sizing: border-box;
       border-radius: 6px;
       padding: 16px 24px;
