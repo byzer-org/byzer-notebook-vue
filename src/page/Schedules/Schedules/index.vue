@@ -215,6 +215,9 @@ export default class Schedules extends Vue {
   /** full data */
   schedulesList = []
 
+  /** status */
+  isToggling = false
+
   /** methods */
   filterSchedules = debounce(function () {
     this.startLoading()
@@ -315,8 +318,18 @@ export default class Schedules extends Vue {
   }
 
   async handleToggle (row, release_state) {
-    await this.toggleSchedule({ ...row, release_state })
-    await this.querySchedules()
+    if (this.isToggling) {
+      return
+    }
+    this.isToggling = true
+    try {
+      await this.toggleSchedule({ ...row, release_state })
+    } catch (err) {
+      console.log(err)
+    } finally {
+      this.querySchedules()
+      this.isToggling = false
+    }
   }
 
   isOnline ({ release_state }) {

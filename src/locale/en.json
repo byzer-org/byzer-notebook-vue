@@ -373,7 +373,7 @@
     "action_run": "Resume",
     "action_stop": "Stop",
     "action_rerun": "Repeat Running",
-    "runScheduleSuccess": "Joined the running instance successfully",
+    "runScheduleSuccess": "Instance created successfully",
     "updateScheduleTask": "Update Schedule Task"
   },
   "settings": {

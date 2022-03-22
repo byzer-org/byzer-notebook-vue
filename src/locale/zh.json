@@ -374,7 +374,7 @@
     "action_run": "继续",
     "action_stop": "停止",
     "action_rerun": "重新运行",
-    "runScheduleSuccess": "成功加入运行实例",
+    "runScheduleSuccess": "运行实例创建成功",
     "updateScheduleTask": "更新调度任务"
   },
   "settings": {
