@@ -36,34 +36,126 @@
             <svg-icon class="node-label-icon" :icon-class="`file_${data.type}_16`" v-else></svg-icon>
               {{ node.label }}{{getEnding(node)}}
           </span>
-          <el-dropdown v-if="!(data.folder_id && data.is_demo)"  class="node-more node-actions" :style="{'left': treeOffsetWidth + 'px'}" @command="(command) => handleWorkspace(command, node)">
-            <span class="el-dropdown-link" @click.stop>
-              <el-button class="icon-bg" icon="el-ksd-icon-more_22" type="text" size="small"></el-button>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <template v-if="data.id">
-                <el-dropdown-item command="changeActiveTab">{{$t('open')}}</el-dropdown-item>
-                <el-dropdown-item command="handleRename" v-if="!data.is_demo">{{$t('rename')}}</el-dropdown-item>
-                <el-dropdown-item command="handleClone" >{{$t('clone')}}</el-dropdown-item>
-                <el-dropdown-item command="handleMove" v-if="!data.is_demo">{{$t('move')}}</el-dropdown-item>
-                <el-dropdown-item command="handleExport">{{$t('export')}}</el-dropdown-item>
-                <el-dropdown-item command="handleDelete" v-if="!data.is_demo && !isPublished(data)">
-                  <span class="txt-danger">{{$t('delete')}}</span>
-                </el-dropdown-item>
-              </template>
-              <template v-else>
-                <el-dropdown-item command="handleCreateFolder">{{$t('workspace.folderCreate')}}</el-dropdown-item>
-                <el-dropdown-item command="handleCreateNoteBook">{{$t('workspace.notebookCreate')}}</el-dropdown-item>
-                <el-dropdown-item command="handleCreateWorkflow">{{$t('workspace.workflowCreate')}}</el-dropdown-item>
-                <el-dropdown-item command="handleMove">{{$t('move')}}</el-dropdown-item>
-                <el-dropdown-item command="handleRename">{{$t('rename')}}</el-dropdown-item>
-                <el-dropdown-item command="handleClone">{{$t('clone')}}</el-dropdown-item>
-                <el-dropdown-item command="handleDelete"  v-if="showDeleteFolderBtn(node)">
-                  <span class="txt-danger">{{$t('delete')}}</span>
-                </el-dropdown-item>
-              </template>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-menu
+            v-if="!(data.folder_id && data.is_demo)"
+            class="node-more node-actions"
+            :style="{'left': treeOffsetWidth + 'px'}"
+            :mode="'horizontal'"
+            @select="(command) => handleWorkspace(command, node)"
+          >
+            <template v-if="data.id">
+              <el-submenu
+                :popper-class="'node-more-submenu'"
+                :index="'node-more'"
+              >
+                <template slot="title">
+                  <el-button
+                    class="icon-bg"
+                    icon="el-ksd-icon-more_22"
+                    type="text"
+                    size="small"
+                    @click.stop
+                  ></el-button>
+                </template>
+                <el-menu-item
+                  :index="'changeActiveTab'"
+                >
+                  {{ $t('open') }}
+                </el-menu-item>
+                <el-menu-item
+                  v-if="!data.is_demo"
+                  :index="'handleRename'"
+                >
+                  {{ $t('rename') }}
+                </el-menu-item>
+                <el-menu-item
+                  :index="'handleClone'"
+                >
+                  {{ $t('clone') }}
+                </el-menu-item>
+                <el-menu-item
+                  v-if="!data.is_demo"
+                  :index="'handleMove'"
+                >
+                  {{ $t('move') }}
+                </el-menu-item>
+                <el-submenu
+                  :index="$t('export')"
+                  :popper-class="'node-more-submenu-child'"
+                >
+                  <template slot="title">{{ $t('export') }}</template>
+                  <el-menu-item
+                    :index="'handleExport'"
+                  >
+                    {{ $t('export') + ' ' + getEnding(node) }}
+                  </el-menu-item>
+                  <el-menu-item
+                    :index="'handleExportByzer'"
+                  >
+                    {{ $t('export') + ' .byzer' }}
+                  </el-menu-item>
+                </el-submenu>
+                <el-menu-item
+                  v-if="!data.is_demo && !isPublished(data)"
+                  :index="'handleDelete'"
+                >
+                  <span class="txt-danger">{{ $t('delete') }}</span>
+                </el-menu-item>
+              </el-submenu>
+            </template>
+            <template v-else>
+              <el-submenu
+                :popper-class="'node-more-submenu'"
+                :index="'node-more'"
+              >
+                <template slot="title">
+                  <el-button
+                    class="icon-bg"
+                    icon="el-ksd-icon-more_22"
+                    type="text"
+                    size="small"
+                    @click.stop
+                  ></el-button>
+                </template>
+                <el-menu-item
+                  :index="'handleCreateFolder'"
+                >
+                  {{ $t('workspace.folderCreate') }}
+                </el-menu-item>
+                <el-menu-item
+                  :index="'handleCreateNoteBook'"
+                >
+                  {{ $t('workspace.notebookCreate') }}
+                </el-menu-item>
+                <el-menu-item
+                  :index="'handleCreateWorkflow'"
+                >
+                  {{ $t('workspace.workflowCreate') }}
+                </el-menu-item>
+                <el-menu-item
+                  :index="'handleMove'"
+                >
+                  {{ $t('move') }}
+                </el-menu-item>
+                <el-menu-item
+                  :index="'handleRename'"
+                >
+                  {{ $t('rename') }}
+                </el-menu-item>
+                <el-menu-item
+                  :index="'handleClone'"
+                >
+                  {{ $t('clone') }}
+                </el-menu-item>
+                <el-menu-item
+                  v-if="showDeleteFolderBtn(node)"
+                  :index="'handleDelete'"
+                >
+                  <span class="txt-danger">{{ $t('delete') }}</span>
+                </el-menu-item>
+              </el-submenu>
+            </template>
+          </el-menu>
         </div>
       </el-tree>
     </div>
@@ -112,6 +204,7 @@ export default class WorkspaceList extends Vue {
   originalList = []
   nodeScrollWidth = 0
   originalWidth = this.defaultWidth
+
   @Watch('leftWidth')
   onLeftWidthChange (newVal) {
     this.originalWidth = newVal || this.defaultWidth
@@ -191,6 +284,9 @@ export default class WorkspaceList extends Vue {
   }
 
   handleWorkspace (command, node) {
+    if (!command) {
+      return
+    }
     this[command](node)
   }
   async handleCreateFolder (node) {
@@ -230,6 +326,9 @@ export default class WorkspaceList extends Vue {
   }
   handleExport (node) {
     this.$emit('handleExport', this.getNotebookItem(node))
+  }
+  handleExportByzer (node) {
+    this.$emit('handleExport', {...this.getNotebookItem(node), output: 'byzer'})
   }
   handleImport () {
     this.$emit('handleImport')
@@ -442,7 +541,7 @@ export default class WorkspaceList extends Vue {
         &:hover {
           .custom-tree-node {
             .node-actions {
-              display: block;
+              visibility: visible;
             }
           }
         }
@@ -454,11 +553,74 @@ export default class WorkspaceList extends Vue {
             }
           }
           .node-actions {
-            display: none;
+            visibility: hidden;
             position: absolute;
             top: 6px;
+            &.el-menu {
+              background: none;
+            }
+            &.el-menu--horizontal {
+              border: none;
+            }
+            .el-menu-item, .el-submenu__title {
+              padding: 0 !important;
+              width: 26px;
+              height: 23px;
+              line-height: 23px;
+              text-align: center;
+              border: none;
+              &:hover {
+                background: none;
+              }
+              & > i {
+                display: none;
+              }
+            }
           }
         }
+      }
+    }
+  }
+}
+.node-more-submenu {
+  .el-menu {
+    width: fit-content;
+    min-width: 72px;
+  }
+  .el-submenu,
+  .el-menu-item {
+    padding: 0 20px !important;
+    &:hover {
+      color: $pattern-blue-300 !important;
+      background: $pattern-blue-200;
+    }
+    &.is-active {
+      color: $--color-info !important;
+    }
+    .el-submenu__icon-arrow.el-icon-arrow-right {
+      top: 55%;
+      right: 10px;
+    }
+  }
+  .el-submenu {
+    padding: 0 !important;
+    .el-submenu__title {
+      padding: 0 20px;
+      color: $--color-info !important;
+      &:hover {
+        color: $pattern-blue-300 !important;
+        background: $pattern-blue-200;
+      }
+    }
+    & > .el-submenu__title .el-submenu__icon-arrow,
+    &.is-opened > .el-submenu__title .el-submenu__icon-arrow {
+      transform: rotateZ(0);
+      transition: 0s;
+    }
+    .node-more-submenu-child {
+      .el-menu-item {
+        width: 100%;
+        min-width: 72px;
       }
     }
   }
