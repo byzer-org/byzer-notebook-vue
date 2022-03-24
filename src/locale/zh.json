@@ -275,6 +275,8 @@
   },
   "jobs": {
     "jobHistory": "任务历史",
+    "latest": "最近",
+    "archived": "已归档",
     "filterHolder": "搜索任务 Id",
     "RUNNING": "运行中",
     "COMPLETED": "已完成",
