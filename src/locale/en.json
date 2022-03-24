@@ -274,6 +274,8 @@
   },
   "jobs": {
     "jobHistory": "Job History",
+    "latest": "Latest",
+    "archived": "Archived",
     "filterHolder": "Search By Job Id",
     "RUNNING": "RUNNING",
     "COMPLETED": "COMPLETED",
