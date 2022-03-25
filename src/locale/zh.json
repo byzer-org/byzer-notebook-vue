@@ -304,6 +304,7 @@
     "remove_task": "移除任务",
     "onlineSchedule": "上线调度",
     "actionSuccessMsg": "{action}调度任务成功。",
+    "updateSuccessMsg": "调度任务更新成功",
     "editTaskConfirmInfo": "确定{action}任务吗？当前任务所属调度为“上线”状态，在该调度上{action}任务会导致其“下线”。若需要重新上线该调度，请勾选左下角“上线调度”，或稍后前往「调度」进行设置。",
     "editTaskConfirmTitle": "{action}任务",
     "title": "调度",

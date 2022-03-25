@@ -102,13 +102,11 @@ export default class CheckAction extends Vue {
 
   async update () {
     this.isSubmiting = true
-    const { id, params, type } = this.formatParams
+    const { id, params } = this.formatParams
     try {
       const res = await this.updateSchedule({ id, params })
       if (res?.msg === 'success') {
-        this.$message.success(
-          this.$t('schedules.actionSuccessMsg', { action: this.$t(type) })
-        )
+        this.$t('schedules.updateSuccessMsg')
       }
       if (this.checked) {
         await this.checkOnline()
