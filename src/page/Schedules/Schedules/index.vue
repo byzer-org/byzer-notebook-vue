@@ -22,7 +22,7 @@
         show-overflow-tooltip
         :prop="'id'"
         :label="$t('schedules.schId')"
-        :min-width="'100'"
+        :min-width="'120'"
       ></el-table-column>
       <el-table-column
         show-overflow-tooltip
@@ -62,7 +62,7 @@
       <el-table-column
         show-overflow-tooltip
         :prop="'description'"
-        :min-width="'160'"
+        :min-width="'180'"
       >
         <template slot="header">
           <div class="schedule-type-header">

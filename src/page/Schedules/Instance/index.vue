@@ -38,7 +38,7 @@
       <el-table-column
         show-overflow-tooltip
         :prop="'owner'"
-        :min-width="'100'"
+        :min-width="'110'"
         :label="$t('schedules.ins_executeUser')"
       ></el-table-column>
       <el-table-column
@@ -171,11 +171,13 @@ import { cloneDeep } from 'lodash'
 import moment from 'moment'
 import { ACTION_OF_STATE, INSTANCE_STATE, INSTANCE_STATE_MAP } from '../../../config'
 import { actionsTypes } from '../../../store'
+import axios from 'axios'
 
 @Component({
   methods: {
     ...mapActions({
       getInstanceList: actionsTypes.GET_INSTANCE_LIST,
+      getInstance: actionsTypes.GET_INSTANCE,
       getInstanceById: actionsTypes.GET_INSTANCE_BY_ID,
       setInstanceState: actionsTypes.SET_INSTANCE_STATE
     }),
@@ -212,8 +214,16 @@ export default class Instance extends Vue {
   /** full data */
   instanceList = []
 
+  /** initial loading */
+  isInit = true
+
+  /** polling */
+  timer = null
+
+  cancelSearch = ''
+
   /** methods */
-  filterSchedules () {
+  filterInstance () {
     this.startLoading()
     const { pageIndex, pageSize } = this.pagination
     const { prop, order } = this.sortParam
@@ -243,22 +253,33 @@ export default class Instance extends Vue {
   @Watch('keyword')
   keywordChanged () {
     this.resetPageIndex()
-    this.filterSchedules()
+    this.filterInstance()
   }
 
   back () {
     this.$router.push({ name: 'schedulesHome' })
   }
 
-  async queryInstance () {
+  queryInstance () {
+    this.pollingData()
     this.startLoading()
-    try {
-      const res = await this.getInstanceList(this.params.id)
-      this.instanceList = cloneDeep(res.data)
-      this.filterSchedules()
-    } finally {
+    const CancelToken = axios.CancelToken
+    axios({
+      method: 'get',
+      url: `/api/schedule/task/instance?task_id=${this.params.id}`,
+      cancelToken: new CancelToken(c => {
+        this.cancelSearch = c
+      })
+    }).then(res => {
+      this.instanceList = cloneDeep(res.data?.data || [])
+    }).catch(err => {
+      console.log(err)
+    }).finally (() => {
+      this.cancelSearch = ''
+      this.filterInstance()
       this.stopLoading()
-    }
+      this.pollingData()
+    })
   }
 
   /**
@@ -284,15 +305,43 @@ export default class Instance extends Vue {
    * @Date: 2022-03-17 10:58:13
    */
   async handleAction ({ id, state }, index) {
+    if (this.cancelSearch) {
+      this.cancelSearch('cancel')
+    }
+    this.pollingData()
     try {
       this.startLoading()
       await this.setInstanceState({ id, status: ACTION_OF_STATE[state][index] })
       // dolphin 切换状态有延迟，延迟 500 ms 再刷新列表
       setTimeout(async () => {
-        await this.queryInstance()
+        await this.getInstanceState({ id, state })
       }, 500)
     } catch (err) {
       console.log(err)
+    } finally {
+      this.pollingData()
+    }
+  }
+
+  async getInstanceState ({ id, state }) {
+    try {
+      const res = await this.getInstance(id)
+      if (res.data) {
+        if (res.data === state) {
+          await this.getInstanceState({ id, state })
+        } else {
+          this.instanceList = this.instanceList.map(i => {
+            if (i.id === id) {
+              i.state = res.data
+            }
+            return i
+          })
+        }
+      }
+    } catch (err) {
+      console.log(err)
+    } finally {
+      this.filterInstance()
     }
   }
 
@@ -340,26 +389,40 @@ export default class Instance extends Vue {
   handleFilterChange ({ release_type }) {
     this.releaseTypeFilters = release_type
     this.resetPageIndex()
-    this.filterSchedules()
+    this.filterInstance()
   }
 
   handleSizeChange (pageSize) {
     this.pagination.pageSize = pageSize
     this.resetPageIndex()
-    this.filterSchedules()
+    this.filterInstance()
   }
 
   handleCurrentChange (pageIndex) {
     this.pagination.pageIndex = pageIndex
-    this.filterSchedules()
+    this.filterInstance()
   }
 
   resetPageIndex () {
     this.pagination.pageIndex = 1
   }
 
+  pollingData () {
+    if (this.timer) {
+      clearInterval(this.timer)
+      this.timer = null
+    } else {
+      this.timer = setInterval(() => {
+        this.queryInstance()
+      }, 5000)
+    }
+  }
+
   startLoading () {
-    this.loading = true
+    if (this.isInit) {
+      this.loading = true
+      this.isInit = false
+    }
   }
 
   stopLoading () {
@@ -369,6 +432,13 @@ export default class Instance extends Vue {
   mounted () {
     this.params = this.$route.params
     this.queryInstance()
+    this.pollingData()
+  }
+
+  destroyed () {
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
   }
 }
 </script>

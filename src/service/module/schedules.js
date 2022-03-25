@@ -9,6 +9,8 @@ export default {
   getNotebookInfo: params => axios.get(`/api/schedule/task?${params}`),
   // all instance
   getInstanceList: id => axios.get(`/api/schedule/task/instance?task_id=${id}`),
+  // instance
+  getInstance: id => axios.get(`/api/schedule/task/instance/${id}/status`),
   // set schedule
   setSchedule: params => axios.post('/api/schedule/task', params),
   // update/remove schedule
