@@ -32,7 +32,7 @@
       ></el-table-column>
       <el-table-column
         show-overflow-tooltip
-        :label="$t('schedules.type')"
+        :label="$t('schedules.status')"
         :min-width="'80'"
       >
         <template slot-scope="scope">

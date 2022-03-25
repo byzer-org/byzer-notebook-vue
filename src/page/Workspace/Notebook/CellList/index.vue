@@ -62,7 +62,7 @@
               <i class="el-ksd-icon-confirm_22"></i>
               {{ $t('schedules.addedToSchedule') }}
             </span>
-            <el-dropdown @command="handleCommand">
+            <el-dropdown @command="handleCommand" trigger="click">
               <span class="add-to-schedule update-btn">
                 <svg-icon
                   class="menu-icon font-14"
@@ -70,15 +70,15 @@
                 ></svg-icon>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :command="'handleUpdate'">
-                  <div class="update-btn-dropdown-wrap">
+                <el-dropdown-item :command="'handleUpdate'">{{ $t('schedules.updateScheduleTask') }}</el-dropdown-item>
+                  <!-- <div class="update-btn-dropdown-wrap">
                     <svg-icon
                       class="menu-icon font-14"
                       :icon-class="'schedule_update'"
                     ></svg-icon>
                     <div class="update-btn-dropdown-text">{{ $t('schedules.updateScheduleTask') }}</div>
                   </div>
-                </el-dropdown-item>
+                </el-dropdown-item> -->
               </el-dropdown-menu>
             </el-dropdown>
           </div>

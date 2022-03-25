@@ -38,7 +38,7 @@
         </el-button>
         <el-button
           v-if="formatParams.type === 'remove'"
-          type="danger"
+          type="primary"
           size="medium"
           :loading="isSubmiting"
           @click="remove"

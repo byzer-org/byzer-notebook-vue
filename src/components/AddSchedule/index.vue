@@ -203,9 +203,7 @@ export default class Addschedule extends Vue {
       date: [],
       cron: ''
     }
-    this.$refs.scheduleForm.executionTimeResult = this.$t(
-      'schedules.toBeCalculated'
-    )
+    this.$refs.scheduleForm.executionTimeResult = ''
     this.$nextTick(() => {
       this.handleClearValidate()
     })

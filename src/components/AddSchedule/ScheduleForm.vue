@@ -131,8 +131,9 @@
         v-model="executionTimeResult"
         type="textarea"
         :resize="'none'"
+        readonly
         :autosize="{ minRows: 5, maxRows: 5 }"
-        disabled
+        :placeholder="$t('schedules.toBeCalculated')"
       ></el-input>
     </el-form-item>
     <el-form-item prop="schedule_desc">
@@ -194,11 +195,6 @@ export default class Addschedule extends Vue {
       this.querySchedules()
     }
     this.clearValidate()
-  }
-
-  @Watch('lang', { immediate: true })
-  onLangChanged () {
-    this.executionTimeResult = this.$t('schedules.toBeCalculated')
   }
 
   @Watch('scheduleType')

@@ -1,7 +1,7 @@
 <template>
   <div class="jobs-page page-outer-padding">
     <div class="page-inner-header">{{$t('jobs.jobHistory')}}</div>
-    <el-tabs class="tab-wrap" v-model="activeName" @tab-click="handleClick">
+    <el-tabs class="tab-wrap" v-model="activeName">
       <el-tab-pane :label="$t('jobs.latest')" name="latest">
         <JobsTable :dataType="'latest'"></JobsTable>
       </el-tab-pane>
