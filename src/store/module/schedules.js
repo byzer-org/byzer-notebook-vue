@@ -20,6 +20,9 @@ export default {
     [types.GET_INSTANCE_LIST]: (_, payload) => {
       return schedules.getInstanceList(payload)
     },
+    [types.GET_INSTANCE]: (_, payload) => {
+      return schedules.getInstance(payload)
+    },
     [types.SET_SCHEDULE]: (_, payload) => {
       return schedules.setSchedule(payload)
     },

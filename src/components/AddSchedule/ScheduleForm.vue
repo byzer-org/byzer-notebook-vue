@@ -244,9 +244,14 @@ export default class Addschedule extends Vue {
   handleScheduleNameChange (value) {
     this.scheduleForm.previous_task = ''
     this.handleInput('schedule_name', value)
-    this.taskList = this.scheduleList.find(
+    const schedule = this.scheduleList.find(
       item => item.name === value
-    )?.entities
+    )
+    this.taskList = schedule?.entities
+    this.handleInput('date', [schedule?.schedule.start_time, schedule?.schedule.end_time])
+    this.handleInput('cron', schedule?.schedule.crontab)
+    this.expressionChange()
+    this.handleInput('schedule_desc', schedule?.description)
     this.$emit('onTaskListChange', {
       previousTaskList: this.taskList,
       scheduleList: this.scheduleList
