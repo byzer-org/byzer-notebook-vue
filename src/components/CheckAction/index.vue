@@ -106,7 +106,9 @@ export default class CheckAction extends Vue {
     try {
       const res = await this.updateSchedule({ id, params })
       if (res?.msg === 'success') {
-        this.$t('schedules.updateSuccessMsg')
+        this.$message.success(
+          this.$t('schedules.updateSuccessMsg')
+        )
       }
       if (this.checked) {
         await this.checkOnline()
