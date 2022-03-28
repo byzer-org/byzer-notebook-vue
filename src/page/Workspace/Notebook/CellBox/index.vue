@@ -247,8 +247,7 @@ export default {
         this.loadingExcute = true
         const res = await this.excuteCell(params)
         this.loadingExcute = false
-        this.jobId = res.data.job_id
-        this.getStatus(this.jobId)
+        this.getStatus(res.data.job_id)
       } catch (err) {
         this.loadingExcute = false
         this.excuteResult = err.data
