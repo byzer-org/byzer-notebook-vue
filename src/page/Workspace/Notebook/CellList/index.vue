@@ -62,25 +62,27 @@
               <i class="el-ksd-icon-confirm_22"></i>
               {{ $t('schedules.addedToSchedule') }}
             </span>
-            <el-dropdown @command="handleCommand" trigger="click">
-              <span class="add-to-schedule update-btn">
-                <svg-icon
-                  class="menu-icon font-14"
-                  :icon-class="'schedule_update'"
-                ></svg-icon>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :command="'handleUpdate'">{{ $t('schedules.updateScheduleTask') }}</el-dropdown-item>
-                  <!-- <div class="update-btn-dropdown-wrap">
-                    <svg-icon
-                      class="menu-icon font-14"
-                      :icon-class="'schedule_update'"
-                    ></svg-icon>
-                    <div class="update-btn-dropdown-text">{{ $t('schedules.updateScheduleTask') }}</div>
-                  </div>
-                </el-dropdown-item> -->
-              </el-dropdown-menu>
-            </el-dropdown>
+            <el-tooltip placement="top" :content="$t('schedules.updateScheduleTask')">
+              <el-dropdown @command="handleCommand" trigger="click">
+                <span class="add-to-schedule update-btn">
+                  <svg-icon
+                    class="menu-icon font-14"
+                    :icon-class="'schedule_update'"
+                  ></svg-icon>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="'handleUpdate'">{{ $t('schedules.updateScheduleTask') }}</el-dropdown-item>
+                    <!-- <div class="update-btn-dropdown-wrap">
+                      <svg-icon
+                        class="menu-icon font-14"
+                        :icon-class="'schedule_update'"
+                      ></svg-icon>
+                      <div class="update-btn-dropdown-text">{{ $t('schedules.updateScheduleTask') }}</div>
+                    </div>
+                  </el-dropdown-item> -->
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-tooltip>
           </div>
           <span
             v-else
@@ -1100,15 +1102,18 @@ export default {
         try {
           const res = await this.updateSchedule(params)
           if (res?.msg === 'success') {
-            this.$message.success(
-              this.$t('schedules.actionSuccessMsg', { action: this.$t('update') })
-            )
+            this.showUpdatesuccessMsg()
           }
         } catch (err) {
           console.log(err)
         }
       }
       this.checkNotebook()
+    },
+    showUpdatesuccessMsg () {
+      this.$message.success(
+        this.$t('schedules.updateSuccessMsg')
+      )
     },
     formatParams () {
       const {

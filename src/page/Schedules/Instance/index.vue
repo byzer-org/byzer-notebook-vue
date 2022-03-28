@@ -112,7 +112,7 @@
                 v-if="!checkScope(['2', '5'], scope.row.state)"
                 class="el-ksd-icon-pause_with_border_22 content-icon hasEvent"
                 :class="{ 'setting-disabled': !checkScope(['0'], scope.row.state) }"
-                @click="handleAction(scope.row, 0)"
+                @click="handleAction(scope.row, 0, ['0'])"
               ></i>
             </el-tooltip>
             <!-- resume -->
@@ -132,7 +132,7 @@
               <i
                 class="el-ksd-icon-stop_with_border_22 content-icon hasEvent"
                 :class="{ 'setting-disabled': !checkScope(['0', '8', '9', '10'], scope.row.state) }"
-                @click="handleAction(scope.row, 2)"
+                @click="handleAction(scope.row, 2, ['0', '8', '9', '10'])"
               ></i>
             </el-tooltip>
             <!-- repeat running -->
@@ -142,7 +142,7 @@
               <i
                 class="el-ksd-icon-resure_22 content-icon hasEvent"
                 :class="{ 'setting-disabled': !checkScope(['2', '5'], scope.row.state) }"
-                @click="handleAction(scope.row, 3)"
+                @click="handleAction(scope.row, 3, ['2', '5'])"
               ></i>
             </el-tooltip>
           </div>
@@ -304,7 +304,10 @@ export default class Instance extends Vue {
    * @param {*} index
    * @Date: 2022-03-17 10:58:13
    */
-  async handleAction ({ id, state }, index) {
+  async handleAction ({ id, state }, index, scopeList = []) {
+    if (scopeList.length > 0 && !this.checkScope(scopeList, state)) {
+      return
+    }
     if (this.cancelSearch) {
       this.cancelSearch('cancel')
     }
