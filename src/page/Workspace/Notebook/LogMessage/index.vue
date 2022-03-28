@@ -38,13 +38,17 @@ export default class LogMessage extends Vue {
 
   @Watch('status')
   onResultChange (newVal) {
-    if (newVal === 'RUNNING') {
-      this.offset = -1
-      this.logList = []
-      this.getLogs()
-    } else {
+    if (newVal !== 'RUNNING') {
       window.clearTimeout(this.timer)
+      this.getLogs()
     }
+  }
+
+  @Watch('jobId')
+  onJobIdChange () {
+    this.offset = -1
+    this.logList = []
+    this.getLogs()
   }
 
   @Watch('activeNotebook', { immediate: true, deep: true })
