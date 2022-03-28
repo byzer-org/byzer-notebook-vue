@@ -210,6 +210,7 @@ export default class JobsTable extends Vue {
   onKeywordChange () {
     window.clearTimeout(this.timer)
     this.timer = setTimeout(() => {
+      this.filterData.page_offset = 0
       this.fetchData()
     }, 1000)
   }
