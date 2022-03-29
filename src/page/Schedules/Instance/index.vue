@@ -310,6 +310,7 @@ export default class Instance extends Vue {
     }
     if (this.cancelSearch) {
       this.cancelSearch('cancel')
+      this.cancelSearch = ''
     }
     this.pollingData()
     try {
@@ -411,6 +412,9 @@ export default class Instance extends Vue {
   }
 
   pollingData () {
+    if (this && this._isDestroyed) {
+      return
+    }
     if (this.timer) {
       clearInterval(this.timer)
       this.timer = null
@@ -438,7 +442,10 @@ export default class Instance extends Vue {
     this.pollingData()
   }
 
-  destroyed () {
+  beforeDestroy () {
+    if (this.cancelSearch) {
+      this.cancelSearch('cancel')
+    }
     if (this.timer) {
       clearInterval(this.timer)
     }
