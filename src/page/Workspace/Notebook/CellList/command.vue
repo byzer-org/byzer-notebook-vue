@@ -72,7 +72,7 @@ export default {
       this.$shortcut.unbind('3')
       this.$shortcut.unbind('4')
     },
-    bindAllKey () {
+    bindAllKey: debounce(function () {
       if (this.currentNotebook.id !== this.activeNotebookId) {
         return
       } else if (this.currentNotebook.type === 'workflow') {
@@ -88,7 +88,7 @@ export default {
       this.$shortcut.bind('up', debounce(this.selectPrevCell, 200))
       this.$shortcut.bind('down', debounce(this.selectNextCell, 200))
       this.bindSomeKey()
-    },
+    }, 200),
     bindSomeKey () {
       if (this.mode === 'command') {
         this.$shortcut.bind('A', debounce(this.insertCellUp, 200))
