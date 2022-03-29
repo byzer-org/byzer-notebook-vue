@@ -27,12 +27,12 @@
         </el-form-item>
         <div class="schedule-form">
           <div class="schedule-form-label">
-            <span class="txt-danger">*</span>
-            <span class="label">{{ $t('schedules.schedule') }}</span>
+            <span class="txt-danger">*&nbsp;</span>
+            <span class="label">{{ $t('schedules.addSchedule') }}</span>
           </div>
           <div class="schedule-form-content">
             <el-form-item class="type-select">
-              <el-radio-group v-model="scheduleType">
+              <el-radio-group v-model="scheduleType" @change="handleScheduleChange">
                 <el-radio label="new">
                   {{ $t('schedules.createSchedule') }}
                 </el-radio>
@@ -150,10 +150,15 @@ export default class Addschedule extends Vue {
     }
     if (newVal) {
       this.$nextTick(() => {
+        this.scheduleType = 'new'
         this.handleClearValidate()
         this.$refs['scheduleForm'].querySchedules()
       })
     }
+  }
+
+  handleScheduleChange () {
+    this.clearValidate()
   }
 
   changeScheduleValue (key, value) {
@@ -198,10 +203,10 @@ export default class Addschedule extends Vue {
       date: [],
       cron: ''
     }
-    this.$refs.scheduleForm.executionTimeResult = this.$t(
-      'schedules.toBeCalculated'
-    )
-    this.handleClearValidate()
+    this.$refs.scheduleForm.executionTimeResult = ''
+    this.$nextTick(() => {
+      this.handleClearValidate()
+    })
   }
 
   checkForm () {
@@ -352,7 +357,7 @@ export default class Addschedule extends Vue {
     }
     &-content {
       background: $--background-color-secondary;
-      border: 1px solid #e6ebf4;
+      border: 1px solid $--border-update-schedule;
       box-sizing: border-box;
       border-radius: 6px;
       padding: 16px 24px;

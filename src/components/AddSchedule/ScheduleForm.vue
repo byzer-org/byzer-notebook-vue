@@ -40,18 +40,6 @@
       </el-select>
     </el-form-item>
     <el-form-item
-      v-if="scheduleType === 'new'"
-      prop="schedule_desc"
-      :label="$t(`schedules.scheduleDesc`)"
-    >
-      <el-input
-        v-model="scheduleForm.schedule_desc"
-        :maxlength="50"
-        :placeholder="$t('pleaseInput')"
-        @change="(value) => handleInput('schedule_desc', value)"
-      />
-    </el-form-item>
-    <el-form-item
       v-if="scheduleType === 'old' && scheduleForm.schedule_name"
       prop="previous_task"
     >
@@ -78,7 +66,12 @@
         ></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item prop="date" :label="$t(`schedules.dateSelect`)">
+    <el-form-item prop="date">
+      <span
+        slot="label"
+        :class="{ 'schedule-form-item-disabled': scheduleType === 'old' }"
+      >{{ $t(`schedules.dateSelect`) }}
+      </span>
       <el-date-picker
         style="width: 100%"
         v-model="scheduleForm.date"
@@ -89,10 +82,15 @@
         :start-placeholder="$t('schedules.startDate')"
         :end-placeholder="$t('schedules.endDate')"
         value-format="yyyy-MM-dd"
-        @change="(value) => handleInput('date', value)"
+        @change="handleDateRangeChange"
       ></el-date-picker>
     </el-form-item>
-    <el-form-item prop="cron" :label="$t(`schedules.timing`)">
+    <el-form-item prop="cron">
+      <span
+        slot="label"
+        :class="{ 'schedule-form-item-disabled': scheduleType === 'old' }"
+      >{{ $t(`schedules.timing`) }}
+      </span>
       <div class="schedule-form-crontab-wrap">
         <el-popover v-model="showCron" v-if="scheduleType === 'new'">
           <Crontab
@@ -104,7 +102,7 @@
             slot="reference"
             style="width: 100%"
             v-model="scheduleForm.cron"
-            :placeholder="$t('schedules.cronRequired')"
+            :placeholder="$t('schedules.cronPlaceholder')"
           ></el-input>
         </el-popover>
         <el-input
@@ -112,26 +110,45 @@
           style="width: 100%"
           v-model="scheduleForm.cron"
           disabled
-          :placeholder="$t('schedules.cronRequired')"
+          :placeholder="$t('schedules.cronPlaceholder')"
         ></el-input>
         <el-button
-          type="primary"
           size="mini"
           :disabled="!scheduleForm.cron || scheduleType === 'old'"
-          @click="handleExcute"
+          @click="expressionChange"
         >
           {{ $t('schedules.executionTime') }}
         </el-button>
       </div>
     </el-form-item>
-    <el-form-item :label="$t(`schedules.futureExcuteTime`)">
+    <el-form-item>
+      <span
+        slot="label"
+        :class="{ 'schedule-form-item-disabled': scheduleType === 'old' }"
+      >{{ $t(`schedules.futureExcuteTime`) }}
+      </span>
       <el-input
         v-model="executionTimeResult"
         type="textarea"
         :resize="'none'"
+        readonly
         :autosize="{ minRows: 5, maxRows: 5 }"
-        disabled
+        :placeholder="$t('schedules.toBeCalculated')"
       ></el-input>
+    </el-form-item>
+    <el-form-item prop="schedule_desc">
+      <span
+        slot="label"
+        :class="{ 'schedule-form-item-disabled': scheduleType !== 'new' }"
+      >{{ $t(`schedules.scheduleDesc`) }}
+      </span>
+      <el-input
+        v-model="scheduleForm.schedule_desc"
+        :maxlength="50"
+        :placeholder="$t('pleaseInput')"
+        :disabled="scheduleType !== 'new'"
+        @change="(value) => handleInput('schedule_desc', value)"
+      />
     </el-form-item>
   </el-form>
 </template>
@@ -173,21 +190,11 @@ export default class Addschedule extends Vue {
   showCron = false
   executionTimeResult = ''
 
-  crontabFill (value) {
-    this.handleInput('cron', value)
-  }
-
   mounted () {
-    this.executionTimeResult = this.$t('schedules.toBeCalculated')
     if (this.scheduleType === 'old') {
       this.querySchedules()
     }
     this.clearValidate()
-  }
-
-  @Watch('lang')
-  onLangChanged () {
-    this.executionTimeResult = this.$t('schedules.toBeCalculated')
   }
 
   @Watch('scheduleType')
@@ -196,6 +203,11 @@ export default class Addschedule extends Vue {
       this.querySchedules()
     }
     this.clearValidate()
+  }
+
+  @Watch('scheduleForm.cron', { immediate: true })
+  onCronChanged (newVal) {
+    this.cronValidator({}, newVal, () => {})
   }
 
   get rules () {
@@ -221,6 +233,10 @@ export default class Addschedule extends Vue {
     }
   }
 
+  crontabFill (value) {
+    this.handleInput('cron', value)
+  }
+
   clearValidate () {
     this.$emit('clearValidate')
   }
@@ -228,17 +244,18 @@ export default class Addschedule extends Vue {
   handleScheduleNameChange (value) {
     this.scheduleForm.previous_task = ''
     this.handleInput('schedule_name', value)
-    this.taskList = this.scheduleList.find(
+    const schedule = this.scheduleList.find(
       item => item.name === value
-    )?.entities
+    )
+    this.taskList = schedule?.entities
+    this.handleInput('date', [schedule?.schedule.start_time, schedule?.schedule.end_time])
+    this.handleInput('cron', schedule?.schedule.crontab)
+    this.expressionChange()
+    this.handleInput('schedule_desc', schedule?.description)
     this.$emit('onTaskListChange', {
       previousTaskList: this.taskList,
       scheduleList: this.scheduleList
     })
-  }
-
-  handleExcute () {
-    this.expressionChange()
   }
 
   cronValidator (_, value, callback) {
@@ -248,8 +265,14 @@ export default class Addschedule extends Vue {
       } else if (!isValidCronExpression(value)) {
         return callback(new Error(this.$t('schedules.cronIsWrong')))
       }
+      this.expressionChange()
     }
     return callback()
+  }
+
+  handleDateRangeChange (value) {
+    this.cronValidator({}, this.scheduleForm.cron, () => {})
+    this.handleInput('date', value)
   }
 
   async querySchedules () {
@@ -296,5 +319,8 @@ export default class Addschedule extends Vue {
   .el-button {
     margin-left: 20px;
   }
+}
+.schedule-form-item-disabled {
+  color: $--color-text-placeholder;
 }
 </style>

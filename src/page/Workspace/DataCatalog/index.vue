@@ -7,7 +7,7 @@
         :class="{'in-refresh': refreshing}"
         :icon="'el-ksd-icon-refresh_22'"
         :text="$t('refresh')"
-        :handler="refreshHive"
+        :handler="refreshTreeNode"
       ></icon-btn>
     </div>
     <div class="catalog-wrapper" ref="catalogWrapper" @scroll="scrollTree">
@@ -131,10 +131,10 @@ export default class DataCataLog extends Vue {
     return this.originalWidth + this.nodeScrollWidth - 55
   }
 
-  async refreshHive () {
+  async refreshTreeNode () {
     this.refreshing = true
     await setTimeout(() => {
-      this.$refs['tableTree'].getNode(this.allDataList[0]).parent.childNodes.forEach(i => {
+      this.$refs['tableTree'].getNode(this.allDataList[2])?.parent.childNodes.forEach(i => {
         this.$refs['tableTree'].remove(i.id)
         i.expanded = false
         i.loaded = false

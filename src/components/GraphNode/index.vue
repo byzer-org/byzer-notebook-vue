@@ -1,6 +1,8 @@
 <template>
-  <el-tooltip placement="top" :content="taskEntity.description">
-    <el-tag>{{ taskEntity.name }}</el-tag>
+  <el-tooltip placement="top" :content="taskEntity.name">
+    <div class="node-circle">
+      <div class="node-task-name">{{ taskEntity.name }}</div>
+    </div>
   </el-tooltip>
 </template>
 
@@ -19,11 +21,28 @@ export default class GraphNode extends Vue {
 
 <style lang="scss" scoped>
 @import '../../assets/css/variable.scss';
-.el-tag {
-  width: 100px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  text-align: center;
-  border-color: $--border-color-tag;
+.node-circle {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  background: $pattern-blue-100;
+  border: 2px solid $--color-primary;
+  border-radius: 16px;
+
+  .node-task-name {
+    position: absolute;
+    top: 40px;
+    left: -46px;
+    width: 120px;
+    color: $--color-text-primary;
+    text-align: center;
+    font-weight: bold;
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    word-break: break-all;
+  }
 }
 </style>

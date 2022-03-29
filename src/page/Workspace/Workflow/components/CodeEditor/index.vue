@@ -80,7 +80,10 @@ export default class NodeCodeEditor extends Vue {
   }
   changeContent (value) {
     this.$emit('changeContent', value)
-    this.queryCompleters(value)
+    // this.queryCompleters(value)
+    // 清空默认的代码提示
+    const lnTools = ace.acequire('ace/ext/language_tools')
+    lnTools?.setCompleters([])
 
     this.$nextTick(() => {
       let v = value
@@ -175,8 +178,9 @@ export default class NodeCodeEditor extends Vue {
       editor = this.$refs['nodeEditor'].editor
       editor.commands.addCommand({
         name: 'enter',
-        bindKey: { win: 'Tab',  mac: 'Tab' },
+        bindKey: { win: 'Alt-Space', mac: 'Option-Space' },
         exec: editor => {
+          this.queryCompleters(this.contentBackup)
           editor.execCommand('startAutocomplete')
         }
       })

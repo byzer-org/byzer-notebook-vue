@@ -22,7 +22,7 @@
         show-overflow-tooltip
         :prop="'id'"
         :label="$t('schedules.schId')"
-        :min-width="'100'"
+        :min-width="'120'"
       ></el-table-column>
       <el-table-column
         show-overflow-tooltip
@@ -32,7 +32,7 @@
       ></el-table-column>
       <el-table-column
         show-overflow-tooltip
-        :label="$t('schedules.type')"
+        :label="$t('schedules.status')"
         :min-width="'80'"
       >
         <template slot-scope="scope">
@@ -62,7 +62,7 @@
       <el-table-column
         show-overflow-tooltip
         :prop="'description'"
-        :min-width="'150'"
+        :min-width="'180'"
       >
         <template slot="header">
           <div class="schedule-type-header">
@@ -109,7 +109,7 @@
                   <el-dropdown-item :disabled="!isOnline(scope.row)">
                     <div
                       class="schedules-action-dropdown"
-                      @click="runSchedule(scope.row.id)"
+                      @click="handleRun(scope.row.id)"
                     >
                       <i class="el-ksd-icon-play_outline_16 icon-btn"></i>
                       {{ $t('run') }}
@@ -215,6 +215,9 @@ export default class Schedules extends Vue {
   /** full data */
   schedulesList = []
 
+  /** status */
+  isToggling = false
+
   /** methods */
   filterSchedules = debounce(function () {
     this.startLoading()
@@ -272,6 +275,15 @@ export default class Schedules extends Vue {
     this.$router.push({ name: 'dag', params: { id } })
   }
 
+  async handleRun (id) {
+    try {
+      await this.runSchedule(id)
+      this.$message.success(this.$t('schedules.runScheduleSuccess'))
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   confirmDelete ({ id }) {
     this.$confirm(
       this.$t('schedules.confirmDeleteschedule'),
@@ -306,8 +318,18 @@ export default class Schedules extends Vue {
   }
 
   async handleToggle (row, release_state) {
-    await this.toggleSchedule({ ...row, release_state })
-    await this.querySchedules()
+    if (this.isToggling) {
+      return
+    }
+    this.isToggling = true
+    try {
+      await this.toggleSchedule({ ...row, release_state })
+    } catch (err) {
+      console.log(err)
+    } finally {
+      this.querySchedules()
+      this.isToggling = false
+    }
   }
 
   isOnline ({ release_state }) {
@@ -393,7 +415,7 @@ export default class Schedules extends Vue {
         color: $--color-success;
       }
       &.offline {
-        color: $--color-danger;
+        color: $--color-text-placeholder;
       }
     }
     .icon-btn {

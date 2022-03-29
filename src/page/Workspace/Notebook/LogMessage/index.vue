@@ -1,4 +1,3 @@
-
 <template>
   <div class="log-message" :style="{'max-height': innerMaxHeight}">
     <ul class="log-message-list" v-if="logList.length">
@@ -35,24 +34,35 @@ import { mapState, mapMutations, mapActions } from 'vuex'
 export default class LogMessage extends Vue {
   logList = []
   timer = null
+  offset = -1
 
   @Watch('status')
-  onResultChange (newVal, oldVal) {
-    if (oldVal === 'RUNNING') {
-      this.getLogs()
-    } else {
+  onResultChange (newVal) {
+    if (newVal !== 'RUNNING') {
       window.clearTimeout(this.timer)
+      this.getLogs()
     }
   }
+
   @Watch('jobId')
   onJobIdChange () {
+    this.offset = -1
+    this.logList = []
     this.getLogs()
   }
 
   @Watch('activeNotebook', { immediate: true, deep: true })
   onCurrentNotebookChange (newVal) {
     if (newVal && newVal.active === 'true' &&
-      (this.isDemo || !this.logMessageList[newVal.id] || (this.logMessageList[newVal.id] && !this.logMessageList[newVal.id].includes(this.cellId)))
+      (
+        this.isDemo ||
+        !this.logMessageList[newVal.id] ||
+        (
+          this.logMessageList[newVal.id] &&
+          !this.logMessageList[newVal.id].includes(this.cellId)
+        )
+      ) &&
+      this.status === 'RUNNING'
     ) {
       this.initLog()
     }
@@ -66,6 +76,8 @@ export default class LogMessage extends Vue {
     if (!this.isDemo) {
       this.addLogMessage({ name: 'logMessageList', notebookId: this.activeNotebook.id, cellId: this.cellId })
     }
+    this.offset = -1
+    this.logList = []
     this.getLogs()
   }
 
@@ -81,12 +93,13 @@ export default class LogMessage extends Vue {
 
   async getLogs () {
     try {
-      const res = await this.getJobLogs(this.jobId)
+      const res = await this.getJobLogs({ job_id: this.jobId, offset: this.offset })
       if (this._isDestroyed) {
         return false
       }
-      this.logList = res.data?.logs ?? []
-      if (this.status === 'RUNNING') {
+      this.offset = res.data?.offset || -1
+      this.logList.push(...(res.data?.logs ?? []))
+      if (this.status === 'RUNNING' && res.data?.offset !== -1) {
         this.pollingData()
       } else {
         window.clearTimeout(this.timer)

@@ -7,43 +7,23 @@
       </el-tooltip>
     </div>
     <div class="duration">{{$t('notebook.totalDuration')}}: {{formatTime(totalDuration)}}</div>
-    <ul class="progress-jobs" v-show="inprogressJobs.length || failedJobs.length">
-      <li v-for="item in inprogressJobs" :key="item.spark_job_id">
-        <div class="job-row">
-          <i class="loading el-ksd-icon-loading_22 font-16 mr-5"></i>
-          <span class="label">{{$t('notebook.sparkJobId')}}: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
-          <el-tooltip trigger="hover" placement="top" :value="showCode">
-            <div slot="content">
-              <div>Running {{currentScriptCount}}/{{totalScriptCount}}</div>
-              <div>
-                {{currentScript}}
-              </div>
+    <ul v-if="result && result.status === '0'" class="progress-jobs">
+      <li>
+        <i v-if="result && result.failed_jobs" class="el-icon-error txt-danger failed-icon"></i>
+        <div class="progress-wrap">
+          <el-progress :stroke-width="4" :percentage="percentage"></el-progress>
+        </div>
+        <span class="label">{{ percentage + '%' }}</span>
+        <span class="label">{{ progresFormat }}</span>
+        <el-tooltip ref="codeRef" trigger="hover" placement="top" :value="showCode">
+          <div slot="content">
+            <div>Running {{ currentScriptCount }}/{{ totalScriptCount }}</div>
+            <div>
+              {{ currentScript }}
             </div>
-            <i class="view hasEvent el-ksd-icon-view_22 font-22" @mouseenter="showCurrentScript"></i>
-          </el-tooltip>
-        </div>
-        <el-progress :stroke-width="4" :percentage="getPercentage(item.completed_task_count,item.total_task_count)"></el-progress>
-      </li>
-      <li v-for="item in failedJobs" :key="item.spark_job_id">
-        <div class="job-row">
-          <i class="el-icon-error txt-danger"></i>
-          <span class="label">{{$t('notebook.sparkJobId')}}: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
-        </div>
-        <el-progress :stroke-width="4" :percentage="getPercentage(item.completed_task_count,item.total_task_count)"></el-progress>
-      </li>
-    </ul>
-    <div class="view-complete-btn">
-      <el-button type="text" size="mini" @click="showDetails = !showDetails">
-        {{$t('notebook.viewCompleted')}}({{completeJobs.length}})
-        <i :class="showDetails ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'"></i>
-      </el-button>
-    </div>
-    <ul class="complete-jobs" v-show="showDetails && completeJobs.length">
-      <li v-for="item in completeJobs" :key="item.spark_job_id">
-        <div class="job-row">
-          <span class="label">{{$t('notebook.sparkJobId')}}: {{item.spark_job_id}} ({{item.completed_task_count}}/{{item.total_task_count}})</span>
-        </div>
-        <div class="value">{{formatTime(item.duration)}}</div>
+          </div>
+          <i class="view hasEvent el-ksd-icon-view_22 font-22" @mouseenter="showCurrentScript"></i>
+        </el-tooltip>
       </li>
     </ul>
   </div>
@@ -73,10 +53,18 @@ export default class ExcuteDetail extends Vue {
   totalScriptCount = 0
   currentScriptCount = 0
 
-  completeJobs = []
-  inprogressJobs = []
   totalDuration = '0'
-  failedJobs = []
+
+  get progresFormat () {
+    const { completed_jobs = 0, failed_jobs = 0, in_progress_jobs = 0 } = this.result
+    return `${ completed_jobs }/${ completed_jobs + failed_jobs + in_progress_jobs }`
+  }
+
+  get percentage () {
+    const { completed_jobs = 0, failed_jobs = 0, in_progress_jobs = 0 } = this.result
+    const result = completed_jobs / (completed_jobs + failed_jobs + in_progress_jobs)
+    return result || result === 0 ? Number((result * 100).toFixed(0)) : 0
+  }
 
   @Watch('result')
   onResultChange (newVal) {
@@ -88,10 +76,7 @@ export default class ExcuteDetail extends Vue {
   }
 
   getExcuteDetails (data) {
-    this.completeJobs = data?.completed_jobs ?? []
-    this.inprogressJobs = data?.in_progress_jobs ?? []
     this.totalDuration = data?.duration ?? '0'
-    this.failedJobs = data?.failed_jobs ?? []
   }
 
   formatTime (time) {
@@ -102,9 +87,6 @@ export default class ExcuteDetail extends Vue {
   getUnit (count, unit) {
     return count > 0 ? count + unit : ''
   }
-  getPercentage (completeCount, total) {
-    return Number((completeCount / total * 100).toFixed(0))
-  }
 
   showCurrentScript () {
     this.showCode = true
@@ -114,10 +96,14 @@ export default class ExcuteDetail extends Vue {
   async getScript () {
     try {
       const res = await this.getCurrentScript(this.jobId)
-      const { content, current_job_index, total_job_count } = res.data
+      const { content = '', current_job_index, total_job_count } = res.data || {}
       this.currentScript = content
       this.currentScriptCount = current_job_index
       this.totalScriptCount = total_job_count
+      this.$nextTick(() => {
+        // 修正 tooltip 偏移
+        this.$refs['codeRef'].updatePopper()
+      });
     } catch (e) {
       console.log(e)
     }
@@ -139,25 +125,30 @@ export default class ExcuteDetail extends Vue {
     margin-bottom: 15px;
   }
   .progress-jobs {
-    width: 240px;
     padding-left: 8px;
     > li {
       margin-top: 4px;
-      .job-row {
-        line-height: 22px;
-        margin-bottom: 7px;
-        display: flex;
-        align-items: center;
-        .label {
-          font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      .failed-icon {
+        margin-right: 10px;
+      }
+      .progress-wrap {
+        width: 240px;
+        .el-progress-bar {
+          padding-right: 15px;
         }
-        .loading {
-          color: $--color-primary;
-          margin-right: 7px;
+        .el-progress__text {
+          display: none;
         }
-        .view {
-          margin-left: 15px;
-        }
+      }
+      .label {
+        margin-right: 10px;
+        font-weight: 500;
+      }
+      .loading {
+        color: $--color-primary;
+        margin-right: 7px;
       }
     }
   }

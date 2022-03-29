@@ -71,6 +71,15 @@ const routes = [
           needLogin: true,
           menuIndex: 'schedules'
         }
+      },
+      {
+        name: 'dag',
+        path: 'dag/:id',
+        component: () => import('../page/Schedules/Dag'),
+        meta: {
+          needLogin: true,
+          menuIndex: 'schedules'
+        }
       }
     ]
   },
@@ -87,15 +96,6 @@ const routes = [
     name: 'result',
     path: '/result/:id',
     component: () => import('../page/IframeImage'),
-    meta: {
-      needLogin: true,
-      menuIndex: 'result'
-    }
-  },
-  {
-    name: 'dag',
-    path: '/dag/:id',
-    component: () => import('../page/Dag'),
     meta: {
       needLogin: true,
       menuIndex: 'result'

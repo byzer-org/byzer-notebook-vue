@@ -9,6 +9,8 @@ export default {
   getNotebookInfo: params => axios.get(`/api/schedule/task?${params}`),
   // all instance
   getInstanceList: id => axios.get(`/api/schedule/task/instance?task_id=${id}`),
+  // instance
+  getInstance: id => axios.get(`/api/schedule/task/instance/${id}/status`),
   // set schedule
   setSchedule: params => axios.post('/api/schedule/task', params),
   // update/remove schedule
@@ -18,5 +20,7 @@ export default {
   // delete schedule
   deleteSchedule: id => axios.delete(`/api/schedule/task/${id}`),
   // toogle schedule release_state to online/offline
-  toggleSchedule: ({id, release_state}) => axios.post(`/api/schedule/task/${id}/${release_state}`)
+  toggleSchedule: ({ id, release_state }) => axios.post(`/api/schedule/task/${id}/${release_state}`),
+  // set state of instance
+  setInstanceState: ({ id, status }) => axios.post(`/api/schedule/task/instance/${id}/status?set_status=${status}`)
 }

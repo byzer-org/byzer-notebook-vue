@@ -9,14 +9,13 @@
     @close="isShow && closeModal()"
   >
     <div class="log-wrap">
-      <div class="node-item">
+      <div class="node-item node-item-flex">
         <div class="label">{{ $t('schedules.failureNode') }}</div>
-        <el-input v-model="failureDetail.name" disabled></el-input>
+        <div class="value">{{ failureDetail.name }}</div>
       </div>
       <div class="node-item">
         <div class="label">{{ $t('schedules.failureLog') }}</div>
-        <div class="log" style="white-space: pre-wrap">
-          {{ failureDetail.log }}
+        <div class="log" style="white-space: pre-wrap" v-html="getFailureDetail()">
         </div>
       </div>
     </div>
@@ -65,6 +64,10 @@ export default class SetSchedule extends Vue {
     }
   }
 
+  getFailureDetail () {
+    return this.failureDetail.log?.replace(/\\n/g, '<br />')
+  }
+
   // 关闭弹窗
   closeModal () {
     this.hideModal()
@@ -74,13 +77,17 @@ export default class SetSchedule extends Vue {
 <style lang="scss">
 @import '../../assets/css/variable.scss';
 .log-wrap {
+  .node-item-flex {
+    display: flex;
+    align-items: center;
+  }
   .node-item {
     margin: 8px 0;
     .label {
       margin: 8px 0;
       font-size: 14px;
       font-weight: bold;
-      color: $--color-text-regular;
+      color: $--color-text-primary;
     }
     .log {
       padding: 10px;

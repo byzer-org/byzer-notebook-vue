@@ -287,9 +287,8 @@ export default {
         this.changeTabList(newNotobookInfo)
       }
     },
-    handleExport (item) {
-      const { id, type } = item
-      this.exportNotebook({id, type}).then(res => {
+    handleExport (params) {
+      this.exportNotebook(params).then(res => {
         const disposition = res.headers['content-disposition']
         const fileNameArr = disposition && disposition.split('filename=')
         const filename = fileNameArr.length > 1 && JSON.parse(fileNameArr[1])
