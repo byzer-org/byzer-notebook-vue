@@ -27,8 +27,8 @@
             <span :title="node.label">{{ node.label }}</span>
           </div>
           <div class="node-actions" :style="{'left': (treeOffsetWidth - (node.data.upload ? 40 : 0)) + 'px'}">
-            <el-tooltip placement="top" :content="$t('copy')" v-if="data.id && data.id.startsWith('Database_Table_')">
-              <el-button class="icon-bg" icon="el-ksd-icon-dup_16" type="text" size="small" v-clipboard:success="onCopy" v-clipboard:copy="node.label"></el-button>
+            <el-tooltip placement="top" :content="$t('catalog.copyPath')" v-if="data.id && data.id.startsWith('Database_Table_')">
+              <el-button class="icon-bg" icon="el-ksd-icon-dup_16" type="text" size="small" v-clipboard:success="onCopy" v-clipboard:copy="getCopyContent(node)"></el-button>
             </el-tooltip>
             <el-tooltip effect="dark" v-else-if="node.data.id === 'file'" :content="$t('upload')" placement="top">
               <el-button class="icon-bg" icon="el-ksd-icon-add_16" type="text" size="mini" @click.stop="uploadFile"></el-button>
@@ -129,6 +129,12 @@ export default class DataCataLog extends Vue {
 
   get treeOffsetWidth () {
     return this.originalWidth + this.nodeScrollWidth - 55
+  }
+
+  getCopyContent (node) {
+    const datasource_type = node.parent.parent.data.id
+    const db = node.parent.data.label
+    return `${datasource_type}.\`${db}.${node.label}\``
   }
 
   async refreshTreeNode () {
