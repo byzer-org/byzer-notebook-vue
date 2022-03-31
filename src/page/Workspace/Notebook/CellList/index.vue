@@ -687,11 +687,17 @@ export default {
       this.newCellList[index].loadingResult = false
       this.someIsRunning = this.newCellList.some(cell => cell.status === 'RUNNING')
       // 为了通知运行结束
+
       if (this.runningIndex === -1) {
         return
       }
       if (status !== 'RUNNING' && status !== 'NEW' && this.isRunningAll) {
-        this.confirmExcuteAll()
+        if (status === 'ERROR') { // 停留在当前 cell, 停止运行
+          this.isRunningAll = false
+          return
+        } else {
+          this.confirmExcuteAll()
+        }
       } else if (status === 'NEW' && this.exuteType === 'stop') {
         this.confirmStopAll()
       }

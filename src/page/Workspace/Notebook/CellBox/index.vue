@@ -217,7 +217,7 @@ export default {
     },
     handleRunToHere () {
       this.$emit('handleRunToHere', this.cellId)
-      },
+    },
     handleStopToHere () {
       this.$emit('handleStopHere')
     },
