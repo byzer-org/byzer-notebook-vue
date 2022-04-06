@@ -19,24 +19,7 @@
         <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-add_22" :disabled="isRunningAll" :text="$t('notebook.addCell')" :handler="() => handleAddCell({ type: 'below' }, selectCell)" />
         </div>
-        <div class="btn" v-if="!isDemo">
-          <icon-btn v-if="selectCellStatus !== 'RUNNING' || isRunningAll" icon="el-ksd-icon-play_outline_22" :disabled="isRunningAll" :text="$t('run')" :handler="() => hanldeExcuteSelectCell('run')" />
-          <icon-btn v-else icon="el-ksd-icon-stop_with_border_22" :disabled="isRunningAll" :text="$t('notebook.stop')" :handler="() => hanldeExcuteSelectCell('stop')" />
-        </div>
-        <div class="btn" v-if="!isDemo">
-          <icon-btn icon="el-ksd-icon-fast_forward_outline_22" :disabled="isRunningAll" :text="$t('notebook.runNext')" :handler="handleRunNext" />
-        </div>
-        <div class="btn" v-if="!isDemo">
-          <icon-btn v-if="isRunningAll" icon="el-ksd-icon-stop_with_border_22" :text="$t('notebook.cancelAll')" :handler="() => hanldeExcuteAll('stop')" />
-          <icon-btn v-else icon="el-icon-video-play" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
-        </div>
-        <div class="btn" v-if="!isDemo">
-          <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1 || isRunningAll" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
-        </div>
-        <div class="btn" v-if="!isDemo">
-          <icon-btn icon="el-ksd-icon-clear_22" :disabled="isRunningAll" :text="$t('notebook.clearAllResult')" :handler="clearAllResult" />
-        </div>
-        <el-dropdown class="btn" @command="handleChanged" v-if="!isDemo">
+        <el-dropdown class="btn divider" @command="handleChanged" v-if="!isDemo">
           <span class="drop-text hasEvent">
             {{ editType }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
@@ -47,7 +30,28 @@
           </el-dropdown-menu>
         </el-dropdown>
         <div class="btn" v-if="!isDemo">
-          <span class="hasEvent" @click="handleShowShortcutHelp">{{ $t('notebook.showShortcutHelp') }}</span>
+          <icon-btn v-if="selectCellStatus !== 'RUNNING' || isRunningAll" icon="el-ksd-icon-play_outline_22" :disabled="isRunningAll" :text="$t('run')" :handler="() => hanldeExcuteSelectCell('run')" />
+          <icon-btn v-else icon="el-ksd-icon-stop_with_border_22" :disabled="isRunningAll" :text="$t('notebook.stop')" :handler="() => hanldeExcuteSelectCell('stop')" />
+        </div>
+        <div class="btn" v-if="!isDemo">
+          <icon-btn icon="el-ksd-icon-fast_forward_outline_22" :disabled="isRunningAll" :text="$t('notebook.runNext')" :handler="handleRunNext" />
+        </div>
+        <div class="btn" v-if="!isDemo">
+          <icon-btn v-if="isRunningAll" icon="el-ksd-icon-stop_with_border_22" :text="$t('notebook.cancelAll')" :handler="() => hanldeExcuteAll('stop')" />
+          <icon-btn v-else icon="el-ksd-icon-play_all_outline_22" :disabled="selectCellStatus === 'RUNNING'" :text="$t('notebook.runAll')" :handler="() => hanldeExcuteAll('run')" />
+        </div>
+        <div class="btn" v-if="!isDemo">
+          <icon-btn icon="el-ksd-icon-delete_22" :disabled="newCellList.length === 1 || isRunningAll" :text="$t('delete')" :handler="() => hanldeExcuteSelectCell('delete')" />
+        </div>
+        <div class="btn divider" v-if="!isDemo">
+          <icon-btn icon="el-ksd-icon-clear_22" :disabled="isRunningAll" :text="$t('notebook.clearAllResult')" :handler="clearAllResult" />
+        </div>
+        <div class="btn" v-if="!isDemo">
+          <icon-btn v-if="showAllCell" icon="el-ksd-icon-arrow_up_2_22" :text="$t('notebook.hideAllCell')" :handler="handleToggleCellShow" />
+          <icon-btn v-else icon="el-ksd-icon-arrow_down_2_22" :text="$t('notebook.showAllCell')" :handler="handleToggleCellShow" />
+        </div>
+        <div class="btn" v-if="!isDemo">
+          <icon-btn icon="el-ksd-icon-keyboard" :text="$t('notebook.shortcut')" :handler="handleShowShortcutHelp" />
         </div>
         <SetDemo
           :userInfo="userInfo"
@@ -56,7 +60,7 @@
           @runAll="handleRunAll"
           @operateDemoSuccess="handleOperateDemoSuccess"
         />
-        <div class="btn" v-if="is_scheduler_enabled && !isDemo">
+        <div class="btn right-bar" v-if="is_scheduler_enabled && !isDemo">
           <div v-if="added" class="added-to-schedule-wrap">
             <span class="add-to-schedule add-btn" @click="viewDAG">
               <i class="el-ksd-icon-confirm_22"></i>
@@ -72,14 +76,6 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="'handleUpdate'">{{ $t('schedules.updateScheduleTask') }}</el-dropdown-item>
-                    <!-- <div class="update-btn-dropdown-wrap">
-                      <svg-icon
-                        class="menu-icon font-14"
-                        :icon-class="'schedule_update'"
-                      ></svg-icon>
-                      <div class="update-btn-dropdown-text">{{ $t('schedules.updateScheduleTask') }}</div>
-                    </div>
-                  </el-dropdown-item> -->
                 </el-dropdown-menu>
               </el-dropdown>
             </el-tooltip>
@@ -156,6 +152,8 @@
                 :mode="isDemo ? 'command' : mode"
                 @gotoNextCell="gotoNextCell"
                 @changeMode="changeMode"
+                :showAllCell="showAllCell"
+                @changeShowAllCell="changeShowAllCell"
               />
             </li>
           </draggable>
@@ -216,7 +214,8 @@ export default {
       findKey: '',
       replaceKey: '',
       results: [], // 查找的结果
-      setDemoParams: null
+      setDemoParams: null,
+      showAllCell: true
     }
   },
   props: ['removeTabId', 'currentNotebook', 'activeNotebookId'],
@@ -315,7 +314,7 @@ export default {
             const mdEditorInstance = this.$refs['cell' + id][0].$refs[
               'cellEditor' + id
             ]
-            mdEditorInstance.mdMode = 'preview'
+            mdEditorInstance && (mdEditorInstance.mdMode = 'preview')
           }
           if (this.mode === 'edit') {
             this.handleCodeFocus(id)
@@ -408,6 +407,22 @@ export default {
         this.scrollToSelectCell(index + 1)
       }
       this.hanldeExcuteSelectCell('run')
+    },
+    handleToggleCellShow () {
+      this.showAllCell = !this.showAllCell
+    },
+    changeShowAllCell () {
+      // 判断是否所有的 cell 都是 收起/展开
+      const list = this.newCellList.map(v => this.$refs[`cell${v.id}`][0].showCode)
+      const allShowCode = list.every(v => v)
+      const allHideCode = list.every(v => !v)
+      if (allShowCode) { // 所有 cell 都是展开状态
+        this.showAllCell = !allShowCode
+      }
+      if (allHideCode) { // 所有 cell 都是收起状态
+        this.showAllCell = !allHideCode
+      }
+
     },
     handleShowShortcutHelp () {
       const isShow = this.$refs.shortcutPrompt.isShow
@@ -525,21 +540,21 @@ export default {
         // 运行和折叠按钮
         const runBtnNode = this.$refs['cell' + item.id][0].$refs['cellHover' + item.id]
         // 点击的位置不在包裹editor的li中
-        if (!containerNode.contains(event.target)) {
+        if (containerNode && !containerNode.contains(event.target)) {
           if (item.editType === 'Markdown') {
             // markdown变为预览模式
-            node.mdMode = 'preview'
+            node && (node.mdMode = 'preview')
           }
         } else {
           // 点击区域在单个运行和折叠代码内
           if (runBtnNode.contains(event.target)) {
-            node.mdMode = 'preview'
+            node && (node.mdMode = 'preview')
           } else {
             // 点击的位置在包裹editor的li中切不在拖拽和添加按钮中
             if (!btnNode.contains(event.target)) {
               // 模式变为编辑模式
               this.changeMode('edit')
-              if (item.editType === 'Markdown') {
+              if (item.editType === 'Markdown' && node) {
                 // markdown变为编辑模式并聚焦
                 node.mdMode = 'edit'
                 node.handleFocus()
@@ -1177,10 +1192,29 @@ export default {
       padding: 13px 0;
       padding-left: 30px;
       display: flex;
+      position: relative;
       .btn {
         height: 22px;
-        margin-right: 15px;
+        padding-right: 15px;
         line-height: 22px;
+        &.divider {
+          padding-right: 27px;
+          position: relative;
+          &::after {
+            content: '';
+            position: absolute;
+            right: 12px;
+            top: 0px;
+            width: 1px;
+            height: 22px;
+            background-color: #E6EBF4;
+          }
+        }
+        &.right-bar {
+          padding-right: 0px;
+          position: absolute;
+          right: 20px;
+        }
         .drop-text {
           color: $--color-black;
           i {

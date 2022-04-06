@@ -1,6 +1,6 @@
 
 <template>
-  <div class="cell-box" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" >
+  <div class="cell-box" @dblclick="dbClickCollapseCell" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" >
     <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode && !isDemo ? 'block' : 'none'}">
       <div><icon-btn icon="el-ksd-icon-grab_dots_16" class="move-cell" :disabled="isRunningAll" /></div>
       <div class="mt-5"><icon-btn icon="el-ksd-icon-add_22" :handler="handleAddBelow" /></div>
@@ -62,11 +62,11 @@
         />
       </template>
     </div>
-    <div class="cell-box-container" v-else>
+    <div class="cell-box-container" :class="{'active': isActive}" v-else>
       <div class="cell-btns hide-mode" :ref="'cellHover' + cellId">
         <ActionButton :actions="actions" />
       </div>
-      <CollapseCode :value="content" @toggleShowCode="toggleShowCode" />
+      <CollapseCode :type="editType" :value="content" :status="status" @toggleShowCode="toggleShowCode" />
     </div>
   </div>
 </template>
@@ -82,7 +82,7 @@ import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import { JOB_STATUS, MarkdownTag } from '@/config'
 
 export default {
-  props: ['cellInfo', 'selectCell', 'disableDelete', 'isRunningAll', 'currentNotebook', 'mode', 'cellId', 'newCellList'],
+  props: ['cellInfo', 'selectCell', 'disableDelete', 'isRunningAll', 'currentNotebook', 'mode', 'cellId', 'newCellList', 'showAllCell'],
   data () {
     return {
       message: '',
@@ -165,6 +165,9 @@ export default {
       },
       immediate: true,
       deep: true
+    },
+    showAllCell (newVal) {
+      this.showCode = newVal
     }
   },
   methods: {
@@ -316,8 +319,15 @@ export default {
         this.getStatus(id)
       }, 1000);
     },
+    dbClickCollapseCell () {
+      if (!this.showCode) {
+        this.toggleShowCode()
+      }
+    },
     toggleShowCode () {
       this.showCode = !this.showCode
+      console.log(this.showCode, 'sow')
+      this.$emit('changeShowAllCell')
     },
     handleAddAbove () {
       this.$emit('handleAddCell', { type: 'above'})
