@@ -11,7 +11,8 @@
     <div class="log-wrap">
       <div class="node-item node-item-flex">
         <div class="label">{{ $t('schedules.failureNode') }}</div>
-        <div class="value">{{ failureDetail.name }}</div>
+        <!-- <div class="value">{{ failureDetail.name }}</div> -->
+        <div class="value">名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——名字很长——</div>
       </div>
       <div class="node-item">
         <div class="label">{{ $t('schedules.failureLog') }}</div>
@@ -79,12 +80,12 @@ export default class SetSchedule extends Vue {
 .log-wrap {
   .node-item-flex {
     display: flex;
-    align-items: center;
   }
   .node-item {
     margin: 8px 0;
     .label {
-      margin: 8px 0;
+      margin-bottom: 8px;
+      white-space: pre;
       font-size: 14px;
       font-weight: bold;
       color: $--color-text-primary;

@@ -203,9 +203,11 @@ export default class DAGView extends Vue {
 .des_wrap {
   .des_item {
     margin: 8px 0;
+    display: flex;
     font-size: 14px;
     .des_label {
       font-weight: bold;
+      white-space: pre;
     }
   }
 }
