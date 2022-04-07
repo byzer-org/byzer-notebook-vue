@@ -41,7 +41,7 @@ function either (...args) {
  Category: common, database
  */
 
-function sql (hljs) {
+function byzer (hljs) {
   const COMMENT_MODE = hljs.COMMENT('--', '$');
   const STRING = {
     className: 'string',
@@ -707,7 +707,7 @@ function sql (hljs) {
   }
 
   return {
-    name: 'SQL',
+    name: 'Byzer',
     case_insensitive: true,
     // does not include {} or HTML tags `</`
     illegal: /[{}]|<\//,
@@ -745,4 +745,4 @@ function sql (hljs) {
   };
 }
 
-module.exports = sql;
+module.exports = byzer;

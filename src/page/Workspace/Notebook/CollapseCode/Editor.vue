@@ -15,7 +15,7 @@
 <script>
 import { Vue, Component, Watch } from 'vue-property-decorator'
 const hljs = require('highlight.js')    
-hljs.registerLanguage('sql', require('./byzer_highlight'))
+hljs.registerLanguage('byzer', require('./byzer_highlight'))
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'))
 hljs.registerLanguage('markdown', require('highlight.js/lib/languages/markdown'))
 require('highlight.js/styles/vs.css') 
@@ -26,7 +26,7 @@ export default class CollapseCodeEditor extends Vue {
   valueArr = []
   value = ''
   langObj = {
-    'Byzer-lang': 'sql',
+    'Byzer-lang': 'byzer',
     'Markdown': 'markdown',
     'Python': 'python'
   }

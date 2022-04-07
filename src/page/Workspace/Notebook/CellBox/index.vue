@@ -204,9 +204,9 @@ export default {
       }
       this.innerMaxHeight = Math.round(avlHeight * 0.53) + 'px'
     },
-    changeStatus (status) {
+    changeStatus (status, progressStatus) {
       this.status = JOB_STATUS[status]
-      this.$emit('changeStatus', this.status)
+      this.$emit('changeStatus', this.status, progressStatus)
     },
     initData () {
       this.activeTab = 'details'
@@ -273,13 +273,13 @@ export default {
       window.clearTimeout(this.timer)
       try {
         await this.cancelExcuteCell(this.jobId)
-        this.getStatus(this.jobId)
+        this.getStatus(this.jobId, 'DISCARDED') // 传一个参数给run all/run to here 做状态提示
       } catch (err) {
         this.loading = false
         this.pollingData(this.jobId)
       }
     },
-    async getStatus (id) {
+    async getStatus (id, progressStatus) {
       this.jobId = id
       this.loading = true
       if (this._isDestroyed) {
@@ -292,12 +292,12 @@ export default {
           return false
         }
         const { status, job_id } = res.data
-        this.changeStatus(status)
+        this.changeStatus(status, progressStatus)
         if (['1', '2', '3'].includes(status)) {
           this.activeTab = 'result'
         } else {
           this.loading = true
-          this.pollingData(job_id)
+          this.pollingData(job_id, progressStatus)
         }
         this.excuteResult = res.data
       } catch (err) {
@@ -326,7 +326,6 @@ export default {
     },
     toggleShowCode () {
       this.showCode = !this.showCode
-      console.log(this.showCode, 'sow')
       this.$emit('changeShowAllCell')
     },
     handleAddAbove () {

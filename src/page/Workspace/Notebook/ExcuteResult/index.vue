@@ -83,7 +83,13 @@
         </div>
       </div>
       <div class="container failed" :style="{'max-height': innerMaxHeight}" v-else>
-        <div class="log-item">{{root_cause}}</div>
+        <div class="mb-16">
+          <el-tag type="danger" v-if="status==='ERROR'">
+            <i class="el-ksd-icon-wrong_fill_16 font16 txt-danger"></i>
+            Error
+          </el-tag>
+        </div>
+        <div class="txt-danger">{{root_cause}}</div>
         <div class="failed-btns">
           <el-button type="text" size="small" :icon="showDetail ? 'el-ksd-icon-arrow_up_22' : 'el-ksd-icon-arrow_down_22'" @click="showDetail = !showDetail">
           {{showDetail ? $t('hideDetails') : $t('viewAll')}}
@@ -250,9 +256,6 @@ export default class ExcuteResult extends Vue {
       .log-item {
         line-height: 22px;
         color: $--color-text-secondary;
-      }
-      .failed-btns {
-        padding: 8px 0;
       }
     }
     .not-table {
