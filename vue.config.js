@@ -25,6 +25,7 @@ module.exports = {
     proxy: process.env.PROXY_SERVER
   },
   configureWebpack: {
+    devtool: process.env.NODE_ENV === 'dev' ? 'eval-source-map' : undefined,
     resolve: {
       alias: {
         'vue$': 'vue/dist/vue.common.js'

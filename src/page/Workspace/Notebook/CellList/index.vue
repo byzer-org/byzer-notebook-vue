@@ -90,6 +90,12 @@
           </span>
         </div>
       </div>
+      <div class="cellListPage-header-progress" v-if="showProgress">
+        <el-progress :percentage="runPercentage" :color="progressColor" :format="progressText"></el-progress>
+        <i 
+          v-if="['ERROR', 'COMPLETED'].includes(runningStatus)"
+          :class="runningStatus === 'ERROR' ? 'el-ksd-icon-wrong_fill_22 txt-danger' : 'el-icon-success txt-success'"></i>
+      </div>
     </div>
     <div class="cellListPage-container">
       <div class="cellListPage-container-left">
@@ -116,7 +122,6 @@
             ref="dragInner"
             :options="draggableOptions"
             v-model="newCellList"
-            @start="handleDragStart"
             @end="handleDragEnd"
             ghostClass="sortable-ghost"
             chosenClass="sortable-chosen"
@@ -143,7 +148,7 @@
                 :cellInfo="cell"
                 :currentNotebook="currentNotebook"
                 :selectCell="selectCell"
-                @changeStatus="(status) => changeStatus(status, cell)"
+                @changeStatus="(status, progressStatus) => changeStatus(status, cell, progressStatus)"
                 @handleAddCell="(data) => handleAddCell(data, cell)"
                 @handleDeleteCell="() => handleDeleteCell(cell)"
                 @handleSave="handleSave"
@@ -215,7 +220,10 @@ export default {
       replaceKey: '',
       results: [], // 查找的结果
       setDemoParams: null,
-      showAllCell: true
+      showAllCell: true,
+      showProgress: false,
+      showProgressDuration: 3000,
+      runningStatus: 'NEW'
     }
   },
   props: ['removeTabId', 'currentNotebook', 'activeNotebookId'],
@@ -255,6 +263,15 @@ export default {
     },
     added () {
       return this.taskInfo && this.taskInfo.scheduleInfo
+    },
+    runPercentage () {
+      const toIndex = this.runToIndex
+      const curIndex = this.runningIndex
+      if (toIndex === -1) {
+        return 0
+      } else {
+        return (curIndex + 1) / (toIndex + 1) * 100
+      }
     }
   },
   created () {
@@ -374,6 +391,20 @@ export default {
     ...mapActions('CreateNoteBookModal', {
       callCreateNoteBookModal: 'CALL_MODAL'
     }),
+    progressColor () {
+      const statusObj = {
+        'ERROR': '#CA1616',
+        'DISCARDED': '#A5B2C5',
+        'RUNNING': '#0875DA',
+        'COMPLETED': '#49A82B'
+      }
+      return statusObj[this.runningStatus]
+    },
+    progressText () {
+      const toIndex = this.runToIndex
+      const curIndex = this.runningIndex
+      return `${curIndex + 1}/${toIndex + 1}`
+    },
     initAllData () {
       this.isRunningAll = false
       this.selectCellStatus = 'NEW'
@@ -547,7 +578,7 @@ export default {
           }
         } else {
           // 点击区域在单个运行和折叠代码内
-          if (runBtnNode.contains(event.target)) {
+          if (runBtnNode && runBtnNode.contains(event.target)) {
             node && (node.mdMode = 'preview')
           } else {
             // 点击的位置在包裹editor的li中切不在拖拽和添加按钮中
@@ -667,8 +698,6 @@ export default {
     scrollCell: debounce(function () {
       this.setScrollTopToLocal()
     }, 200),
-    handleDragStart () {
-    },
     handleDragEnd () {
       this.handleSave()
       this.showDragStyle = false
@@ -685,6 +714,14 @@ export default {
     changeRunAll (value) {
       this.isRunningAll = value
       this.draggableOptions.disabled = value
+      if (value) {
+        this.showProgress = true
+      } else {
+        setTimeout(() => {
+          this.runningIndex = this.runToIndex = -1
+          this.showProgress = false
+        }, this.showProgressDuration)
+      }
     },
     shouldGetScrollTop () {
       if (this.activeNotebookId === this.currentNotebook.id) {
@@ -693,7 +730,12 @@ export default {
         }
       }
     },
-    changeStatus (status, cell) {
+    changeStatus (status, cell, progressStatus) {
+      // 运行结束 runningStatus 标志为对应的状态
+      this.runningStatus = progressStatus || status
+      if (status === 'ERROR' && this.excuteType) { // 避免上次执行失败 再刷新页面出提示
+        this.$message.warning(this.$t('notebook.runningError'))
+      }
       let index = this.newCellList.findIndex(v => v.id === cell.id)
       this.newCellList[index].status = status
       if (cell.id === this.selectCell.id) {
@@ -702,18 +744,22 @@ export default {
       this.newCellList[index].loadingResult = false
       this.someIsRunning = this.newCellList.some(cell => cell.status === 'RUNNING')
       // 为了通知运行结束
-
       if (this.runningIndex === -1) {
         return
       }
+      if (progressStatus) {
+        this.changeRunAll(false)
+        this.$message.warning(this.$t('notebook.canceled'))
+        return
+      }
       if (status !== 'RUNNING' && status !== 'NEW' && this.isRunningAll) {
-        if (status === 'ERROR') { // 停留在当前 cell, 停止运行
-          this.isRunningAll = false
+        if (status === 'ERROR' || status === 'DISCARDED') { // 运行失败停留在当前 cell, 停止运行
+          this.changeRunAll(false)
           return
         } else {
-          this.confirmExcuteAll()
+          this.confirmRunAll()
         }
-      } else if (status === 'NEW' && this.exuteType === 'stop') {
+      } else if (status === 'NEW' && this.excuteType === 'stop') {
         this.confirmStopAll()
       }
     },
@@ -740,13 +786,13 @@ export default {
     handleOfflineTab (tabId) {
       this.$emit('handleOfflineTab', tabId)
     },
-    async handleRunAll ({ params, setDemo, command }) {
+    handleRunAll ({ params, setDemo, command }) {
       this.setDemoParams = {
         params,
         setDemo,
         command
       }
-      await this.hanldeExcuteAll('run')
+      this.hanldeExcuteAll('run')
     },
     /**
      * @description: 格式化newCellList的格式 获取editType
@@ -871,12 +917,15 @@ export default {
         }
       }
     },
+    handleRunToHere (cellId) {
+      this.runToIndex = this.newCellList.findIndex(i => i.id === cellId)
+      this.exuteType = 'run'
+      this.confirmExcuteAll(true, 'run')
+    },
     async hanldeExcuteAll (type) {
       try {
-        await this.autoSaveCell()
-        this.exuteType = type
-        if (this.exuteType === 'stop') {
-          this.$confirm(
+        if (type === 'stop') {
+          await this.$confirm(
             this.$t('notebook.discardAllJob'),
             this.$t('notebook.discardTitle'),
             {
@@ -885,35 +934,32 @@ export default {
               type: 'warning',
               customClass: 'centerButton'
             }
-          ).then(() => {
-            this.confirmExcuteAll(true)
-          })
+          )
+          this.confirmExcuteAll(true, 'stop')
         } else {
           this.runToIndex = this.newCellList.length - 1
-          this.confirmExcuteAll(true)
+          this.confirmExcuteAll(true, 'run')
         }
       } catch (e) {
         console.log(e)
       }
     },
-    confirmExcuteAll (isFirst) {
+    confirmExcuteAll (isFirst, type) {
       this.changeRunAll(true)
-      if (this.exuteType === 'run') {
+      if (type) {
+        this.excuteType = type
+      }
+      if (this.excuteType === 'run') {
         this.confirmRunAll(isFirst)
       } else {
         this.confirmStopAll(isFirst)
       }
     },
-    handleRunToHere (cellId) {
-      this.runToIndex = this.newCellList.findIndex(i => i.id === cellId)
-      this.exuteType = 'run'
-      this.confirmExcuteAll(true)
-    },
     confirmRunAll () {
-      this.runningIndex++
+      this.runningIndex++ // 从 -1 开始 每开始一次+1， 运行结束
       const ids = this.newCellList.map(v => v.id)
       const id = ids[this.runningIndex]
-      if (id && this.runToIndex >= this.runningIndex) {
+      if (id && this.runToIndex >= (this.runningIndex)) { // 还没运行结束
         const domRef = `cell${id}`
         if (this.$refs[domRef] && this.$refs[domRef][0].content) {
           // 运行到哪个，哪个就切换为选中状态
@@ -924,30 +970,31 @@ export default {
         } else {
           this.confirmRunAll()
         }
-      } else {
+      } else { // 执行到最后一个了
+        this.runningStatus = 'COMPLETED'
+        this.$message.success(this.$t('notebook.runningSuccess'))
+        this.runningIndex = this.runToIndex
         this.changeRunAll(false)
         this.setDemoParams = null
-        this.runningIndex = -1
-        this.runToIndex = -1
       }
     },
     confirmStopAll (isFirst) {
+      const ids = this.newCellList.map(v => v.id)
+      let id = ''
       if (!isFirst) {
-        this.runningIndex++
+        id = ids[this.runningIndex]
       } else {
         let firstIndex = this.newCellList.findIndex(
           v => v.status === 'RUNNING'
         )
-        this.runningIndex = firstIndex
+        id = firstIndex !== -1 ? ids[firstIndex] : ''
       }
-      const ids = this.newCellList.map(v => v.id)
-      const id = ids[this.runningIndex]
       const domRef = `cell${id}`
-      if (id && this.$refs[domRef][0].status === 'RUNNING') {
-        this.$refs[domRef] && this.$refs[domRef][0].confirmStopJob()
+      const domData = this.$refs[domRef] && this.$refs[domRef][0]
+      if (id && domData?.status === 'RUNNING') {
+        this.$refs[domRef][0].confirmStopJob()
       } else {
         this.changeRunAll(false)
-        this.runningIndex = -1
       }
     },
     // 当前选中的 cell 操作
@@ -1183,12 +1230,9 @@ export default {
   width: 100%;
   background-color: $--color-white;
   &-header {
-    display: flex;
-    justify-content: space-between;
     border-bottom: 1px solid $--border-color-light;
     &-btns {
-      flex: 1;
-      width: 0;
+      width: 100%;
       padding: 13px 0;
       padding-left: 30px;
       display: flex;
@@ -1254,10 +1298,12 @@ export default {
         }
       }
     }
-    &-catalog {
-      width: 300px;
-      padding-right: 20px;
-      text-align: right;
+    &-progress {
+      padding: 16px;
+      display: flex;
+      .el-progress {
+        flex: 1;
+      }
     }
   }
   &-container {
@@ -1270,7 +1316,7 @@ export default {
         opacity: 0.2;
       }
       .cell-list {
-        height: calc(100vh - 48px - 110px);
+        height: calc(100vh - 96px - 110px);
         padding-bottom: 50vh;
         overflow-y: auto;
         > div > li {
