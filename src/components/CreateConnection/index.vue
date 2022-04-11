@@ -31,6 +31,9 @@ import Form from './Form.vue'
 
 @Component({
   computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    }),
     ...mapState('CreateConnectionModal', {
       isShow: state => state.isShow,
       form: state => state.form,
@@ -83,7 +86,7 @@ export default class CreateConnectionModal extends Vue {
       await this.$refs.ruleForm.checkForm()
       this.isSubmiting = true
       const params = {
-        name: this.form.name,
+        name: this.userInfo.username + '_' + this.form.name,
         content: { ...this.form }
       }
       if (params.content.password) {

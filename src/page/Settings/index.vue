@@ -15,12 +15,28 @@
           </div>
         </el-form>
       </div>
-      <div class="setting-item">
+      <div class="setting-item engine-selector">
         <el-form ref="engineForm" label-position="top" :model="engineRuleForm" :rules="engineRules">
           <el-form-item :label="$t('settings.defaultEngine')" prop="name">
             <p class="tip">{{$t('settings.defaultEngineDesc')}}</p>
-            <el-select style="width: 240px;" v-model="engineRuleForm.name" :placeholder="$t('settings.engineSelectTip')">
-              <el-option :label="engine" :value="engine" v-for="engine in engineList" :key="engine"></el-option>
+            <el-select
+              style="width: 240px;"
+              v-model="engineRuleForm.name"
+              :placeholder="$t('settings.engineSelectTip')"
+              @change="handleEngineChanged"
+              @visible-change="handleVisibleChange"
+            >
+              <span
+                slot="prefix"
+                class="engine-item-circle selected"
+                :class="getEngineStatus(selectedEngine)"
+              ></span>
+              <el-option :label="engine.name" :value="engine.name" v-for="engine in engineList" :key="engine.name">
+                <div class="engine-list">
+                  <span class="engine-item-circle" :class="getEngineStatus(engine)"></span>
+                  <span class="engine-item-name">{{ engine.name }}</span>
+                </div>
+              </el-option>
             </el-select>
           </el-form-item>
           <div class="btns">
@@ -31,7 +47,13 @@
       <div class="setting-item">
         <div class="setting-item-title">{{$t('settings.externalDatasource')}}</div>
         <div class="setting-item-btn">
-          <el-button size="medium" @click="handleCreateConnection()">{{$t('add')}}</el-button>
+          <el-button type="primary" size="small" @click="handleCreateConnection()">{{$t('add')}}</el-button>
+          <el-button
+            size="small"
+            :icon="'el-ksd-icon-refresh_22'"
+            :loading="isRefreshing"
+            @click="getConnections('?refresh=true')"
+          >{{$t('refresh')}}</el-button>
         </div>
         <el-table
           :data="connectionList"
@@ -68,12 +90,17 @@
   </div>
 </template>
 <script>
+import { cloneDeep } from '@antv/x6/lib/util/object/object'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import { ENGINE_STATUS } from '../../config'
 
 @Component({
   computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    }),
     timeoutRules () {
       return {
         time: [{required: false, validator: this.validateTime, trigger: 'blur'}]
@@ -108,6 +135,8 @@ export default class SettingsPage extends Vue {
   showReset = true
   engineList = []
   connectionList = []
+  selectedEngine = {}
+  isRefreshing = false
 
   created () {
     this.getConfig()
@@ -123,6 +152,7 @@ export default class SettingsPage extends Vue {
     if (engine) {
       this.defaultEngine = engine
       this.engineRuleForm.name = engine
+      this.handleEngineChanged(engine)
     }
   }
 
@@ -141,11 +171,17 @@ export default class SettingsPage extends Vue {
     }
   }
 
-  async getEngineList () {
+  async getEngineList (isRefresh) {
     try {
       const res = await this.getEngins()
       this.engineList = res.data?.list || []
-      this.engineRuleForm.name = this.engineList.length ? this.engineList[0] : ''
+      if (!isRefresh) {
+        this.engineRuleForm.name = this.engineList.length ? this.engineList[0] : ''
+      } else {
+        if (this.engineList.length && !this.engineList.some(i => i.name === this.selectedEngine.name)) {
+          this.initData({ engine: this.engineList[0].name })
+        }
+      }
     } catch (e) {
       console.log(e)
     }
@@ -189,6 +225,7 @@ export default class SettingsPage extends Vue {
         console.log(e)
       }
     }
+    this.getConnections()
   }
   async resetForm (type) {
     try {
@@ -201,26 +238,51 @@ export default class SettingsPage extends Vue {
       console.log(e)
     }
   }
-  async getConnections () {
+  async getConnections (params = '') {
+    if (params) {
+      this.isRefreshing = true
+    }
     try {
-      const res = await this.getConnectionList()
+      const res = await this.getConnectionList(params)
       this.connectionList = res.data?.connection_list ?? []
     } catch (e) {
       console.log(e)
+    } finally {
+      if (params) {
+        this.isRefreshing = false
+      }
     }
   }
 
   async handleCreateConnection (item) {
     const type = item ? 'edit' : 'add'
-    const payload = item || {}
     if (item && (item.parameter.length === 0)) {
       item.parameter = [{name: '', value: '', key: String(Date.now())}]
+    }
+    const payload = cloneDeep(item || {})
+    if (payload?.name?.startsWith(this.userInfo.username + '_')) {
+      payload.name = payload.name.replace(this.userInfo.username + '_', '')
     }
     const { isSubmit } = await this.callCreateConnectionModal({ payload, type })
     if (isSubmit) {
       this.getConnections()
     }
   }
+
+  handleVisibleChange (visible) {
+    if (visible) {
+      this.getEngineList(true)
+    }
+  }
+
+  getEngineStatus ({ status }) {
+    return ENGINE_STATUS[status]
+  }
+
+  handleEngineChanged (e) {
+    this.selectedEngine = this.engineList.find(i => i.name === e) || {}
+  }
+
   deleteConnectionConfirm () {
     return this.$confirm(this.$t('settings.deleteText'), this.$t('settings.deleteTitle'), {
       confirmButtonText: this.$t('ok'),
@@ -244,6 +306,8 @@ export default class SettingsPage extends Vue {
 </script>
 
 <style lang="scss">
+@import '../../assets/css/variable.scss';
+
 .settings-page {
   .setting-item {
     width: 544px;
@@ -262,6 +326,38 @@ export default class SettingsPage extends Vue {
       line-height: 16px;
       margin-bottom: 10px;
     }
+  }
+}
+.engine-selector {
+  .el-select {
+    .el-input {
+      input {
+        padding-left: 35px;
+      }
+      .el-input__prefix {
+        width: 35px;
+      }
+    }
+  }
+}
+.engine-list {
+  display: flex;
+  align-items: center;
+}
+.engine-item-circle {
+  margin-right: 10px;
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  &.selected {
+    margin-right: 0;
+  }
+  &.available {
+    background: $pattern-green-500;
+  }
+  &.unavailable {
+    background: $--color-danger;
   }
 }
 </style>

@@ -2,7 +2,9 @@
   <div class="connect-form">
     <el-form size="small" ref="form" :model="form" :rules="rules">
       <el-form-item :label="$t('settings.connectionName')" prop="name">
-        <el-input v-model.trim="form.name" :placeholder="$t('pleaseInput')" />
+        <el-input v-model.trim="form.name" :placeholder="$t('pleaseInput')">
+          <template slot="prepend">{{ userInfo.username + '_' }}</template>
+        </el-input>
       </el-form-item>
       <el-form-item :label="$t('settings.dataSource')" prop="datasource">
         <el-select v-model="form.datasource" style="width: 100%;" @change="value => handleInput('datasource', value)"  :placeholder="$t('pleaseSelect')">
@@ -70,6 +72,9 @@ import { encryptData } from '@/util'
 
 @Component({
   computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    }),
     ...mapState('CreateConnectionModal', {
       form: state => state.form,
       type: state => state.type,
