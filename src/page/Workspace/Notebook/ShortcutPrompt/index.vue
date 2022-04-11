@@ -7,11 +7,11 @@
       </div>
       <div class="content">
         <el-tabs>
-          <el-tab-pane label="Command Mode" name="0">
+          <el-tab-pane :label="$t('notebook.commandMode')" name="0">
             <ShortcutDetail :mode="'command'" :type="'global'" />
             <ShortcutDetail :mode="'command'" :type="'md'" />
           </el-tab-pane>
-          <el-tab-pane label="Edit Mode">
+          <el-tab-pane :label="$t('notebook.editMode')">
             <ShortcutDetail :mode="'edit'" :type="'global'" />
             <ShortcutDetail :mode="'edit'" :type="'md'" />
           </el-tab-pane>

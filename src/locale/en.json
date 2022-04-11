@@ -117,6 +117,8 @@
     "showAllCell": "Show all cells",
     "hideAllCell": "Fold all cells",
     "shortcut": "Shortcut",
+    "commandMode": "Command Mode",
+    "editMode": "Edit Mode",
     "runningError": "Running Error",
     "runningSuccess": "Running Success",
     "canceled": "Cancelled",

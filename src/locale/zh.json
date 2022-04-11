@@ -116,6 +116,8 @@
     "showAllCell": "显示全部 cell",
     "hideAllCell": "收起全部 cell",
     "shortcut": "快捷键",
+    "commandMode": "命令模式",
+    "editMode": "编辑模式",
     "runningError": "运行错误",
     "runningSuccess": "运行成功",
     "canceled": "已取消",
