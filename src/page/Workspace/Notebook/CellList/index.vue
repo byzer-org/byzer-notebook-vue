@@ -16,6 +16,13 @@
         <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-save_22" :disabled="isRunningAll" :text="$t('save')" :handler="() => handleSave(true)" />
         </div>
+        <SetDemo
+          :userInfo="userInfo"
+          :activeNotebook="activeNotebook"
+          @offlineTab="handleOfflineTab"
+          @runAll="handleRunAll"
+          @operateDemoSuccess="handleOperateDemoSuccess"
+        />
         <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-add_22" :disabled="isRunningAll" :text="$t('notebook.addCell')" :handler="() => handleAddCell({ type: 'below' }, selectCell)" />
         </div>
@@ -53,13 +60,6 @@
         <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-keyboard" :text="$t('notebook.shortcut')" :handler="handleShowShortcutHelp" />
         </div>
-        <SetDemo
-          :userInfo="userInfo"
-          :activeNotebook="activeNotebook"
-          @offlineTab="handleOfflineTab"
-          @runAll="handleRunAll"
-          @operateDemoSuccess="handleOperateDemoSuccess"
-        />
         <div class="btn right-bar" v-if="is_scheduler_enabled && !isDemo">
           <div v-if="added" class="added-to-schedule-wrap">
             <span class="add-to-schedule add-btn" @click="viewDAG">

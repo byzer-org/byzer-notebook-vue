@@ -1,7 +1,7 @@
 
 <template>
   <div class="shortcut-detail">
-    <div class="shortcut-sub-title">{{ title }}</div>
+    <!-- <div class="shortcut-sub-title">{{ title }}</div> -->
     <div v-for="(item, index) in list" :key="index">
       <ShortcutItem :item="item" :platform="platform" />
     </div>

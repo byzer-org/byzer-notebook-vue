@@ -4,9 +4,7 @@
       v-if="!demoList.includes(activeNotebook.id)"
       class="btn"
     >
-      <span class="hasEvent" @click="handleOperateDemo('publish')">
-        {{ $t('notebook.setDemo') }}
-      </span>
+    <icon-btn icon="el-ksd-icon-export_22" :text="$t('notebook.setDemo')" @click.native="handleOperateDemo('publish')" />
     </div>
     <el-dropdown
       v-if="demoList.includes(activeNotebook.id)"
@@ -15,7 +13,8 @@
       @command="handleOperateDemo"
     >
       <span class="drop-text hasEvent">
-        {{ $t('notebook.demoOn') }}
+        <icon-btn icon="el-ksd-icon-export_22" />
+        <span class="ml-2">{{ $t('notebook.demoOn') }}</span>
         <i class="el-ksd-icon-arrow_down_22 font-22"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
@@ -107,13 +106,11 @@ export default class SetDemo extends Vue {
   display: inline-flex;
   .btn {
     height: 22px;
-    margin-right: 15px;
     line-height: 22px;
     .drop-text {
+      display: flex;
+      align-items: center;
       color: $--color-black;
-      i {
-        vertical-align: middle;
-      }
     }
   }
 }
