@@ -48,21 +48,7 @@
     "schedules": "Schedules",
     "settings": "Settings",
     "give_feedback": "Give Feedback",
-    "Byzer_docs": "Byzer Notebook Docs",
-    "engine_status": "Engine State: ",
-    "heart_beat": "Heartbeat Detection: ",
-    "usage": "Resource Rate: ",
-    "state": {
-      "available": "Running",
-      "unavailable": "Disabled"
-    },
-    "percentage": {
-      "available": "Normal",
-      "unavailable": "Disabled",
-      "crowded": "Crowded"
-    },
-    "step": "Auto-refresh engine state every 10 seconds",
-    "refresh_success": "Engine state refreshed successfully"
+    "Byzer_docs": "Byzer Notebook Docs"
   },
   "home": {
     "quick_start": "Quick Start",

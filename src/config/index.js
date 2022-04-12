@@ -110,8 +110,3 @@ export const ACTION_OF_STATE = {
   [INSTANCE_STATE['9']]: [0, 0, 5, 0],
   [INSTANCE_STATE['10']]: [0, 0, 5, 0]
 }
-
-export const ENGINE_STATUS = {
-  0: 'unavailable',
-  2: 'available'
-}

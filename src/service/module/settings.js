@@ -10,11 +10,10 @@ export default {
   resetTimout: () => axios.post('/api/settings/configuration/reset'),
   checkConnection: payload => axios.post('/api/settings/connection/test', payload),
   createConnect: payload => axios.post('/api/settings/connection', payload),
-  getConnectionList: payload => axios.get(`/api/settings/connection${payload}`),
+  getConnectionList: () => axios.get('/api/settings/connection'),
   getExistingTableList: connectionId => axios.get(`/api/settings/connection/${connectionId}/table`),
   updateConnection: (connectionId, data) => axios.put(`/api/settings/connection/${connectionId}`, data),
   deleteConnection: connectionId => axios.delete(`/api/settings/connection/${connectionId}`),
   getAlgorithmList: () => axios.get('/api/settings/node/def?node_type=train'),
-  getParamsByAlgorithmId: id => axios.get(`/api/settings/node/def/${id}`),
-  getEngineInfo: payload => axios.get(`/api/engine/status${payload}`)
+  getParamsByAlgorithmId: id => axios.get(`/api/settings/node/def/${id}`)
 }

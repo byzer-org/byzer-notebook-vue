@@ -6,7 +6,6 @@
       <header-menu v-if="!isLoginPage"></header-menu>
     </div>
     <div class="page-header-right">
-      <EngineInfo />
       <GlobalHelp />
       <ChangeLang />
       <UserInfo class="page-header-right-item" v-if="!isLoginPage" />
@@ -19,20 +18,17 @@ import { Component } from 'vue-property-decorator'
 import HeaderMenu from './HeaderMenu'
 import UserInfo from './UserInfo'
 import GlobalHelp from './GlobalHelp'
-import ChangeLang from './ChangeLang'
-import EngineInfo from './EngineInfo'
+import ChangeLang from './ChangeLang.vue'
 import { mapState } from 'vuex'
 @Component({
   components: {
     HeaderMenu,
     UserInfo,
     GlobalHelp,
-    ChangeLang,
-    EngineInfo
+    ChangeLang
   },
   computed: {
     ...mapState({
-      userInfo: state => state.user.userInfo,
       isTrial: state => state.global.is_trial
     }),
     isLoginPage () {

@@ -2,14 +2,9 @@ import * as types from '../type'
 import { settings } from '../../service'
 export default {
   state: {
-    isRunningAll: false,
-    engineInfo: {}
+    isRunningAll: false
   },
-  mutations: {
-    [types.SET_ENGINE_INFO]: (state, payload) => {
-      state.engineInfo = payload
-    }
-  },
+  mutations: {},
   actions: {
     [types.GET_CONFIGS]: () => {
       return settings.getDefaultConfig()
@@ -29,8 +24,8 @@ export default {
     [types.CREATE_CONNECTION]: (_, payload) => {
       return settings.createConnect(payload)
     },
-    [types.GET_CONNECTION_LIST]: (_, payload = '') => {
-      return settings.getConnectionList(payload)
+    [types.GET_CONNECTION_LIST]: () => {
+      return settings.getConnectionList()
     },
     [types.GET_CONNECTION_TABLE]: (_, connectionId) => {
       return settings.getExistingTableList(connectionId)
@@ -46,16 +41,6 @@ export default {
     },
     [types.GET_PARAM_BY_ID]: (_, id) => {
       return settings.getParamsByAlgorithmId(id)
-    },
-    [types.GET_ENGINE_INFO]: async ({ commit }, payload = '') => {
-      let res = {}
-      try {
-        res = await settings.getEngineInfo(payload)
-        commit(types.SET_ENGINE_INFO, res.data)
-      } catch (err) {
-        console.log(err)
-      }
-      return res
     }
   }
 }
