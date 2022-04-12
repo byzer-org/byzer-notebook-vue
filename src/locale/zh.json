@@ -47,21 +47,7 @@
     "schedules": "调度",
     "settings": "设置",
     "give_feedback": "反馈",
-    "Byzer_docs": "Byzer Notebook 手册",
-    "engine_status": "引擎状态：",
-    "heart_beat": "心跳检测：",
-    "usage": "资源占比：",
-    "state": {
-      "available": "运行中",
-      "unavailable": "不可用"
-    },
-    "percentage": {
-      "available": "正常",
-      "unavailable": "不可用",
-      "crowded": "拥挤"
-    },
-    "step": "每 10 秒自动刷新引擎状态",
-    "refresh_success": "引擎状态刷新成功"
+    "Byzer_docs": "Byzer Notebook 手册"
   },
   "home": {
     "quick_start": "快速开始",
