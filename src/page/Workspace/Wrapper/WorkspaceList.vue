@@ -153,6 +153,11 @@
                 >
                   <span class="txt-danger">{{ $t('delete') }}</span>
                 </el-menu-item>
+                <el-menu-item
+                  :index="'handleImportInFolder'"
+                >
+                  {{ $t('import') }}
+                </el-menu-item>
               </el-submenu>
             </template>
           </el-menu>
@@ -332,6 +337,10 @@ export default class WorkspaceList extends Vue {
   }
   handleImport () {
     this.$emit('handleImport')
+  }
+  handleImportInFolder (node) {
+    const folderId = node ? node.data.folder_id : ''
+    this.$emit('handleImport', folderId)
   }
   async handleMove (node) {
     const isRoot = Array.isArray(node.parent.data)

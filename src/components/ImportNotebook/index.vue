@@ -46,6 +46,7 @@ vuex.registerModule(['modals', 'ImportNotebookModal'], store)
     ...mapState('ImportNotebookModal', {
       isShow: state => state.isShow,
       form: state => state.form,
+      folderId: state => state.folderId,
       callback: state => state.callback,
       type: state => state.type
     })
@@ -132,6 +133,7 @@ export default class FileUploadModal extends Vue {
       this.fileList.forEach(v => {
         formData.append('file', v.raw)
       })
+      formData.append('folder_id', this.folderId)
       this.loadingSubmit = true
       const res = await this.uploadNotebook(formData)
       const activeFile = res.data[0]

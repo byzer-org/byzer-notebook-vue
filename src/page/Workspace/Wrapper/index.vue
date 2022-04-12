@@ -280,8 +280,8 @@ export default {
         }
       }
     },
-   async handleImport () {
-      const { isSubmit, newNotobookInfo } = await this.callImportNotebookModal()
+   async handleImport (folderId = '') {
+      const { isSubmit, newNotobookInfo } = await this.callImportNotebookModal({ folderId })
       if (isSubmit) {
         this.$message.success(this.$t('workspace.importSuccess'))
         this.changeTabList(newNotobookInfo)
