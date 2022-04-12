@@ -48,7 +48,7 @@ export default class CollapseCodeEditor extends Vue {
 .collapse-editor {
   background-color: #fff;
   font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
-  height: 48px;
+  height: 37px;
   overflow: hidden;
   .editor-line {
     display: flex;
@@ -58,12 +58,12 @@ export default class CollapseCodeEditor extends Vue {
       padding-left: 13px;
       padding-right: 19px;
       text-align: right;
-      line-height: 24px;
+      line-height: 18.5px;
     }
     &-content {
       width: 0;
       flex: 1;
-      line-height: 24px;
+      line-height: 18.5px;
       color: #2c3e50;
       font-size: 14px;
     }
