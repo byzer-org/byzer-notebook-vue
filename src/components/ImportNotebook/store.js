@@ -8,6 +8,7 @@ export function getInitState () {
       file: ''
     },
     type: '',
+    folderId: '',
     callback: () => {}
   }
 }
