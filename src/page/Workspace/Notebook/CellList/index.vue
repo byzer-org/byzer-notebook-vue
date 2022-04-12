@@ -91,10 +91,10 @@
         </div>
       </div>
       <div class="cellListPage-header-progress" v-if="showProgress">
-        <el-progress :percentage="runPercentage" :color="progressColor" :format="progressText"></el-progress>
+        <el-progress :percentage="runPercentage" :show-text="runningStatus !== 'COMPLETED'" :color="progressColor" :format="progressText"></el-progress>
         <i 
           v-if="['ERROR', 'COMPLETED'].includes(runningStatus)"
-          :class="runningStatus === 'ERROR' ? 'el-ksd-icon-wrong_fill_22 txt-danger' : 'el-icon-success txt-success'"></i>
+          :class="[runningStatus === 'ERROR' ? 'el-ksd-icon-wrong_fill_22 txt-danger' : 'el-icon-success txt-success', runningStatus === 'COMPLETED' ? 'ml-5' : '']"></i>
       </div>
     </div>
     <div class="cellListPage-container">
@@ -448,12 +448,11 @@ export default {
       const allShowCode = list.every(v => v)
       const allHideCode = list.every(v => !v)
       if (allShowCode) { // 所有 cell 都是展开状态
-        this.showAllCell = !allShowCode
+        this.showAllCell = allShowCode
       }
       if (allHideCode) { // 所有 cell 都是收起状态
         this.showAllCell = !allHideCode
       }
-
     },
     handleShowShortcutHelp () {
       const isShow = this.$refs.shortcutPrompt.isShow
@@ -734,7 +733,7 @@ export default {
       // 运行结束 runningStatus 标志为对应的状态
       this.runningStatus = progressStatus || status
       if (status === 'ERROR' && this.excuteType) { // 避免上次执行失败 再刷新页面出提示
-        this.$message.warning(this.$t('notebook.runningError'))
+        this.$message.error(this.$t('notebook.runningError'))
       }
       let index = this.newCellList.findIndex(v => v.id === cell.id)
       this.newCellList[index].status = status
@@ -749,7 +748,7 @@ export default {
       }
       if (progressStatus) {
         this.changeRunAll(false)
-        this.$message.warning(this.$t('notebook.canceled'))
+        this.$message.success(this.$t('notebook.canceled'))
         return
       }
       if (status !== 'RUNNING' && status !== 'NEW' && this.isRunningAll) {
@@ -1301,6 +1300,7 @@ export default {
     &-progress {
       padding: 16px;
       display: flex;
+      align-items: center;
       .el-progress {
         flex: 1;
       }
