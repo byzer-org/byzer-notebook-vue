@@ -232,7 +232,7 @@ export default class ExcuteResult extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
 .cell-excute-result {
   &-wrapper {
     position: relative;

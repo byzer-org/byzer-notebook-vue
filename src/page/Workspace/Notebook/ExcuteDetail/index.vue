@@ -115,7 +115,7 @@ export default class ExcuteDetail extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
 .excute-detail {
   overflow: auto;
   .duration {

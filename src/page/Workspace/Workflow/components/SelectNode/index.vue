@@ -128,7 +128,7 @@ export default class SelectNodeForm extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .form-select {
   width: 100%;
   height: 100%;

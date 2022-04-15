@@ -80,7 +80,7 @@ export default class IframePage extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .cell-result-page {
   width: 100%;
   height: calc(100vh - $page-header-height);

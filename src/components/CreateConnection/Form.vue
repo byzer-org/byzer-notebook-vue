@@ -169,7 +169,7 @@ export default class CreateConnectionForm extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .connect-form {
   height: 450px;
   overflow-y: auto;

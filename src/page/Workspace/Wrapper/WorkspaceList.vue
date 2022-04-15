@@ -506,7 +506,7 @@ export default class WorkspaceList extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../assets/css/variable.scss';
+
 .notebook-list {
   width: 100%;
   height: 100%;

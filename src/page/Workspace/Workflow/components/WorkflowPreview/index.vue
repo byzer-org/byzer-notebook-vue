@@ -79,7 +79,7 @@ export default class WorkflowPreview extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .workflow-preview {
   width: 100%;
   background-color: $--color-white;

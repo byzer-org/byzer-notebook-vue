@@ -20,7 +20,7 @@ export default class GraphNode extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../assets/css/variable.scss';
+
 .node-circle {
   position: relative;
   width: 32px;

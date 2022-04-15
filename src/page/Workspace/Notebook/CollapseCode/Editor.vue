@@ -44,7 +44,7 @@ export default class CollapseCodeEditor extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../assets/css/variable.scss';
+
 .collapse-editor {
   background-color: #fff;
   font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
@@ -73,7 +73,7 @@ export default class CollapseCodeEditor extends Vue {
 }
 </style>
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
   // 颜色设置
   .hljs-comment, .hljs-constant.hljs-numeric {
     color: $cellCommentColor;

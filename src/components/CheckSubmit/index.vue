@@ -72,7 +72,7 @@ export default class CheckSubmit extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .alert-foot-wrap {
   display: flex;
   justify-content: space-between;

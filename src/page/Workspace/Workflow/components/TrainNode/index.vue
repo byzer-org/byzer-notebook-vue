@@ -309,7 +309,7 @@ export default class TrainNodeForm extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .node-container.train {
   .node-container-form {
     padding: 16px;

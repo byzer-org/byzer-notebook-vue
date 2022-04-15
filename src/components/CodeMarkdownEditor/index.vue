@@ -190,7 +190,7 @@ export default class CodeMarkdownEditor extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 /* 工具栏 */
 .v-md-editor__toolbar {
   display: none;

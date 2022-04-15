@@ -130,7 +130,7 @@ export default class SetSchedule extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 
 .schedule-form {
   &-label {

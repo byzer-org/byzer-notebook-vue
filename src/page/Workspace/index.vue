@@ -63,7 +63,7 @@ export default class Notebook extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .notebookWrapper {
   width: 100%;
   height: calc(100vh - 48px);

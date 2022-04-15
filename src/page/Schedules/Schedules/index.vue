@@ -397,7 +397,7 @@ export default class Schedules extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../assets/css/variable.scss';
+
 .schedules-page {
   .btns-search {
     margin: 10px 0;

@@ -146,7 +146,7 @@ export default class CheckAction extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .alert-foot-wrap {
   display: flex;
   justify-content: space-between;

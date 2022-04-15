@@ -270,7 +270,7 @@ export default class DataCataLog extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../assets/css/variable.scss';
+
 .dataCatalog {
   width: 100%;
   height: 100%;

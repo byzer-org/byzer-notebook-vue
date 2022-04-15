@@ -454,7 +454,7 @@ export default class Instance extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../assets/css/variable.scss';
+
 .instance-page {
   .page-inner-header {
     display: flex;

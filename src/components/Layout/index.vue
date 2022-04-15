@@ -23,7 +23,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../assets/css/variable.scss';
+
 .layout {
   width: 100%;
   height: 100vh;

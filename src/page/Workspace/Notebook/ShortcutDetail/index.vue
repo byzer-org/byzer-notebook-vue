@@ -76,7 +76,7 @@ export default class ShortcutDetail extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../assets/css/variable.scss';
+
 .shortcut-detail {
   .shortcut-sub-title {
     display: flex;

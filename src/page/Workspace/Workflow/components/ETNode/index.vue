@@ -693,7 +693,7 @@ export default class ETNodeForm extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .node-container.et {
   padding-right: 10px;
   .node-container-form {

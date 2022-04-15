@@ -224,7 +224,7 @@ export default class WorkflowWrapper extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../assets/css/variable.scss';
+
 .notebook-workflow {
   width: 100%;
   height: calc(100vh - 100px);

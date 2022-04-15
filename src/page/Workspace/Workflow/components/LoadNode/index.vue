@@ -527,7 +527,7 @@ export default class LoadNodeForm extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .node-container.load {
   .parameter-part {
     padding: 8px;

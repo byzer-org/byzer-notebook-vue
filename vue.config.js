@@ -33,6 +33,16 @@ module.exports = {
     }
   },
   chainWebpack: config => {
+    const oneOfsMap = config.module.rule('scss').oneOfs.store;
+    oneOfsMap.forEach(item => {
+      item
+        .use('style-resources-loader')
+        .loader('style-resources-loader')
+        .options({
+          patterns: './src/assets/css/variable.scss'
+        })
+        .end()
+    })
     // 定义组件中文案翻译
     config.module
       .rule('i18n')

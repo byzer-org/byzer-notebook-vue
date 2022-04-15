@@ -1223,7 +1223,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
 .cellListPage {
   width: 100%;
   background-color: $--color-white;

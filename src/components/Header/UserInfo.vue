@@ -55,7 +55,7 @@ export default class UserInfo extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .user-info-wrapper {
   display: flex;
   align-items: center;

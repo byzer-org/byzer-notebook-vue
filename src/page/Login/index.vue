@@ -109,7 +109,7 @@ export default class Login extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+// 
 #loginPage {
   .login-box {
     width: 500px;
