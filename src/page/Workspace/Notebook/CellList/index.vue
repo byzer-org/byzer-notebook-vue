@@ -586,8 +586,7 @@ export default {
               this.changeMode('edit')
               if (item.editType === 'Markdown' && node) {
                 // markdown变为编辑模式并聚焦
-                node.mdMode = 'edit'
-                node.handleFocus()
+                node.singleClick()
               }
             }
           }

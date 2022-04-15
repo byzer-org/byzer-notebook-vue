@@ -57,6 +57,7 @@ import 'codemirror/lib/codemirror.css'
 import 'katex/dist/katex.css'
 // mermaid
 import '@kangc/v-md-editor/lib/plugins/mermaid/mermaid.css'
+import { debounce } from '@antv/x6/lib/util/function/function'
 
 @Component({
   props: {
@@ -90,6 +91,10 @@ export default class CodeMarkdownEditor extends Vue {
   /** md编辑器模式 edit——编辑模式 preview——预览模式 */
   mdMode = 'preview'
 
+  dblClickStatus = false
+
+  timer = null
+
   /** 编辑器内容 */
   content = this.value
 
@@ -103,6 +108,20 @@ export default class CodeMarkdownEditor extends Vue {
   changeContent () {
     this.$emit('changeContent', this.content)
   }
+
+  singleClick = debounce(function () {
+    if (!this.dblClickStatus) {
+      this.dblClickStatus = true
+      this.timer = setTimeout(() => {
+        this.dblClickStatus = false
+      }, 1000);
+    } else {
+      clearTimeout(this.timer)
+      this.dblClickStatus = false
+      this.mdMode = 'edit'
+      this.handleFocus()
+    }
+  }, 50)
 
   /**
    * @description: 获绑定codemirror实例
@@ -130,8 +149,7 @@ export default class CodeMarkdownEditor extends Vue {
     }
     if (newValue === 'edit') {
       if (this.isSelected) {
-        this.mdMode = 'edit'
-        this.handleFocus()
+        this.singleClick()
       } else {
         this.mdMode = 'preview'
       }
