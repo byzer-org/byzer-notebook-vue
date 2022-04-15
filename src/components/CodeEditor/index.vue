@@ -79,9 +79,11 @@ export default {
     readOnly () {
       this.setReadOnly()
     },
-    isSelected () {
-      const codeEditor = this.$refs['codeEditor' + this.cellId]
-      codeEditor?.editor.textInput.focus()
+    isSelected (newVal) {
+      if (newVal) {
+        const codeEditor = this.$refs['codeEditor' + this.cellId]
+        codeEditor?.editor.textInput.focus()
+      }
     }
   },
   created () {

@@ -361,6 +361,14 @@ export default {
     },
     changeModeToEdit () {
       this.changeMode('edit')
+      const { id, editType } = this.selectCell
+      if (editType === 'Markdown') {
+        // editor元素
+        const node = this.$refs['cell' + id][0].$refs['cellEditor'+ id]
+        node.dblClickStatus = false
+        node.mdMode = 'edit'
+        node.handleFocus()
+      }
     },
     changeModeToCommand () {
       this.changeMode('command')
