@@ -342,7 +342,7 @@ export default class FindAndReplace extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
 
 .find-and-replace {
   .dialog-title {

@@ -308,7 +308,7 @@ export default class Addschedule extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .schedule-form-crontab-wrap {
   display: flex;
   justify-content: space-between;

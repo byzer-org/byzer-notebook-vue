@@ -113,7 +113,7 @@ export default class LogMessage extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
 .log-message {
   overflow: auto;
   &-list {

@@ -83,7 +83,7 @@ export default class CodeModal extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .code-dialog {
   .progress {
     line-height: 20px;

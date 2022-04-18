@@ -30,7 +30,7 @@ export default class GlobalHelp extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .global-help {
   margin-right: 10px;
   .drop-icon {

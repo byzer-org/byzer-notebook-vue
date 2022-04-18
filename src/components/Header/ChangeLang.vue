@@ -37,7 +37,7 @@ export default class ChangeLang extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .change-lang {
   margin-right: 10px;
   .drop-icon {

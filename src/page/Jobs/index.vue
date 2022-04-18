@@ -26,7 +26,7 @@ export default class JobPage extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .jobs-page {
   .tab-wrap {
     margin-top: 10px;

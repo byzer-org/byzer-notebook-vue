@@ -331,7 +331,7 @@ export default class JobsTable extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../assets/css/variable.scss';
+
 .jobs-table-wrap {
   .job-id-wrap {
     display: flex;

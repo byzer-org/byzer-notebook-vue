@@ -144,7 +144,7 @@ export default class NodeEditor extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .node-wrapper {
   width: 100%;
   height: 100%;

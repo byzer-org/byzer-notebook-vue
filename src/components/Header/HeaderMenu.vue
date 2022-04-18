@@ -61,7 +61,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .el-menu--horizontal {
   &.el-menu-header {
     .el-menu-item:not(.is-disabled):focus, .el-menu-item:not(.is-disabled):hover, .el-submenu .el-submenu__title:hover {

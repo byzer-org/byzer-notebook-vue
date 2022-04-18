@@ -513,7 +513,7 @@ export default class SaveNodeForm extends Vue {
 </script>
 
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .node-container {
   &.extra-style {
     .node-container-form {

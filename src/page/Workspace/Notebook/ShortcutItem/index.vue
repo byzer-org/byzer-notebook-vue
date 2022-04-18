@@ -71,7 +71,7 @@ export default class ShortcutItem extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../../assets/css/variable.scss';
+
 .shortcut-item {
   margin: 9px 10px 9px 0;
   display: flex;

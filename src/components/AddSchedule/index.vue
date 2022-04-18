@@ -343,7 +343,6 @@ export default class Addschedule extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
 .schedule-form-wrap {
   max-height: 60vh;
   overflow-y: auto;

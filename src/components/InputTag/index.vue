@@ -94,7 +94,7 @@ export default class InputToTag extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .input-to-tag {
   width: 100%;
   border: 1px solid $--border-update-schedule;

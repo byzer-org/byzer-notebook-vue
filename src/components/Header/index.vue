@@ -40,7 +40,7 @@ export default class Header extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-@import '../../assets/css/variable.scss';
+
 .page-header {
   display: flex;
   background-color: $--color-nav;

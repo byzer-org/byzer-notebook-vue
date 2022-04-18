@@ -199,7 +199,7 @@ export default class DAGView extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .des_wrap {
   .des_item {
     margin: 8px 0;

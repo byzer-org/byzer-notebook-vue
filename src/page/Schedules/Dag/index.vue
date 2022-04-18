@@ -133,7 +133,7 @@ export default class DAG extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../assets/css/variable.scss';
+
 
 .dag-wrap {
   padding: 36px 54px;

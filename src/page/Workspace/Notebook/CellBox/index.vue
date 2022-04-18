@@ -362,7 +362,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
 .cell-box {
   width: 100%;
   position: relative;

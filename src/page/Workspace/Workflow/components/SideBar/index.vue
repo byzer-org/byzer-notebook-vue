@@ -129,7 +129,7 @@ export default class WorkflowSide extends Vue {
 } 
 </script>
 <style lang="scss">
-@import '../../../../../assets/css/variable.scss';
+
 .node-tooltip.el-tooltip__popper {
   .title {
     font-size: 12px;

@@ -139,7 +139,7 @@ export default class HomePage extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .home-page {
   width: 100%;
   height: calc(100vh - $page-header-height);

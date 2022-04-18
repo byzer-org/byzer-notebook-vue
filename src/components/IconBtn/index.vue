@@ -41,7 +41,7 @@ export default class IconBtn extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .icon-btn {
   font-size: 22px;
   &.has-bg {

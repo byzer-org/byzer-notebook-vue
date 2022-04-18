@@ -44,7 +44,7 @@ export default class CollapseCode extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../../../assets/css/variable.scss';
+
 .collapse-code {
   padding-top: 19px;
   .code-btn {

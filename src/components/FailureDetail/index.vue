@@ -76,7 +76,7 @@ export default class SetSchedule extends Vue {
 }
 </script>
 <style lang="scss">
-@import '../../assets/css/variable.scss';
+
 .log-wrap {
   .node-item-flex {
     display: flex;

@@ -101,7 +101,6 @@ export default class SetDemo extends Vue {
 }
 </script>
 <style lang="scss">
-@import '@/assets/css/variable.scss';
 .set-demo {
   display: inline-flex;
   .btn {
