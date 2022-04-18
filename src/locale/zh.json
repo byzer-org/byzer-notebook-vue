@@ -227,7 +227,8 @@
     "hotKeyCursorDown": "光标向下",
     "hotKeyCursorUp": "光标向上",
     "selectFolder": "请选择一个文件夹",
-    "reselectFolder": "请选择另一个文件夹"
+    "reselectFolder": "请选择另一个文件夹",
+    "leaveRunAll": "当前 Notebook 正在运行，离开后会中断其运行。确定要离开吗？"
   },
   "workflow": {
     "valueType": "输入值类型错误，应该为 {type}。",

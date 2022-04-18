@@ -7,9 +7,9 @@
           <i class="el-ksd-icon-add_22 font-22 hasEvent"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="handleCreateFolder">{{$t('folder')}}</el-dropdown-item>
-          <el-dropdown-item command="handleCreateNoteBook">{{$t('workspace.notebook')}}</el-dropdown-item>
-          <el-dropdown-item command="handleCreateWorkflow">{{$t('workspace.workflow')}}</el-dropdown-item>
+          <el-dropdown-item v-if="!isRunningAll" command="handleCreateFolder">{{$t('folder')}}</el-dropdown-item>
+          <el-dropdown-item v-if="!isRunningAll" command="handleCreateNoteBook">{{$t('workspace.notebook')}}</el-dropdown-item>
+          <el-dropdown-item v-if="!isRunningAll" command="handleCreateWorkflow">{{$t('workspace.workflow')}}</el-dropdown-item>
           <el-dropdown-item command="handleImport">{{$t('import')}}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -63,12 +63,13 @@
                   {{ $t('open') }}
                 </el-menu-item>
                 <el-menu-item
-                  v-if="!data.is_demo"
+                  v-if="!data.is_demo && !isRunningAll"
                   :index="'handleRename'"
                 >
                   {{ $t('rename') }}
                 </el-menu-item>
                 <el-menu-item
+                  v-if="!isRunningAll"
                   :index="'handleClone'"
                 >
                   {{ $t('clone') }}
@@ -118,16 +119,19 @@
                   ></el-button>
                 </template>
                 <el-menu-item
+                  v-if="!isRunningAll"
                   :index="'handleCreateFolder'"
                 >
                   {{ $t('workspace.folderCreate') }}
                 </el-menu-item>
                 <el-menu-item
+                  v-if="!isRunningAll"
                   :index="'handleCreateNoteBook'"
                 >
                   {{ $t('workspace.notebookCreate') }}
                 </el-menu-item>
                 <el-menu-item
+                  v-if="!isRunningAll"
                   :index="'handleCreateWorkflow'"
                 >
                   {{ $t('workspace.workflowCreate') }}
@@ -138,11 +142,13 @@
                   {{ $t('move') }}
                 </el-menu-item>
                 <el-menu-item
+                  v-if="!isRunningAll"
                   :index="'handleRename'"
                 >
                   {{ $t('rename') }}
                 </el-menu-item>
                 <el-menu-item
+                  v-if="!isRunningAll"
                   :index="'handleClone'"
                 >
                   {{ $t('clone') }}
@@ -191,6 +197,7 @@ import _ from 'lodash'
   },
   computed: {
     ...mapState({
+      isRunningAll: state => state.notebook.isRunningAll,
       notebookList: state => state.notebook.notebookList,
       openedNotebooks: state => state.notebook.openedNotebooks,
       activeNotebook: state => state.notebook.activeNotebook,

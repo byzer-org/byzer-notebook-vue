@@ -230,7 +230,8 @@
     "hotKeyCursorDown": "Cursor Down",
     "hotKeyCursorUp": "Cursor Up",
     "selectFolder": "Please select a folder",
-    "reselectFolder": "Please select another folder"
+    "reselectFolder": "Please select another folder",
+    "leaveRunAll": "Current Notebook is running, it will stop running if leaving it。Are you sure you want to leave？"
   },
   "workflow": {
     "valueType": "Wrong data type, should be {type}",

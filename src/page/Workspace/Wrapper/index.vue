@@ -39,7 +39,10 @@
           type="card"
           closable
           @tab-remove="confirmCloseTab"
-          @tab-click="handleClickTab">
+          :before-leave="handleBeforeLeave"
+        >
+          <!-- :before-leave="handleBeforeLeave" -->
+          <!-- @tab-click="handleClickTab" -->
           <el-tab-pane
             :label="tab.name + (tab.type === 'workflow' ? '.bzwf' : '.bznb')"
             :name="tab.uniq"
@@ -140,7 +143,9 @@ export default {
   computed: {
     ...mapState({
       activeSidebar: state => state.notebook.activeSidebar,
-      sideBarVisible: state => state.notebook.showSideBar
+      sideBarVisible: state => state.notebook.showSideBar,
+      isRunningAll: state => state.notebook.isRunningAll,
+      activeNotebook: state => state.notebook.activeNotebook
     }),
     layoutLeftStyle () {
       const { layoutStyle } = this
@@ -175,7 +180,9 @@ export default {
       setOpenedNotebook: 'SET_OPENED_NOTEBOOK',
       setActiveNotebook: 'SET_ACTIVE_NOTEBOOK',
       setDemoList: 'SET_DEMO_LIST',
-      changeSideBarVisible: 'CHANGE_SIDE_BAR_VISIBLE'
+      changeSideBarVisible: 'CHANGE_SIDE_BAR_VISIBLE',
+      changeRunningAll: 'CHANGE_RUN_ALL',
+      changeShowProgress: 'CHANGE_SHOW_PROGRESS'
     }),
     ...mapActions({
       getNotebookList: 'GET_NOTEBOOK_LIST',
@@ -206,6 +213,28 @@ export default {
       const uniq = tab.name
       const item = this.notebookTab.find(v => v.uniq === uniq)
       this.changeTabList(item, true, true)
+    },
+    handleBeforeLeave (activeName) {
+      return new Promise((resolve, reject) => {
+        if (this.isRunningAll) {
+          this.$confirm(this.$t('notebook.leaveRunAll'), this.$t('tip'), {
+            // confirmButtonText: title,
+            cancelButtonText: this.$t('cancel'),
+            type: 'warning',
+            customClass: 'centerButton'
+          }).then(() => {
+            this.changeRunningAll(false)
+            this.changeShowProgress(false)
+            this.handleClickTab({ name: activeName })
+            resolve()
+          }).catch (() => {
+            reject()
+          })
+        } else {
+          resolve()
+          this.handleClickTab({ name: activeName })
+        }
+      })
     },
     changeActiveTab (item) {
       this.changeTabList(item, true)
@@ -336,6 +365,10 @@ export default {
             if (item.type === 'folder') {
               this.fetchNotebookList()
             } else {
+              if (item.uniq === this.activeNotebook?.uniq) {
+                this.changeRunningAll(false)
+                this.changeShowProgress(false)
+              }
               // 删除成功后，要刷新列表 删除左侧，同时要同步删除右侧的 tab
               let newTabList = this.notebookTab.filter(v => v.uniq !== item.uniq)
               if (newTabList.length && !newTabList.find(v => v.active === 'true')) {
@@ -420,10 +453,26 @@ export default {
       const params = item ? { uniq: item.uniq, type: item.type } : {}
       this.$router.push({name: 'notebook', params})
     },
+    changeTabList (activeNotebook, notNeedGet, tabClicked) {
+      activeNotebook['uniq'] = activeNotebook.type + '_' + activeNotebook.id
+      if (this.isRunningAll && activeNotebook.uniq !== this.activeNotebook?.uniq) {
+        this.$confirm(this.$t('notebook.leaveRunAll'), this.$t('tip'), {
+          cancelButtonText: this.$t('cancel'),
+          type: 'warning',
+          customClass: 'centerButton'
+        }).then(() => {
+          this.changeRunningAll(false)
+          this.changeShowProgress(false)
+          this.confirmChangeTabList(activeNotebook, notNeedGet, tabClicked)
+        }).catch (() => {})
+      } else {
+        this.confirmChangeTabList(activeNotebook, notNeedGet, tabClicked)
+      }
+    },
     /**
      * @param tabClickd 是否为tab项的点击事件，true为真，不需要将当前项移动至数组首位
      */
-    async changeTabList (activeNotebook, notNeedGet, tabClicked) { // 向当前打开的notebook 中新增一个notebook 或者重新打开
+    async confirmChangeTabList (activeNotebook, notNeedGet, tabClicked) { // 向当前打开的notebook 中新增一个notebook 或者重新打开
       try {
         const temp = _.cloneDeep(this.notebookTab)
         if (!tabClicked) {

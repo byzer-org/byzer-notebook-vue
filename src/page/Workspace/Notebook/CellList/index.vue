@@ -221,7 +221,6 @@ export default {
       results: [], // 查找的结果
       setDemoParams: null,
       showAllCell: true,
-      showProgress: false,
       showProgressDuration: 3000,
       runningStatus: 'NEW'
     }
@@ -240,7 +239,8 @@ export default {
       activeNotebook: state => state.notebook.activeNotebook,
       mode: state => state.notebook.activeNotebook.mode,
       openedNotebookList: state => state.notebook.openedNotebooks,
-      is_scheduler_enabled: state => state.global.is_scheduler_enabled
+      is_scheduler_enabled: state => state.global.is_scheduler_enabled,
+      showProgress: state => state.notebook.showProgress
     }),
     ...mapState('DAGViewModal', {
       taskInfo: state => state.taskInfo
@@ -314,6 +314,8 @@ export default {
           this.changeMode('edit')
           this.bindAllKey()
           this.checkNotebook()
+        } else {
+          this.resetIndex()
         }
       },
       immediate: true
@@ -363,7 +365,9 @@ export default {
   methods: {
     ...mapMutations({
       changeNotebookMode: 'CHANGE_NOTEBOOK_MODE', // 修改notebook 模式 edit/command
-      removeLoadedCellList: 'REMOVE_LOADED_CELL_LIST'
+      removeLoadedCellList: 'REMOVE_LOADED_CELL_LIST',
+      changeRunningAll: 'CHANGE_RUN_ALL',
+      changeShowProgress: 'CHANGE_SHOW_PROGRESS'
     }),
     ...mapActions('AddScheduleModal', {
       callAddScheduleModal: 'CALL_MODAL'
@@ -710,16 +714,22 @@ export default {
       this.draggedIndex = futureIndex + 1
     },
     changeRunAll (value) {
+      this.changeRunningAll(value)
       this.isRunningAll = value
       this.draggableOptions.disabled = value
       if (value) {
-        this.showProgress = true
+          this.changeShowProgress(value)
       } else {
         setTimeout(() => {
           this.runningIndex = this.runToIndex = -1
-          this.showProgress = false
+          this.changeShowProgress(false)
         }, this.showProgressDuration)
       }
+    },
+    resetIndex () {
+      this.runningIndex = -1
+      this.runToIndex = -1
+      this.runningStatus = 'NEW'
     },
     shouldGetScrollTop () {
       if (this.activeNotebookId === this.currentNotebook.id) {

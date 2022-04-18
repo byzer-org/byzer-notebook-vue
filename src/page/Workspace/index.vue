@@ -23,14 +23,33 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
     ...mapState({
       activeNotebook: state => state.notebook.activeNotebook,
       activeSidebar: state => state.notebook.activeSidebar,
-      sideBarVisible: state => state.notebook.showSideBar
+      sideBarVisible: state => state.notebook.showSideBar,
+      isRunningAll: state => state.notebook.isRunningAll
     })
   },
   methods: {
     ...mapMutations({
       changeActiveSidebar: 'CHANGE_ACTIVE_SIDEBAR',
-      changeSideBarVisible: 'CHANGE_SIDE_BAR_VISIBLE'
+      changeSideBarVisible: 'CHANGE_SIDE_BAR_VISIBLE',
+      changeRunningAll: 'CHANGE_RUN_ALL',
+      changeShowProgress: 'CHANGE_SHOW_PROGRESS'
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.isRunningAll) {
+      this.$confirm(this.$t('notebook.leaveRunAll'), this.$t('tip'), {
+        // confirmButtonText: title,
+        cancelButtonText: this.$t('cancel'),
+        type: 'warning',
+        customClass: 'centerButton'
+      }).then(() => {
+        this.changeRunningAll(false)
+        this.changeShowProgress(false)
+        next()
+      })
+    } else {
+      next()
+    }
   }
 })
 
