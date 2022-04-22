@@ -11,9 +11,17 @@ export default {
     logMessageList: {},
     resultList: {},
     activeSidebar: 'notebook',
-    showSideBar: true
+    showSideBar: true,
+    isRunningAll: false,
+    showProgress: false
   },
   mutations: {
+    [types.CHANGE_RUN_ALL]: (state, payload) => {
+      state.isRunningAll = payload
+    },
+    [types.CHANGE_SHOW_PROGRESS]: (state, payload) => {
+      state.showProgress = payload
+    },
     [types.SET_NOTEBOOK_LIST]: (state, data) => {
       state.notebookList = data
     },
