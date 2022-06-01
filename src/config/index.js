@@ -27,7 +27,8 @@ export const SpecialCodeSuggestKey = ['.', '/', '`', '\'', '"']
  */
 export const FileSuffixMap = {
   'notebook': '.bznb',
-  'workflow': '.bzwf'
+  'workflow': '.bzwf',
+  'folder': ''
 }
 
 export const GRAPH_NODE_ATTRS = {

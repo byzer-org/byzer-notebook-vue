@@ -81,7 +81,7 @@
     "notebookDeleteTitle": "删除笔记本",
     "folderDeleteTitle": "删除文件夹",
     "workflowDeleteTitle": "删除工作流",
-    "confirmDelete": "您确定要删除此{type}吗？请注意，此操作无法还原。",
+    "confirmDelete": "您确定要删除 {name} 吗？请注意，此操作无法还原。",
     "createTip": "创建空白笔记本/工作流或选择现有文件",
     "renameSuccess": "重命名成功",
     "cloneSuccess": "克隆成功",

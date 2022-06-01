@@ -82,7 +82,7 @@
     "notebookDeleteTitle": "Delete Notebook",
     "folderDeleteTitle": "Delete Folder",
     "workflowDeleteTitle": "Delete Workflow",
-    "confirmDelete": "Are you sure you want to delete this {type}? Please note this action can’t be reverted.",
+    "confirmDelete": "Are you sure you want to delete {name}? Please note this action can’t be reverted.",
     "createTip": "Create a blank Notebook/Workflow or select an existing file",
     "renameSuccess": "Successfully Renamed",
     "cloneSuccess": "Successfully Duplicated",
