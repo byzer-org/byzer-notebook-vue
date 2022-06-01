@@ -110,6 +110,7 @@ import { getDemoList, getCasAndTree } from '@/util'
 import _ from 'lodash'
 import Sortable from 'sortablejs'
 import { getAllList } from '../../../util'
+import { FileSuffixMap } from '@/config'
 
 export default {
   data () {
@@ -336,13 +337,14 @@ export default {
     },
     handleDelete (item) {
       const title = this.$t(`workspace.${item.type}DeleteTitle`)
-      const text = this.$t('workspace.confirmDelete', {type: this.$t(`workspace.${item.type}`)})
+      const text = this.$t('workspace.confirmDelete', {name: `<strong>${item.name}${FileSuffixMap[item.type]}</strong>`})
       this.$confirm(text, title, {
         confirmButtonText: this.$t('delete'),
         cancelButtonText: this.$t('cancel'),
         confirmButtonClass: 'el-button--danger',
         type: 'warning',
-        customClass: 'centerButton'
+        customClass: 'centerButton',
+        dangerouslyUseHTMLString: true
       }).then(() => {
         this.confirmDelete(item)
       }).catch(() => {
