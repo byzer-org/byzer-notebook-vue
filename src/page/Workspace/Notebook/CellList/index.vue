@@ -1325,7 +1325,7 @@ export default {
         opacity: 0.2;
       }
       .cell-list {
-        height: calc(100vh - 96px - 110px);
+        height: calc(100vh - $page-header-height - 105px);
         padding-bottom: 50vh;
         overflow-y: auto;
         > div > li {
