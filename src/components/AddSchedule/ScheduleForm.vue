@@ -291,7 +291,7 @@ export default class Addschedule extends Vue {
   // 校验参数名称
   async validateName (rule, value, callback) {
     if (!value || value.trim() === '') {
-      return callback(new Error(this.$t('workspace.nameHolder')))
+      return callback(new Error(this.$t('schedules.nameHolder')))
     } else if (!notebookNameReg.test(value)) {
       return callback(new Error(this.$t('workspace.nameFormatValidTip')))
     }

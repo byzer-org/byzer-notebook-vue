@@ -93,7 +93,7 @@
     "notebookClone": "Clone Notebook",
     "folderClone": "Clone Folder",
     "workflowClone": "Clone Workflow",
-    "nameHolder": "Please input schedule name",
+    "nameHolder": "Please input a name",
     "taskHolder": "Please select a task",
     "saveAsNotebook": "Save as Notebook",
     "notebookCreate": "Create Notebook",
@@ -316,6 +316,7 @@
     "status": "Status"
   },
   "schedules": {
+    "nameHolder": "Please input schedule name",
     "viewDAG": "View DAG",
     "DAGViewTitle": "View Task",
     "viewInstance": "View Instance",

@@ -95,7 +95,7 @@
     "notebookName": "笔记本名称",
     "workflowName": "工作流名称",
     "folderName": "文件夹名称",
-    "nameHolder": "请输入调度名称",
+    "nameHolder": "请输入名称",
     "taskHolder": "请选择一个任务",
     "saveAsNotebook": "另存为笔记本",
     "folderCreate": "创建文件夹",
@@ -317,6 +317,7 @@
     "status": "状态"
   },
   "schedules": {
+    "nameHolder": "请输入调度名称",
     "viewDAG": "查看 DAG",
     "DAGViewTitle": "查看任务",
     "viewInstance": "查看实例",
