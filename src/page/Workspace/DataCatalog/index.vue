@@ -142,8 +142,12 @@ export default class DataCataLog extends Vue {
     await setTimeout(() => {
       this.$refs['tableTree'].getNode(this.allDataList[2])?.parent.childNodes.forEach(i => {
         this.$refs['tableTree'].remove(i.id)
+        // 变为折叠
         i.expanded = false
+        // 取消加载中动画
         i.loaded = false
+        // 取消叶子节点
+        i.isLeaf = false;
       })
       this.refreshing = false
     }, 1000)
