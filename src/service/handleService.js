@@ -29,6 +29,7 @@ instance.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           store.commit(actionsTypes.HIDE_ALL_MODALS)
+          store.commit(actionsTypes.CLEAR_USER_INFO)
           router.push({name: 'login'})
       }
     }
