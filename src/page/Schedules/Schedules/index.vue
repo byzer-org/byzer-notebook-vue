@@ -20,16 +20,14 @@
     >
       <el-table-column
         show-overflow-tooltip
-        :prop="'id'"
-        :label="$t('schedules.schId')"
-        :min-width="'120'"
-      ></el-table-column>
-      <el-table-column
-        show-overflow-tooltip
         :prop="'name'"
         :label="$t('schedules.name')"
         :min-width="'150'"
-      ></el-table-column>
+      >
+        <template slot-scope="scope">
+          <a href="javascript:;" @click="handleViewInstance(scope.row)">{{scope.row.name}}</a>
+        </template>
+      </el-table-column>
       <el-table-column
         show-overflow-tooltip
         :label="$t('schedules.status')"
@@ -132,15 +130,6 @@
                     >
                       <i class="el-ksd-icon-notbook_16 icon-btn"></i>
                       {{ $t('schedules.viewDAG') }}
-                    </div>
-                  </el-dropdown-item>
-                  <el-dropdown-item>
-                    <div
-                      class="schedules-action-dropdown"
-                      @click="handleViewInstance(scope.row)"
-                    >
-                      <i class="el-ksd-icon-view_22 icon-btn"></i>
-                      {{ $t('schedules.viewInstance') }}
                     </div>
                   </el-dropdown-item>
                 </el-dropdown-menu>
