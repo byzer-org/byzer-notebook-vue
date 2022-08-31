@@ -11,7 +11,7 @@
     <div class="log-wrap">
       <div class="node-item node-item-flex">
         <div class="label">{{ $t('schedules.failureNode') }}</div>
-        <div class="value">{{ failureDetail.name }}</div>
+        <div class="value" v-if="failureDetail && failureDetail.notebook">{{ failureDetail.notebook.name || '' }}</div>
       </div>
       <div class="node-item">
         <div class="label">{{ $t('schedules.failureLog') }}</div>

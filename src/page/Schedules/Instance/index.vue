@@ -179,7 +179,8 @@ import axios from 'axios'
       getInstanceList: actionsTypes.GET_INSTANCE_LIST,
       getInstance: actionsTypes.GET_INSTANCE,
       getInstanceById: actionsTypes.GET_INSTANCE_BY_ID,
-      setInstanceState: actionsTypes.SET_INSTANCE_STATE
+      setInstanceState: actionsTypes.SET_INSTANCE_STATE,
+      getNotebookById: actionsTypes.GET_NOTEBOOK_BY_ID
     }),
     ...mapActions('FailureDetailModal', {
       callAddScheduleModal: 'CALL_MODAL'
@@ -358,6 +359,8 @@ export default class Instance extends Vue {
     try {
       const res = await this.getInstanceById(id)
       failureDetail = res.data.find(i => this.checkScope(['5'], i.state))
+      const notebookInfo = await this.getNotebookById({id: failureDetail?.entity?.entity_id})
+      failureDetail.notebook = notebookInfo?.data
     } catch (err) {
       console.log(err)
     } finally {

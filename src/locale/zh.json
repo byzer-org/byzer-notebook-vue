@@ -348,7 +348,7 @@
     "deleteTitle": "删除调度",
     "addToSchedule": "加入调度",
     "addedToSchedule": "已加入调度",
-    "failureNode": "失败节点：",
+    "failureNode": "笔记本名称：",
     "failureLog": "失败日志",
     "taskName": "任务名称",
     "taskDesc": "任务描述",

@@ -347,7 +347,7 @@
     "deleteTitle": "Delete Schedule",
     "addToSchedule": "Add to Schedule",
     "addedToSchedule": "Added to Schedule",
-    "failureNode": "Failed Node: ",
+    "failureNode": "Notebook Name: ",
     "failureLog": "Failed Log",
     "taskName": "Task Name",
     "taskDesc": "Task Description",
