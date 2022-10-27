@@ -152,6 +152,7 @@ export default class CellConfigForm extends Vue {
     this.$refs.ruleForm.resetFields()
     this.$refs.parameterForm.resetFields()
     this.getInitForm(this.cellInfo)
+    this.$emit('onHideForm')
   }
 
   handleCloseForm () {

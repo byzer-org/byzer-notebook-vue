@@ -41,7 +41,7 @@
             :isSelected="selectCell.id===cellId"
           />
           <div class="cell-btns" :ref="'cellHover' + cellId">
-            <el-tag @click="showConfigForm = true"><i class="el-icon-setting"></i>{{ getEditType() }}</el-tag>
+            <el-tag @click="handleShowConfigForm"><i class="el-icon-setting"></i>{{ getEditType() }}</el-tag>
             <div class="actions">
               <ActionButton :actions="actions" />
             </div>
@@ -195,6 +195,12 @@ export default {
     ...mapMutations({
       addResult: 'SET_LOADED_CELL_LIST'
     }),
+    handleShowConfigForm () {
+      console.debug(this.editType, 'lang')
+      if ([LANG.PYTHON, LANG.OPENMLDB, LANG.KYLIN].includes(this.editType)) {
+        this.showConfigForm = true
+      }
+    },
     getEditType () {
       return langList.find(item => item.value === this.editType)?.label
     },
