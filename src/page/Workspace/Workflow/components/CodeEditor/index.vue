@@ -10,7 +10,7 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { mapActions } from 'vuex'
 import ace from 'brace'
-import { SpecialCodeSuggestKey } from '../../../../../config'
+import { SpecialCodeSuggestKey } from '@/config/lang'
 @Component({
   props: {
     height: {

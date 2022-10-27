@@ -5,27 +5,48 @@
       <div><icon-btn icon="el-ksd-icon-grab_dots_16" class="move-cell" :disabled="isRunningAll" /></div>
       <div class="mt-5"><icon-btn icon="el-ksd-icon-add_22" :handler="handleAddBelow" /></div>
     </div>
-    <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === 'Markdown'}" v-if="showCode">
-      <!-- Code编辑器 & log -->
-      <div v-if="editType === 'Byzer-lang' || editType === 'Python'">
-        <div class="mock-editor" :class="!(mode === 'edit' && selectCell.id === cellId) && 'preview'"><div class="mock-editor-gutter"></div><div class="mock-editor-content"></div></div>
-        <CodeEditor
-          @changeMode="changeMode"
+    <div class="cell-box-container" :class="{'active': isActive, 'is-md-cell': editType === LANG.MARKDOWN}" v-if="showCode">
+      <!-- markdown编辑器 -->
+      <template v-if="editType === LANG.MARKDOWN">
+        <CodeMarkdownEditor
           :cellId="cellId"
-          :readOnly="mode !== 'edit'"
           :ref="'cellEditor' + cellId"
           :value="content"
-          :editType="editType"
-          :newCellList="newCellList"
+          :mode="mode"
+          :isSelected="selectCell.id === cellId"
           @changeContent="changeContent"
-          @gotoNextCell="gotoNextCell"
-          :isSelected="selectCell.id===cellId"
+          @changeMdMode="changeMdMode"
         />
-      </div>
-      <div class="cell-btns" :ref="'cellHover' + cellId">
-        <ActionButton :actions="actions" />
-      </div>
-      <div v-if="editType === 'Byzer-lang' || editType === 'Python'">
+      </template>
+      <template v-else>
+        <!-- Code编辑器 & log -->
+        <CellConfigForm 
+          v-if="showConfigForm"
+          :cellInfo="cellInfo"
+          @changeCellConfig="handleChangeCellConfig"
+          @onHideForm="showConfigForm = false"
+        />
+        <div class="code-container">
+          <div class="mock-editor" :class="!(mode === 'edit' && selectCell.id === cellId) && 'preview'"><div class="mock-editor-gutter"></div><div class="mock-editor-content"></div></div>
+          <CodeEditor
+            @changeMode="changeMode"
+            :cellId="cellId"
+            :readOnly="mode !== 'edit'"
+            :ref="'cellEditor' + cellId"
+            :value="content"
+            :editType="editType"
+            :newCellList="newCellList"
+            @changeContent="changeContent"
+            @gotoNextCell="gotoNextCell"
+            :isSelected="selectCell.id===cellId"
+          />
+          <div class="cell-btns" :ref="'cellHover' + cellId">
+            <el-tag @click="showConfigForm = true"><i class="el-icon-setting"></i>{{ getEditType() }}</el-tag>
+            <div class="actions">
+              <ActionButton :actions="actions" />
+            </div>
+          </div>
+        </div>
         <div class="excute-result" v-if="status !== 'NEW' || loadingExcute" v-loading="loadingExcute">
           <el-tabs v-model="activeTab" class="tabs_button">
             <el-tab-pane label="Result" name="result">
@@ -48,18 +69,6 @@
             </el-tab-pane>
           </el-tabs>
         </div>
-      </div>
-      <!-- markdown编辑器 -->
-      <template v-else-if="editType === 'Markdown'">
-        <CodeMarkdownEditor
-          :cellId="cellId"
-          :ref="'cellEditor' + cellId"
-          :value="content"
-          :mode="mode"
-          :isSelected="selectCell.id === cellId"
-          @changeContent="changeContent"
-          @changeMdMode="changeMdMode"
-        />
       </template>
     </div>
     <div class="cell-box-container" :class="{'active': isActive}" v-else>
@@ -78,8 +87,11 @@ import ExcuteResult from '../ExcuteResult'
 import CollapseCode from '../CollapseCode'
 import ExcuteDetail from '../ExcuteDetail'
 import LogMessage from '../LogMessage'
+import CellConfigForm from './CellConfigForm'
 import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
-import { JOB_STATUS, MarkdownTag } from '@/config'
+import { JOB_STATUS } from '@/config'
+import { LANG, MarkdownTag, LANG_PREFIX, langList } from '@/config/lang'
+import { getCellConfig } from '../CellList/util'
 
 export default {
   props: ['cellInfo', 'selectCell', 'disableDelete', 'isRunningAll', 'currentNotebook', 'mode', 'cellId', 'newCellList', 'showAllCell'],
@@ -97,10 +109,12 @@ export default {
       showExcuteDetails: true,
       startTime: 0,
       showAddCode: false,
-      editType: this.cellInfo.editType || 'Byzer-lang', // 编辑器类型
+      editType: this.cellInfo.editType || LANG?.BYZER, // 编辑器类型
       mdMode: 'preview',
       innerMaxHeight: '',
-      loadingExcute: false
+      loadingExcute: false,
+      LANG: LANG,
+      showConfigForm: false
     }
   },
   components: {
@@ -110,7 +124,8 @@ export default {
     ExcuteResult,
     CollapseCode,
     ExcuteDetail,
-    LogMessage
+    LogMessage,
+    CellConfigForm
   },
   created () {
     this.calInnerMaxHeight()
@@ -142,7 +157,8 @@ export default {
     cellInfo: {
       handler (newVal) {
         this.content = this.cellInfo.content
-        this.editType = this.cellInfo.editType || 'Byzer-lang'
+        this.editType = this.cellInfo.editType || LANG?.BYZER
+        this.showConfigForm = Boolean(LANG_PREFIX[this.editType])
         if (!newVal.job_id) {
           this.excuteResult = {}
           this.status = 'NEW'
@@ -179,6 +195,9 @@ export default {
     ...mapMutations({
       addResult: 'SET_LOADED_CELL_LIST'
     }),
+    getEditType () {
+      return langList.find(item => item.value === this.editType)?.label
+    },
     changeMdMode (mode) {
       if (this.isDemo) return
       this.mdMode = mode
@@ -225,7 +244,7 @@ export default {
       this.$emit('handleStopHere')
     },
     async handleRun () {
-      if (this.editType === 'Markdown') {
+      if (this.editType === LANG.MARKDOWN) {
         // markdown
         this.changeStatus('1')
         this.loading = false
@@ -340,13 +359,13 @@ export default {
     changeContent (value) {
       let newValue = value
       this.content = newValue
-      if (this.editType === 'Markdown') {
+      if (this.editType === LANG.MARKDOWN) {
         newValue = `${MarkdownTag}${newValue}`
       }
       this.$emit('changeCellContent', {
         value: newValue,
         cellInfo: this.cellInfo,
-        reserve: this.editType === 'Markdown'
+        reserve: this.editType === LANG.MARKDOWN
       })
     },
     gotoNextCell (type) {
@@ -354,6 +373,14 @@ export default {
     },
     changeMode (mode) {
       this.$emit('changeMode', mode)
+    },
+    handleChangeCellConfig (config) {
+      const curConfig = getCellConfig(this.selectCell)
+      const str = this.selectCell.content.replace(curConfig, config)
+       this.$emit('changeCellContent', {
+        value: str,
+        cellInfo: this.cellInfo
+      })
     }
   },
   beforeDestory () {
@@ -362,7 +389,6 @@ export default {
 }
 </script>
 <style lang="scss">
-
 .cell-box {
   width: 100%;
   position: relative;
@@ -400,6 +426,9 @@ export default {
     &:hover {
       box-shadow: 0px 1px 4px rgba(63, 89, 128, 0.16);
     }
+    .code-container {
+      position: relative;
+    }
     .mock-editor {
       display: flex;
       height: 19px;
@@ -433,7 +462,6 @@ export default {
     }
     .cell-btns {
       z-index: 999;
-      // height: 30px;
       padding: 4px 5px;
       padding-top: 0;
       display: none;
@@ -441,6 +469,17 @@ export default {
       position: absolute;
       right: 8px;
       top: 10px;
+      .el-tag {
+        cursor: pointer;
+      }
+      .el-icon-setting {
+        margin-right: 5px;
+      }
+      .actions {
+        display: inline-block;
+        vertical-align: middle;
+        padding: 2px;
+      }
     }
     .excute-result {
       margin-top: 15px;

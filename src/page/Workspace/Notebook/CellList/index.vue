@@ -26,14 +26,12 @@
         <div class="btn" v-if="!isDemo">
           <icon-btn icon="el-ksd-icon-add_22" :disabled="isRunningAll" :text="$t('notebook.addCell')" :handler="() => handleAddCell({ type: 'below' }, selectCell)" />
         </div>
-        <el-dropdown class="btn divider" @command="handleChanged" v-if="!isDemo">
+        <el-dropdown class="btn divider" @command="handleLangChange" v-if="!isDemo">
           <span class="drop-text hasEvent">
-            {{ editType }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
+            {{ getEditType() }}<i class="el-ksd-icon-arrow_down_22 font-22"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="Byzer-lang">Byzer-lang</el-dropdown-item>
-            <el-dropdown-item command="Python">Python</el-dropdown-item>
-            <el-dropdown-item command="Markdown">Markdown</el-dropdown-item>
+            <el-dropdown-item v-for="item in langList" :disabled="item.value === editType" :key="item.value" :command="item.value">{{item.label}}</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <div class="btn" v-if="!isDemo">
@@ -185,9 +183,9 @@ import SetDemo from '@/components/SetDemo'
 import { debounce, cloneDeep } from 'lodash'
 import draggable from 'vuedraggable'
 import cellCommand from './command.vue'
-import { MarkdownTag } from '@/config'
-import { PythonTag } from '../../../../config'
 import { formatGetParams } from '../../../../util'
+import { LANG, langList, PythonTag, MarkdownTag, OpenMLDBTag, KylinTag, LANG_PREFIX } from '@/config/lang'
+import { getDefaultConfig, getLangByContent, getCellConfig } from './util'
 
 export default {
   name: 'cellList',
@@ -222,7 +220,8 @@ export default {
       setDemoParams: null,
       showAllCell: true,
       showProgressDuration: 3000,
-      runningStatus: 'NEW'
+      runningStatus: 'NEW',
+      langList: langList
     }
   },
   props: ['removeTabId', 'currentNotebook', 'activeNotebookId'],
@@ -322,13 +321,13 @@ export default {
     },
     selectCell: {
       handler (newVal, oldValue) {
-        const {id, editType} = newVal
-        const {editType: oldEditType} = oldValue
+        const { id, editType, content } = newVal
+        const { editType: oldEditType } = oldValue
         if (id) {
-          this.editType = newVal.editType || ''
+          this.editType = editType || getLangByContent(content)
           if (
-            editType === 'Markdown' &&
-            (oldEditType === 'Byzer-lang' || oldEditType === 'Python')
+            editType === LANG.MARKDOWN && 
+            Object.values(LANG).some(lang => oldEditType === lang && oldEditType !== LANG.MARKDOWN)
           ) {
             const mdEditorInstance = this.$refs['cell' + id][0].$refs[
               'cellEditor' + id
@@ -395,6 +394,9 @@ export default {
     ...mapActions('CreateNoteBookModal', {
       callCreateNoteBookModal: 'CALL_MODAL'
     }),
+    getEditType () {
+      return langList.find(item => item.value === this.editType)?.label
+    },
     progressColor () {
       const statusObj = {
         'ERROR': '#CA1616',
@@ -521,15 +523,15 @@ export default {
             }
           })
           const node = this.$refs['cell' + item.id][0].$refs['cellEditor'+ item.id]
-          if (item.editType === 'Byzer-lang' || item.editType === 'Python') {
+          if (item.editType === LANG.MARKDOWN) {
+            // markdown可以直接修改content
+            node.content = lineList.join('\n')
+          } else {
             // ace-editor直接改content来修改文本会导致Ctrl+Z无法undo
             // 并且光标可能会重置在{column:0, row: 0}的位置
             const editor = node.$refs['codeEditor'+ cellId].editor
             const cursorPos = editor?.getCursorPosition()
             editor?.setValue(lineList.join('\n'), cursorPos)
-          } else {
-            // markdown可以直接修改content
-            node.content = lineList.join('\n')
           }
           item.content = lineList.join('\n')
         }
@@ -575,7 +577,7 @@ export default {
         const runBtnNode = this.$refs['cell' + item.id][0].$refs['cellHover' + item.id]
         // 点击的位置不在包裹editor的li中
         if (containerNode && !containerNode.contains(event.target)) {
-          if (item.editType === 'Markdown') {
+          if (item.editType === LANG.MARKDOWN) {
             // markdown变为预览模式
             node && (node.mdMode = 'preview')
           }
@@ -588,7 +590,7 @@ export default {
             if (!btnNode.contains(event.target)) {
               // 模式变为编辑模式
               this.changeMode('edit')
-              if (item.editType === 'Markdown' && node) {
+              if (item.editType === LANG.MARKDOWN && node) {
                 // markdown变为编辑模式并聚焦
                 node.singleClick()
               }
@@ -597,35 +599,49 @@ export default {
         }
       })
     },
+
+    getLangConfig (value, lang) {
+      const prefix = LANG_PREFIX[lang]
+      return value.split('\n').filter(item => item).filter(item => !item.startsWith(prefix)).join('\n')
+    },
+    
     /**
      * @description: 下拉框change事件
      * @param {e} new editType
      * @Date: 2021-08-27 10:22:54
      */
-    handleChanged (e) {
-      this.editType = e
+    handleLangChange (type) {
+      this.editType = type
       this.refreshSelectCell()
       let newValue = this.selectCell?.content || ''
       const index = this.newCellList.findIndex(i => i.id === this.selectCell.id)
       this.$set(this.newCellList, index, Object.assign(this.newCellList[index], {
-        editType: e
+        editType: type
       }))
-      if (e === 'Markdown') {
+      if (type === LANG.MARKDOWN) {
         newValue = `${MarkdownTag}${newValue}`
         this.handleSave()
       } else {
         if (newValue.startsWith(MarkdownTag)) {
           newValue = newValue.replace(MarkdownTag, '')
         }
-        const index = newValue.split('\n').map(i => i.trim()).indexOf(PythonTag)
-        if (e === 'Python' && index < 0) {
-          newValue = PythonTag + '\n' + newValue
-          this.setEditorValue(newValue)
-        }
-        if (e === 'Byzer-lang') {
-          if (index > -1) {
-            newValue = newValue.replace(PythonTag, '')
+        // index: 先找到行数 是否是 1 判断当前的语言是什么
+        // 如果是从当前的切换到其他的语言，新增默认配置
+        const valueArr = newValue.split('\n').filter(item => item).map(i => i.trim())
+        const isPython = valueArr.indexOf(PythonTag) === 0
+        const isOpenMLDB = valueArr.indexOf(OpenMLDBTag) === 0
+        const isKylin = valueArr.indexOf(KylinTag) === 0
+        if (type !== LANG.MARKDOWN) {
+          if (isPython && type !== LANG.PYTHON) {
+            // 替换掉以 python 前缀开头的人
+            newValue = this.getLangConfig(newValue, LANG.PYTHON)
+          } else if (isOpenMLDB && type !== LANG.OPENMLDB) {
+            newValue = this.getLangConfig(newValue, LANG.OPENMLDB)
+          } else if (isKylin && type !== LANG.KYLIN) {
+            newValue = this.getLangConfig(newValue, LANG.KYLIN)
           }
+          const { configStr } = getDefaultConfig(type)
+          newValue = configStr + '\n' + newValue
           this.setEditorValue(newValue)
         }
         if (this.mode === 'command') {
@@ -680,20 +696,9 @@ export default {
       }
       const { id, type } = this.activeNotebook
       this.changeNotebookMode({notebookId: id, type, mode})
-      if (
-        mode === 'command' &&
-        (this.selectCell.editType === 'Byzer-lang' ||
-          this.selectCell.editType === 'Python')
-      ) {
+      if (this.selectCell.editType !== LANG.MARKDOWN) {
         // 切换为command模式后ace editor失焦
-        this.handleCodeBlur()
-      } else if (
-        mode === 'edit' &&
-        (this.selectCell.editType === 'Byzer-lang' ||
-          this.selectCell.editType === 'Python')
-      ) {
-        // 切换为edit模式后ace editor聚焦
-        this.handleCodeFocus(this.selectCell.id)
+        mode === 'command' ? this.handleCodeBlur() : this.handleCodeFocus(this.selectCell.id)
       }
       this.bindSomeKey()
     },
@@ -817,14 +822,9 @@ export default {
           item.content = item.content.replace(MarkdownTag, '')
           // ！！！从备份中取保存前编辑器的模式
           const temp = this.oldCellList.find(i => i.id === item.id) || {}
-          item.editType = temp.editType || 'Markdown'
+          item.editType = temp.editType || LANG.MARKDOWN
         } else {
-          item.editType = 'Byzer-lang'
-          if (
-            (item.content || '').split('\n').map(i => i.trim()).indexOf(PythonTag) > -1
-          ) {
-            item.editType = 'Python'
-          }
+          item.editType = getLangByContent(item.content) ?? item.BYZER
         }
         return item
       })
@@ -885,7 +885,7 @@ export default {
         // 处理content并保存
         this.oldCellList = cloneDeep(this.newCellList).map(item => {
           item.content = item.content || ''
-          if (item.editType === 'Markdown') {
+          if (item.editType === LANG.MARKDOWN) {
             if (!(item.content || '').startsWith(MarkdownTag)) {
               item.content = MarkdownTag + item.content
             }
@@ -1019,18 +1019,8 @@ export default {
     changeInput: debounce(function ({ value, cellInfo }) {
       const index = this.newCellList.findIndex(v => v.id === cellInfo.id)
       this.newCellList[index].content = value
-      let editType = 'Byzer-lang'
+      let editType = getLangByContent(value)
       // 保存时给markdown添加标记
-      if ((value || '').startsWith(MarkdownTag)) {
-        editType = 'Markdown'
-      } else if (
-        (value || '')
-          .split('\n')
-          .map(i => i.trim())
-          .indexOf(PythonTag) > -1
-      ) {
-        editType = 'Python'
-      }
       this.$set(
         this.newCellList,
         index,
@@ -1069,7 +1059,18 @@ export default {
         console.log(e)
       }
     },
+    getNewCellConfig (cellIndex, lang) {
+      const lastCellIndex = cellIndex - 1
+      if (lastCellIndex > -1) {
+        const lastCell = this.newCellList[lastCellIndex]
+        return getCellConfig(lastCell)
+      } else {
+        return getDefaultConfig(lang)
+      }
+    },
     async handleAddCell (data, cell) {
+      const { editType } = cell
+      console.log('handleAddCell ~ editType', editType, this.editType)
       const { type } = data
       const index = this.newCellList.findIndex(v => v.id === cell.id)
       const insertIndex = type === 'below' ? index + 1 : index
@@ -1090,8 +1091,11 @@ export default {
         this.loadingSave = false
         this.newCellList = this.dataProcess(res.data.cell_list)
         this.selectCell = Object.assign(newCell.data, {
-          editType: 'Byzer-lang'
+          editType: this.editType,
+          content: this.getNewCellConfig(insertIndex, this.editType)
         })
+        this.newCellList[insertIndex] = this.selectCell
+        await this.autoSaveCell()
         this.changeMode('edit')
         this.autoScrollCells(insertIndex)
       } catch (e) {

@@ -18,7 +18,7 @@
 <script>
 import ace from 'brace'
 import { mapActions } from 'vuex'
-import { PythonTag, SpecialCodeSuggestKey } from '../../config'
+import { LANG, PythonTag, SpecialCodeSuggestKey } from '@/config/lang'
 
 export default {
   props: {
@@ -63,9 +63,9 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
-      if (this.readOnly) {
+      // if (this.readOnly) {
         this.content = newVal
-      }
+      // }
       this.checkLang()
 
       ;(oldVal || '').split('').forEach(i => {
@@ -178,7 +178,7 @@ export default {
         for (let index in this.newCellList) {
           index = index * 1
           const { editType, content } = this.newCellList[index]
-          if (index < cellIndex && editType !== 'Markdown') {
+          if (index < cellIndex && editType !== LANG.MARKDOWN) {
             const lineList = content.split('\n')
             lineNum += lineList.length
             beforeCellValue =

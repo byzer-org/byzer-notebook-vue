@@ -1,0 +1,68 @@
+{
+  "python": {
+    "input": {
+      "required": true,
+      "default": ""
+    },
+    "output": {
+      "required": false,
+      "default": ""
+    },
+    "schema": {
+      "required": true,
+      "default": ""
+    },
+    "runIn": {
+      "required": false,
+      "default": "driver",
+      "options": ["driver", "executor"]
+    },
+    "dataMode": {
+      "required": false,
+      "default": "data",
+      "options": ["data", "model"]
+    } ,
+    "cache": {
+      "required": false,
+      "default": true,
+      "options": [true, false]
+    },
+    "env": {
+      "required": true,
+      "default": ""
+    }
+  },
+  "openmldb": {
+    "url": {
+      "required": true,
+      "default": ""
+    },
+    "db": {
+      "required": true,
+      "default": ""
+    },
+    "execute_mode": {
+      "required": true,
+      "default": "offline",
+      "options": ["offline", "online"]
+    },
+    "output": {
+      "required": true,
+      "default": ""
+    }
+  },
+  "kylin": {
+    "url": {
+      "required": true,
+      "default": ""
+    },
+    "db": {
+      "required": true,
+      "default": ""
+    },
+    "output": {
+      "required": true,
+      "default": ""
+    }
+  }
+}
