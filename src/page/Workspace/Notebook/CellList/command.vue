@@ -3,7 +3,9 @@
 </template>
 <script>
 import { debounce } from 'lodash'
-import { PythonTag } from '../../../../config'
+import { LANG } from '@/config/lang'
+import { getLangByContent } from './util'
+
 
 export default {
   name: 'cellList',
@@ -157,7 +159,7 @@ export default {
      * @Date: 2021-09-01 17:09:13
      */
     checkAndChangeTitleLevel (tag) {
-      if ((this.currentNotebook.id === this.activeNotebookId) && this.selectCell?.editType === 'Markdown') {
+      if ((this.currentNotebook.id === this.activeNotebookId) && this.selectCell?.editType === LANG.MARKDOWN) {
         const {id} = this.selectCell
         // editor元素
         const node = this.$refs['cell' + id][0].$refs['cellEditor'+ id]
@@ -310,10 +312,9 @@ export default {
       }
     },
     getSelectedText () {
-      const editorType = ['Byzer-lang', 'Python']
       const { editType, id } = this.selectCell
       const node = this.$refs['cell' + id][0].$refs['cellEditor' + id]
-      if (editorType.includes(editType)) {
+      if (editType !== LANG.MARKDOWN) {
         const editor = node.$refs['codeEditor' + id].editor
         return editor.getSelectedText()
       }
@@ -348,13 +349,10 @@ export default {
     changeCurrentEditType () {
       if (this.currentNotebook.id === this.activeNotebookId) {
         let editType = ''
-        if (this.selectCell.editType === 'Byzer-lang' || this.selectCell.editType === 'Python') {
-          editType = 'Markdown'
+        if (this.selectCell.editType !== LANG.MARKDOWN) {
+          editType = LANG.MARKDOWN
         } else {
-          editType = 'Byzer-lang'
-          if (this.selectCell.content.split('\n').map(i => i.trim()).indexOf(PythonTag) > -1) {
-            editType = 'Python'
-          }
+          editType = getLangByContent(this.selectCell.content) ?? LANG.BYZER
         }
         this.handleChanged(editType);
       }
@@ -362,7 +360,7 @@ export default {
     changeModeToEdit () {
       this.changeMode('edit')
       const { id, editType } = this.selectCell
-      if (editType === 'Markdown') {
+      if (editType === LANG.MARKDOWN) {
         // editor元素
         const node = this.$refs['cell' + id][0].$refs['cellEditor'+ id]
         node.dblClickStatus = false

@@ -19,17 +19,15 @@ hljs.registerLanguage('byzer', require('./byzer_highlight'))
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'))
 hljs.registerLanguage('markdown', require('highlight.js/lib/languages/markdown'))
 require('highlight.js/styles/vs.css') 
+
+import { langList } from '@/config/lang'
+
 @Component({
   props: ['content', 'lang']
 })
 export default class CollapseCodeEditor extends Vue {
   valueArr = []
   value = ''
-  langObj = {
-    'Byzer-lang': 'byzer',
-    'Markdown': 'markdown',
-    'Python': 'python'
-  }
   hljs = hljs
   @Watch('content')
   onContentChange (newVal) {
@@ -38,7 +36,7 @@ export default class CollapseCodeEditor extends Vue {
     }
   }
   get curLang () {
-    return this.langObj[this.lang]
+    return langList.find(item => item.value === this.lang).value
   }
 }
 </script>
