@@ -63,9 +63,9 @@ export default {
   },
   watch: {
     value (newVal, oldVal) {
-      // if (this.readOnly) {
+      if (this.readOnly) {
         this.content = newVal
-      // }
+      }
       this.checkLang()
 
       ;(oldVal || '').split('').forEach(i => {
