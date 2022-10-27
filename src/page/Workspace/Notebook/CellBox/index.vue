@@ -377,7 +377,7 @@ export default {
     handleChangeCellConfig (config) {
       const curConfig = getCellConfig(this.selectCell)
       const str = this.selectCell.content.replace(curConfig, config)
-       this.$emit('changeCellContent', {
+       this.$emit('setCellContent', {
         value: str,
         cellInfo: this.cellInfo
       })
@@ -468,7 +468,7 @@ export default {
       background-color: transparent;
       position: absolute;
       right: 8px;
-      top: 10px;
+      top: -5px;
       .el-tag {
         cursor: pointer;
       }

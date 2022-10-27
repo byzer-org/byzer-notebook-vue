@@ -143,6 +143,7 @@
                 :cellId="cell.id"
                 :newCellList="newCellList"
                 @changeCellContent="changeCellContent"
+                @setCellContent="setCellContent"
                 :cellInfo="cell"
                 :currentNotebook="currentNotebook"
                 :selectCell="selectCell"
@@ -1011,6 +1012,13 @@ export default {
       if (!this.isRunningAll) {
         this.selectCell = item
       }
+    },
+    setCellContent ({ value, cellInfo }) {
+      const { id } = cellInfo
+      const cell = this.$refs?.['cell' + id]?.[0].$refs['cellEditor'+ id]
+      const editor = cell.$refs['codeEditor'+ id].editor
+      editor?.setValue(value)
+      this.changeCellContent({ value, cellInfo })
     },
     // 内容改变 新增 删除之后等操作都需要保存到后端
     changeCellContent ({ value, cellInfo }) {
