@@ -17,7 +17,7 @@ function getCompressionName () {
 const isProd = process.env.NODE_ENV === 'production'
 
 module.exports = {
-  lintOnSave: true,
+  lintOnSave: false,
   publicPath: process.env.BASE_URL,
   assetsDir: 'static', // 配置js、css静态资源二级目录的位置
   devServer: {
