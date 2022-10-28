@@ -53,7 +53,7 @@
       <el-button icon="el-icon-plus" size="small" @click="handleAddParam">{{$t('add')}}</el-button>
       <div class="btns-submit">
         <template v-if="applied">
-          <el-button size="mini" type="primary" v-if="applied" disabled icon="el-icon-check">{{$t('apply')}}</el-button>
+          <el-button size="mini" type="primary" v-if="applied" disabled icon="el-icon-check">{{$t('applied')}}</el-button>
           <el-button size="mini" v-if="applied" @click="handleCloseForm">{{$t('close')}}</el-button>
         </template>
         <template v-else>

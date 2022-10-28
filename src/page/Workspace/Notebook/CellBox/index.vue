@@ -41,7 +41,7 @@
             :isSelected="selectCell.id===cellId"
           />
           <div class="cell-btns" :ref="'cellHover' + cellId">
-            <el-tag @click="handleShowConfigForm"><i class="el-icon-setting"></i>{{ getEditType() }}</el-tag>
+            <el-tag @click="handleShowConfigForm" :type="showConfigForm ? 'primary' : 'info'"><i class="el-icon-setting"></i>{{ getEditType() }}</el-tag>
             <div class="actions">
               <ActionButton :actions="actions" />
             </div>
