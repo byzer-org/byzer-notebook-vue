@@ -20,7 +20,7 @@ hljs.registerLanguage('python', require('highlight.js/lib/languages/python'))
 hljs.registerLanguage('markdown', require('highlight.js/lib/languages/markdown'))
 require('highlight.js/styles/vs.css') 
 
-import { langList } from '@/config/lang'
+import { LANG } from '@/config/lang'
 
 @Component({
   props: ['content', 'lang']
@@ -36,7 +36,11 @@ export default class CollapseCodeEditor extends Vue {
     }
   }
   get curLang () {
-    return langList.find(item => item.value === this.lang).value
+    if (this.lang === LANG.PYTHON) {
+      return 'python'
+    } else {
+      return 'sql'
+    }
   }
 }
 </script>

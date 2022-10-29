@@ -19,7 +19,7 @@
         />
       </template>
       <template v-else>
-        <!-- Code编辑器 & log -->
+        <!-- Code 编辑器 & log -->
         <CellConfigForm 
           v-if="showConfigForm"
           :cellInfo="cellInfo"
@@ -72,10 +72,23 @@
       </template>
     </div>
     <div class="cell-box-container" :class="{'active': isActive}" v-else>
-      <div class="cell-btns hide-mode" :ref="'cellHover' + cellId">
-        <ActionButton :actions="actions" />
-      </div>
+      <CellConfigForm 
+        v-if="showConfigForm"
+        :cellInfo="cellInfo"
+        @changeCellConfig="handleChangeCellConfig"
+        @onHideForm="showConfigForm = false"
+      />
+      <div class="code-container">
+        <div class="cell-btns hide-mode" :ref="'cellHover' + cellId">
+          <el-tag @click="handleShowConfigForm" :type="showConfigForm ? 'primary' : 'info'">
+            <i class="el-icon-setting"></i>{{ getEditType() }}
+          </el-tag>
+          <div class="actions">
+            <ActionButton :actions="actions" />
+          </div>
+        </div>
       <CollapseCode :type="editType" :value="content" :status="status" @toggleShowCode="toggleShowCode" />
+      </div>
     </div>
   </div>
 </template>
@@ -196,7 +209,6 @@ export default {
       addResult: 'SET_LOADED_CELL_LIST'
     }),
     handleShowConfigForm () {
-      console.debug(this.editType, 'lang')
       if ([LANG.PYTHON, LANG.OPENMLDB, LANG.KYLIN].includes(this.editType)) {
         this.showConfigForm = true
       }
@@ -477,6 +489,7 @@ export default {
       top: -5px;
       .el-tag {
         cursor: pointer;
+        margin-right: 16px;
       }
       .el-icon-setting {
         margin-right: 5px;
