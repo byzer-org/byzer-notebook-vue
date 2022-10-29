@@ -16,7 +16,7 @@
 <script>
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
-import CodeEditor from './Editor.vue'
+import CodeEditor from './Editor'
 
 @Component({
   props: ['value', 'type', 'status'],
