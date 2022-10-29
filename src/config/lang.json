@@ -52,15 +52,18 @@
     }
   },
   "kylin": {
-    "url": {
-      "required": true,
-      "default": ""
-    },
     "db": {
       "required": true,
       "default": ""
     },
     "output": {
+      "required": true,
+      "default": ""
+    }
+  },
+
+  "visualize": {
+    "input": {
       "required": true,
       "default": ""
     }

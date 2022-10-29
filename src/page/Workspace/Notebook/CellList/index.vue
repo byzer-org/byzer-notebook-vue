@@ -185,7 +185,7 @@ import { debounce, cloneDeep } from 'lodash'
 import draggable from 'vuedraggable'
 import cellCommand from './command.vue'
 import { formatGetParams } from '../../../../util'
-import { LANG, langList, PythonTag, MarkdownTag, OpenMLDBTag, KylinTag, LANG_PREFIX } from '@/config/lang'
+import { LANG, langList, PythonTag, VisualizeTag, MarkdownTag, OpenMLDBTag, KylinTag, LANG_PREFIX } from '@/config/lang'
 import { getDefaultConfig, getLangByContent, getCellConfig } from './util'
 
 export default {
@@ -632,6 +632,7 @@ export default {
         const isPython = valueArr.indexOf(PythonTag) === 0
         const isOpenMLDB = valueArr.indexOf(OpenMLDBTag) === 0
         const isKylin = valueArr.indexOf(KylinTag) === 0
+        const isVisualize = valueArr.indexOf(VisualizeTag) === 0
         if (type !== LANG.MARKDOWN) {
           if (isPython && type !== LANG.PYTHON) {
             // 替换掉以 python 前缀开头的人
@@ -640,6 +641,8 @@ export default {
             newValue = this.getLangConfig(newValue, LANG.OPENMLDB)
           } else if (isKylin && type !== LANG.KYLIN) {
             newValue = this.getLangConfig(newValue, LANG.KYLIN)
+          } else if (isVisualize && type !== LANG.VISUALIZE) {
+            newValue = this.getLangConfig(newValue, LANG.VISUALIZE)
           }
           const { configStr } = getDefaultConfig(type)
           newValue = configStr + '\n' + newValue
