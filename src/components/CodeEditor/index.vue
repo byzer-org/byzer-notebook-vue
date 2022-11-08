@@ -107,7 +107,7 @@ export default {
         this.lang = lang
       }
       // 每次输入都要重新init代码提示，否则在getCompletions中都是上一次init时的数据
-      // this.queryCompleters()
+      this.queryCompleters()
       // 清空默认的代码提示
       const lnTools = ace.acequire('ace/ext/language_tools')
       lnTools?.setCompleters([])
@@ -122,7 +122,7 @@ export default {
       lnTools?.setCompleters([
         {
           getCompletions: async (editor, session, pos, prefix, callback) => {
-            const {sql, lineNum, columnNum} = this.getAllContent()
+            const {sql, lineNum, columnNum} = this.getCurrentCellContent()
             if (this.lang === 'sql') {
               try {
                 const resl = await this.autoComplete({
@@ -157,6 +157,24 @@ export default {
           }
         }
       ])
+    },
+    /**
+     * @description: 获取当前 cell 所在的内容
+     * @Date: 2021-11-05 15:42:24
+     */
+    getCurrentCellContent () {
+      let editor = null
+      if (this.$refs['codeEditor' + this.cellId]) {
+        editor = this.$refs['codeEditor' + this.cellId].editor
+        const { column, row } = editor.getCursorPosition()
+        return {
+          sql: this.content, // sql脚本内容
+          lineNum: row + 1, // pos所在行数,1开始
+          columnNum: column // pos所在列数,1开始，如果光标在列开头,则为0
+        }
+      } else {
+        return {}
+      }
     },
     /**
      * @description: 获取所有除markdown以外的代码
