@@ -109,8 +109,8 @@ export default {
       // 每次输入都要重新init代码提示，否则在getCompletions中都是上一次init时的数据
       this.queryCompleters()
       // 清空默认的代码提示
-      const lnTools = ace.acequire('ace/ext/language_tools')
-      lnTools?.setCompleters([])
+      // const lnTools = ace.acequire('ace/ext/language_tools')
+      // lnTools?.setCompleters([])
     },
     /**
      * @description: 获取代码补全
