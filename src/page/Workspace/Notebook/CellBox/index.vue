@@ -1,6 +1,6 @@
 
 <template>
-  <div class="cell-box" @dblclick="dbClickCollapseCell" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" v-lazy="init_job_status" >
+  <div class="cell-box" @dblclick="dbClickCollapseCell" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" v-lazy="init_job_status" v-loading="loading" >
     <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode && !isDemo ? 'block' : 'none'}">
       <div><icon-btn icon="el-ksd-icon-grab_dots_16" class="move-cell" :disabled="isRunningAll" /></div>
       <div class="mt-5"><icon-btn icon="el-ksd-icon-add_22" :handler="handleAddBelow" /></div>
