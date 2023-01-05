@@ -138,15 +138,7 @@ export default class ExcuteResult extends Vue {
   root_cause = ''
   detailType = 'table'
   detailContent = []
-
-  get headerList () {
-    let keys = []
-    this.tableList.forEach(v => {
-      keys = keys.concat(Object.keys(v))
-    })
-    const list = _.uniq(keys)
-    return list.map(v => ({prop: v, label: v}))
-  }
+  headerList = []
 
   get totalCount () {
     return this.tableList.length
@@ -171,6 +163,7 @@ export default class ExcuteResult extends Vue {
       if (this.result.status !== '0') {
         let parsedResult = this.result && this.result.result ? JSON.parse(this.result.result) : ''
         const schema = (parsedResult.schema?.fields || [])
+        this.headerList = schema.map(v => ({prop: v.name, label: v.name}))
         const dataList = (parsedResult.data || []).map(item => {
           schema.forEach(s => {
             if (!Object.prototype.hasOwnProperty.call(item, s.name)) {

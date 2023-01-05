@@ -6,7 +6,7 @@
         <i class="hasEvent copy-btn el-ksd-icon-dup_16 font-16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="jobId"></i>
       </el-tooltip>
     </div>
-    <div class="duration" v-show="start_time">
+    <div class="duration" v-if="start_time">
       {{ $t('notebook.lastExecuteTime')}}: {{ start_time }}
     </div>
     <div class="duration">{{$t('notebook.totalDuration')}}: {{formatTime(totalDuration)}}</div>
@@ -57,7 +57,7 @@ export default class ExcuteDetail extends Vue {
   totalScriptCount = 0
   currentScriptCount = 0
 
-  start_time = undefined
+  start_time = null
 
   totalDuration = '0'
 
