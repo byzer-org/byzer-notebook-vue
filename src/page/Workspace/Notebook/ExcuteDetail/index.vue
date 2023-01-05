@@ -6,6 +6,9 @@
         <i class="hasEvent copy-btn el-ksd-icon-dup_16 font-16" type="text" v-clipboard:success="onCopy" v-clipboard:copy="jobId"></i>
       </el-tooltip>
     </div>
+    <div class="duration" v-show="start_time">
+      <span>{{ $t('notebook.lastExecuteTime')}}:</span>{{ start_time }}
+    </div>
     <div class="duration">{{$t('notebook.totalDuration')}}: {{formatTime(totalDuration)}}</div>
     <ul v-if="result && result.status === '0'" class="progress-jobs">
       <li>
@@ -33,6 +36,7 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator'
 import { timeToStr } from '@/util'
 import { mapActions } from 'vuex'
+import moment from 'moment';
 
 @Component({
   props: ['result', 'jobId', 'innerMaxHeight'],
@@ -52,6 +56,8 @@ export default class ExcuteDetail extends Vue {
   showCode = false
   totalScriptCount = 0
   currentScriptCount = 0
+
+  start_time = undefined
 
   totalDuration = '0'
 
@@ -77,6 +83,8 @@ export default class ExcuteDetail extends Vue {
 
   getExcuteDetails (data) {
     this.totalDuration = data?.duration ?? '0'
+    //  格式化start_time
+    this.start_time = moment(data?.start_time).format('YYYY-MM-DD HH:mm:ss')
   }
 
   formatTime (time) {
@@ -122,7 +130,7 @@ export default class ExcuteDetail extends Vue {
     color: $--color-text-secondary;
     line-height: 22px;
     padding-left: 8px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
   }
   .progress-jobs {
     padding-left: 8px;
