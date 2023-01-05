@@ -453,7 +453,10 @@ export default {
     changeRouteParams (item) {
       this.curNotebookTab = item ? `${item.uniq}` : ''
       const params = item ? { uniq: item.uniq, type: item.type } : {}
-      this.$router.push({name: 'notebook', params})
+      // 判断当前路由是不是一样
+      if (this.$route.params.uniq !== params.uniq) {
+        this.$router.push({ name: 'notebook', params })
+      }
     },
     changeTabList (activeNotebook, notNeedGet, tabClicked) {
       activeNotebook['uniq'] = activeNotebook.type + '_' + activeNotebook.id
