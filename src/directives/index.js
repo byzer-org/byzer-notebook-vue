@@ -2,6 +2,21 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
 
+Vue.directive('lazy', {
+  inserted: (el,binding) => {
+    // 从binding中获取传入函数，在进入界面的时候调用
+    const fn = binding.value
+    const obServer = new IntersectionObserver(([{isIntersecting}]) => {
+      if (isIntersecting) {
+        fn.apply()
+        obServer.unobserve(el)
+      }
+    },{
+      threshold: 0
+    })
+    obServer.observe(el)
+  }
+})
 
 // 自定义增加tooltip指令，判断宽度（加偏移量）是否超过父盒子从而插入或移出tooltip
 let parentList = {}
