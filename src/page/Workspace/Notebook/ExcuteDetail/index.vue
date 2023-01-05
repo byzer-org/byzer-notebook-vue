@@ -7,7 +7,7 @@
       </el-tooltip>
     </div>
     <div class="duration" v-show="start_time">
-      <span>{{ $t('notebook.lastExecuteTime')}}:</span>{{ start_time }}
+      {{ $t('notebook.lastExecuteTime')}}: {{ start_time }}
     </div>
     <div class="duration">{{$t('notebook.totalDuration')}}: {{formatTime(totalDuration)}}</div>
     <ul v-if="result && result.status === '0'" class="progress-jobs">
