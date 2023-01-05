@@ -233,7 +233,8 @@
     "hotKeyCursorUp": "Cursor Up",
     "selectFolder": "Please select a folder",
     "reselectFolder": "Please select another folder",
-    "leaveRunAll": "Current Notebook is running, it will stop running if leaving it。Are you sure you want to leave？"
+    "leaveRunAll": "Current Notebook is running, it will stop running if leaving it。Are you sure you want to leave？",
+    "lastExecuteTime" : "Last Execute Time"
   },
   "workflow": {
     "valueType": "Wrong data type, should be {type}",

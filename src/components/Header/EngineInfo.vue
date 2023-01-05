@@ -107,7 +107,7 @@ export default class EngineInfo extends Vue {
   initInterval () {
     this.timer = setInterval(() => {
       this.getEngineInfo()
-    }, 10000)
+    }, 1000 * 60)
   }
   clear () {
     if (this.timer) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="cellListPage" v-loading="isLoading || isLoadingResult">
+  <div class="cellListPage" v-loading="isLoading">
     <div class="cellListPage-header">
       <div class="cellListPage-header-btns">
         <el-dropdown class="btn" @command="handleNotebook">
@@ -90,7 +90,7 @@
       </div>
       <div class="cellListPage-header-progress" v-if="showProgress">
         <el-progress :percentage="runPercentage" :show-text="runningStatus !== 'COMPLETED'" :color="progressColor" :format="progressText"></el-progress>
-        <i 
+        <i
           v-if="['ERROR', 'COMPLETED'].includes(runningStatus)"
           :class="[runningStatus === 'ERROR' ? 'el-ksd-icon-wrong_fill_22 txt-danger' : 'el-icon-success txt-success', runningStatus === 'COMPLETED' ? 'ml-5' : '']"></i>
       </div>
@@ -327,7 +327,7 @@ export default {
         if (id) {
           this.editType = editType || getLangByContent(content)
           if (
-            editType === LANG.MARKDOWN && 
+            editType === LANG.MARKDOWN &&
             Object.values(LANG).some(lang => oldEditType === lang && oldEditType !== LANG.MARKDOWN)
           ) {
             const mdEditorInstance = this.$refs['cell' + id][0].$refs[
@@ -605,7 +605,7 @@ export default {
       const prefix = LANG_PREFIX[lang]
       return value.split('\n').filter(item => item).filter(item => !item.startsWith(prefix)).join('\n')
     },
-    
+
     /**
      * @description: 下拉框change事件
      * @param {e} new editType
