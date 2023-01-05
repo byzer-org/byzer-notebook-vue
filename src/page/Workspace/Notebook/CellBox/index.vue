@@ -1,6 +1,5 @@
-
 <template>
-  <div class="cell-box" @dblclick="dbClickCollapseCell" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" v-lazy="init_job_status" v-loading="loading" >
+  <div class="cell-box" @dblclick="dbClickCollapseCell" @mouseenter="showAddCode=true" @mouseleave="showAddCode=false" v-lazy="init_job_status" v-loading="loadingStatus" >
     <div :ref="'cellBtn' + cellId" class="cell-box-add-left" :style="{'display': showAddCode && !isDemo ? 'block' : 'none'}">
       <div><icon-btn icon="el-ksd-icon-grab_dots_16" class="move-cell" :disabled="isRunningAll" /></div>
       <div class="mt-5"><icon-btn icon="el-ksd-icon-add_22" :handler="handleAddBelow" /></div>
@@ -127,7 +126,8 @@ export default {
       innerMaxHeight: '',
       loadingExcute: false,
       LANG: LANG,
-      showConfigForm: false
+      showConfigForm: false,
+      loadingStatus: false
     }
   },
   components: {
@@ -194,11 +194,16 @@ export default {
     ...mapMutations({
       addResult: 'SET_LOADED_CELL_LIST'
     }),
-    init_job_status () {
+    async init_job_status () {
       // 因为有懒加载，所以界面上看不到的cell是不会load具体的job数据的，所以我们不需要监听activeNotebook,让cell暴露在屏幕上的时候自动加载即可
-      this.getStatus(this.cellInfo.job_id)
-      if (!this.isDemo) {
-        this.addResult({name: 'resultList', notebookId: this.currentNotebook.id, cellId: this.cellId})
+      try {
+        this.loadingStatus = true
+        await this.getStatus(this.cellInfo.job_id)
+        if (!this.isDemo) {
+          this.addResult({name: 'resultList', notebookId: this.currentNotebook.id, cellId: this.cellId})
+        }
+      } finally {
+        this.loadingStatus = false
       }
     },
     handleShowConfigForm () {
