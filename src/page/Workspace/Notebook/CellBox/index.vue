@@ -104,6 +104,7 @@ import { mapMutations, mapActions, mapGetters, mapState } from 'vuex'
 import { JOB_STATUS } from '@/config'
 import { LANG, MarkdownTag, LANG_PREFIX, langList } from '@/config/lang'
 import { getCellConfig } from '../CellList/util'
+import {base64Encode} from '@/util';
 
 export default {
   props: ['cellInfo', 'selectCell', 'disableDelete', 'isRunningAll', 'currentNotebook', 'mode', 'cellId', 'newCellList', 'showAllCell'],
@@ -276,10 +277,13 @@ export default {
       this.changeStatus('0')
       this.loading = true
       this.startTime = Date.now()
+      // 使用base64对sql进行加密
+      const sql = base64Encode(this.content)
       const params = {
-        sql: this.content,
+        sql,
         notebook: this.currentNotebook.name,
-        cell_id: this.cellInfo.id
+        cell_id: this.cellInfo.id,
+        encType: 'base64'
       }
       try {
         this.loadingExcute = true

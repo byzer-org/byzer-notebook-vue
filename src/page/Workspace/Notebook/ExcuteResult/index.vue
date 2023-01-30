@@ -111,7 +111,6 @@
   </div>
 </template>
 <script>
-import _ from 'lodash'
 import Vue from 'vue'
 import { Watch, Component } from 'vue-property-decorator'
 import { saveAs } from 'file-saver'

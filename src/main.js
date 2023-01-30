@@ -13,7 +13,7 @@ Vue.use(VueClipboard)
 import keymaster from 'keymaster'
 import Contextmenu from 'vue-contextmenujs'
 Vue.use(Contextmenu);
-import directive from './directives'
+import './directives'
 import { findChildren } from './util'
 import '@/icons/index.js'
 import IconBtn from './components/IconBtn'
