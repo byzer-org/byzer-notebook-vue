@@ -19,6 +19,7 @@
 import ace from 'brace'
 import { mapActions } from 'vuex'
 import { LANG, PythonTag, SpecialCodeSuggestKey } from '@/config/lang'
+import {base64Encode} from '@/util';
 
 export default {
   props: {
@@ -127,7 +128,7 @@ export default {
               try {
                 const resl = await this.autoComplete({
                   excuteMode: 'autoSuggest', // 脚本执行类，autoSuggest->语法提示
-                  sql,
+                  sql: base64Encode(sql),
                   lineNum,
                   columnNum,
                   isDebug: false // 后台是否显示debug日志
