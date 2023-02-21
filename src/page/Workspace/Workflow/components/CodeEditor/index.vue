@@ -11,6 +11,7 @@ import { Vue, Component, Watch } from 'vue-property-decorator'
 import { mapActions } from 'vuex'
 import ace from 'brace'
 import { SpecialCodeSuggestKey } from '@/config/lang'
+import {base64Encode} from '@/util';
 @Component({
   props: {
     height: {
@@ -131,10 +132,11 @@ export default class NodeCodeEditor extends Vue {
           try {
             const resl = await this.autoComplete({
               excuteMode: 'autoSuggest', // 脚本执行类，autoSuggest->语法提示
-              sql,
+              sql: base64Encode(sql),
               lineNum,
               columnNum,
-              isDebug: false // 后台是否显示debug日志
+              isDebug: false, // 后台是否显示debug日志
+              encType: 'base64'
             })
             if (resl && Object.prototype.toString.call(resl.data).slice(8, -1) === 'Array') {
               callback(
