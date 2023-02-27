@@ -340,7 +340,19 @@ export default class WorkspaceList extends Vue {
     this.$emit('handleExport', this.getNotebookItem(node))
   }
   handleExportByzer (node) {
-    this.$emit('handleExport', {...this.getNotebookItem(node), output: 'byzer'})
+    this.$confirm(this.$t('workflow.exportByzerFileMessage'), this.$t('workflow.exportByzerFileTitle'), {
+      distinguishCancelAndClose: true,
+      confirmButtonText: this.$t('workflow.exportByzerConfirmText'),
+      cancelButtonText: this.$t('workflow.exportByzerCancelText')
+    })
+        .then(() => {
+          this.$emit('handleExport', {...this.getNotebookItem(node), output: 'byzer', expand_include: 'true'})
+        })
+        .catch(action => {
+          if (action === 'cancel') {
+            this.$emit('handleExport', {...this.getNotebookItem(node), output: 'byzer', expand_include: 'false'})
+          }
+        });
   }
   handleImport () {
     this.$emit('handleImport')
