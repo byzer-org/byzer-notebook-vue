@@ -280,7 +280,11 @@
     "changeNodeTitle": "提示",
     "changeNodeTip": "如果切换到另一个节点，您将丢失未保存的内容.",
     "deleteNodeTitle": "删除节点",
-    "deleteNodeTip": "您确定要删除此节点吗？请注意，此操作无法还原。"
+    "deleteNodeTip": "您确定要删除此节点吗？请注意，此操作无法还原。",
+    "exportByzerFileMessage": "是否展开include语句?",
+    "exportByzerFileTitle": "导出Byzer文件",
+    "exportByzerConfirmText": "展开",
+    "exportByzerCancelText": "不展开"
   },
   "login": {
     "signIn": "登录",

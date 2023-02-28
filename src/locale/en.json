@@ -279,7 +279,11 @@
     "deleteCurrentWorkflow": "Delete Current Workflow",
     "changeNodeTip": "You will lose unsaved content if you change to another node.",
     "deleteNodeTitle": "Delete Node",
-    "deleteNodeTip": "Are you sure you want to delete this node? Please note this action can’t be reverted."
+    "deleteNodeTip": "Are you sure you want to delete this node? Please note this action can’t be reverted.",
+    "exportByzerFileMessage": "Whether to expand the include statement",
+    "exportByzerFileTitle": "Export Byzer File",
+    "exportByzerConfirmText": "Yes",
+    "exportByzerCancelText": "No"
   },
   "login": {
     "signIn": "Sign In",
