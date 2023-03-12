@@ -408,7 +408,11 @@
     "action_stop": "Stop",
     "action_rerun": "Repeat Running",
     "runScheduleSuccess": "Instance created successfully",
-    "updateScheduleTask": "Update Schedule Task"
+    "updateScheduleTask": "Update Schedule Task",
+    "userParams": "User Params",
+    "inputProp": "Please Input Prop",
+    "inputValue": "Please Input Value",
+    "validateProp": "Prop is required"
   },
   "settings": {
     "timeoutSetting": "Timeout Settings",

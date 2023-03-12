@@ -10,7 +10,8 @@ export function getInitState () {
       taskName: '',
       taskDescription: '',
       scheduleName: '',
-      previousTask: null
+      previousTask: null,
+      userParams: {}
     },
     callback: () => { }
   }
@@ -20,6 +21,11 @@ export default {
   namespaced: true,
   state: getInitState(),
   mutations: {
+    [actionsTypes.SET_MODAL_FORM]: (state, payload = {}) => {
+      for (const key of Object.keys(state.form)) {
+        state.form[key] = payload[key] !== undefined ? payload[key] : state.form[key]
+      }
+    },
     [actionsTypes.SET_TASK_INFO]: (state, payload) => {
       for (const [key, value] of Object.entries(payload || {})) {
         state[key] = value

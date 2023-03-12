@@ -25,6 +25,41 @@
             @change="(value) => handleInput('task_desc', value)"
           />
         </el-form-item>
+        <el-form-item :label="$t(`schedules.userParams`)">
+          <el-button v-if="form.user_params.length === 0" plain :style="{width: '100%'}" size="medium"
+                     @click="addUserParam">
+            <i class="el-icon-plus"></i>
+          </el-button>
+          <el-form
+              :ref="`$form${index}`"
+              :model="item"
+              :rules="rules"
+              v-for="(item,index) in form.user_params"
+              :key="index"
+              :style="index !== (form.user_params.length - 1) && {marginBottom: '10px'}"
+          >
+            <div class="user-params">
+              <el-form-item prop="prop">
+                <el-input
+                    v-model="item.prop"
+                    :placeholder="$t('schedules.inputProp')"
+                    @change="(value) => handleInputUserParams(index,'prop', value)"
+                />
+              </el-form-item>
+              <el-form-item prop="value">
+                <el-input
+                    v-model="item.value"
+                    :placeholder="$t('schedules.inputValue')"
+                    @change="(value) => handleInputUserParams(index,'value', value)"
+                />
+              </el-form-item>
+              <div class="user-params-actions">
+                <i class="el-icon-delete" @click="deleteUserParam(index)"></i>
+                <i class="el-icon-plus" @click="addUserParam" v-if="index === (form.user_params.length - 1)"></i>
+              </div>
+            </div>
+          </el-form>
+        </el-form-item>
         <div class="schedule-form">
           <div class="schedule-form-label">
             <span class="txt-danger">*&nbsp;</span>
@@ -79,6 +114,7 @@ import store from './store'
 import { notebookNameReg } from '@/config'
 import ScheduleForm from './ScheduleForm.vue'
 import moment from 'moment'
+import {cloneDeep} from 'lodash';
 
 vuex.registerModule(['modals', 'AddScheduleModal'], store)
 
@@ -107,6 +143,7 @@ vuex.registerModule(['modals', 'AddScheduleModal'], store)
     ...mapActions({
       setSchedule: actionsTypes.SET_SCHEDULE,
       updateSchedule: actionsTypes.UPDATE_SCHEDULE,
+
       toggleSchedule: actionsTypes.TOGGLE_SCHEDULE
     }),
     ...mapActions('CheckSubmitModal', {
@@ -135,6 +172,9 @@ export default class Addschedule extends Vue {
       ],
       task_desc: [
         { required: true, validator: this.validateDesc, trigger: 'blur' }
+      ],
+      prop: [
+        { required: true, validator: this.validateProp, trigger: 'blur' }
       ]
     }
   }
@@ -181,6 +221,13 @@ export default class Addschedule extends Vue {
     return callback()
   }
 
+  async validateProp (rule, value, callback) {
+    if (!value || value.trim() === '') {
+      return callback(new Error(this.$t('schedules.validateProp')))
+    }
+    return callback()
+  }
+
   // 关闭弹窗
   closeModal () {
     this.hideModal()
@@ -190,7 +237,17 @@ export default class Addschedule extends Vue {
     this.setModalForm({ [key]: value })
   }
 
+  handleInputUserParams (index,type,value) {
+    // 根据index修改对应的user_params
+    const user_params = cloneDeep(this.form.user_params)
+    user_params[index][type] = value
+    this.setModalForm({user_params})
+  }
+
   handleClearValidate () {
+    this.form.user_params.forEach((item, index) => {
+      this.$refs[`$form${index}`][0].clearValidate()
+    })
     this.$refs.$form.clearValidate()
     this.$refs.scheduleForm.$refs.$form.clearValidate()
   }
@@ -209,9 +266,23 @@ export default class Addschedule extends Vue {
     })
   }
 
+  deleteUserParam (index) {
+    this.form.user_params = this.form.user_params.filter((item, i) => i !== index)
+  }
+
+  addUserParam () {
+    this.form.user_params.push({
+      prop: '',
+      value: ''
+    })
+  }
+
   checkForm () {
+    // 生成user_params的校验表单
+    const $formRefs = this.form.user_params.map((item, index) => this.$refs[`$form${index}`][0].validate())
     // 需要校验当前表单和 schechuleForm
     return Promise.all([
+      ...$formRefs,
       this.$refs.$form.validate(),
       this.$refs.scheduleForm.checkForm()
     ])
@@ -268,7 +339,8 @@ export default class Addschedule extends Vue {
         },
         description: this.scheduleForm.schedule_desc,
         task_name: this.form.task_name,
-        task_desc: this.form.task_desc
+        task_desc: this.form.task_desc,
+        user_params: this.form.user_params
       }
       await this.setSchedule(params)
       this.showMessage()
@@ -290,6 +362,7 @@ export default class Addschedule extends Vue {
           entity_id: this.notebookInfo.id,
           task_name: this.form.task_name,
           task_desc: this.form.task_desc,
+          user_params: this.form.user_params,
           action: 'update'
         }
       }
@@ -346,20 +419,47 @@ export default class Addschedule extends Vue {
 .schedule-form-wrap {
   max-height: 60vh;
   overflow-y: auto;
+
+  // 隐藏滚动栏
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .user-params {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      i {
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
+
   .schedule-form {
     &-label {
       line-height: 34px;
       font-weight: bold !important;
+
       .start {
         margin-right: 5px;
       }
     }
+
     &-content {
       background: $--background-color-secondary;
       border: 1px solid $--border-update-schedule;
       box-sizing: border-box;
       border-radius: 6px;
       padding: 16px 24px;
+
       .type-select {
         margin-bottom: 22px !important;
       }
