@@ -1221,6 +1221,7 @@ export default {
           entity_id: entity.entity_id,
           task_name: entity.name,
           task_desc: entity.description,
+          user_params: entity.user_params,
           action: 'update'
         }
       }

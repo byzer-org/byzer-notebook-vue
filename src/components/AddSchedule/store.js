@@ -7,7 +7,8 @@ export function getInitState () {
     isShow: false,
     form: {
       task_name: '',
-      task_desc: ''
+      task_desc: '',
+      user_params: []
     },
     notebookInfo: null,
     callback: () => {}

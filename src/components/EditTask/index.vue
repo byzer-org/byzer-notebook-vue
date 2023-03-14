@@ -31,6 +31,41 @@
             @change="(value) => handleInput('taskDescription', value)"
           />
         </el-form-item>
+        <el-form-item :label="$t(`schedules.userParams`)">
+          <el-button v-if="form.userParams.length === 0" plain :style="{width: '100%'}" size="medium"
+                     @click="addUserParam">
+            <i class="el-icon-plus"></i>
+          </el-button>
+          <el-form
+              :ref="`$form${index}`"
+              :model="item"
+              :rules="rules"
+              v-for="(item,index) in form.userParams"
+              :key="index"
+              :style="index !== (form.userParams.length - 1) && {marginBottom: '10px'}"
+          >
+            <div class="user-params">
+              <el-form-item prop="prop">
+                <el-input
+                    v-model="item.prop"
+                    :placeholder="$t('schedules.inputProp')"
+                    @change="(value) => handleInputUserParams(index,'prop', value)"
+                />
+              </el-form-item>
+              <el-form-item prop="value">
+                <el-input
+                    v-model="item.value"
+                    :placeholder="$t('schedules.inputValue')"
+                    @change="(value) => handleInputUserParams(index,'value', value)"
+                />
+              </el-form-item>
+              <div class="user-params-actions">
+                <i class="el-icon-delete" @click="deleteUserParam(index)"></i>
+                <i class="el-icon-plus" @click="addUserParam" v-if="index === (form.userParams.length - 1)"></i>
+              </div>
+            </div>
+          </el-form>
+        </el-form-item>
         <div class="schedule-form">
           <div class="schedule-form-label">
             <span class="txt-danger">*</span>
@@ -128,7 +163,8 @@ vuex.registerModule(['modals', 'EditTaskModal'], store)
   },
   methods: {
     ...mapMutations('EditTaskModal', {
-      hideModal: actionsTypes.HIDE_MODAL
+      hideModal: actionsTypes.HIDE_MODAL,
+      setModalForm: actionsTypes.SET_MODAL_FORM
     }),
     ...mapActions('CheckActionModal', {
       callCheckActionModal: 'CALL_MODAL'
@@ -153,9 +189,23 @@ export default class EditTask extends Vue {
         { required: true, validator: this.validateName, trigger: 'blur' }
       ],
       taskDescription: [
-        { required: true, validator: this.validateDesc, trigger: 'blur' }
+        {required: true, validator: this.validateDesc, trigger: 'blur'}
+      ],
+      prop: [
+        {required: true, validator: this.validateProp, trigger: 'blur'}
       ]
     }
+  }
+
+  handleInput (key, value) {
+    this.setModalForm({[key]: value})
+  }
+
+  handleInputUserParams (index,type,value) {
+    // 根据index修改对应的user_params
+    const userParams = cloneDeep(this.form.userParams)
+    userParams[index][type] = value
+    this.setModalForm({userParams})
   }
 
   @Watch('isShow')
@@ -164,6 +214,9 @@ export default class EditTask extends Vue {
       this.queryTasks()
       this.$nextTick(() => {
         this.$refs.$form.clearValidate()
+        for (let i = 0; i < this.form.userParams.length; i++) {
+          this.$refs[`$form${i}`][0].clearValidate()
+        }
       })
     }
   }
@@ -184,8 +237,22 @@ export default class EditTask extends Vue {
     return callback()
   }
 
-  handleInput (name, value) {
-    this.form[name] = value
+  async validateProp (rule, value, callback) {
+    if (!value || value.trim() === '') {
+      return callback(new Error(this.$t('schedules.validateProp')))
+    }
+    return callback()
+  }
+
+  deleteUserParam (index) {
+    this.form.userParams = this.form.userParams.filter((item, i) => i !== index)
+  }
+
+  addUserParam () {
+    this.form.userParams.push({
+      prop: '',
+      value: ''
+    })
   }
 
   async queryTasks () {
@@ -212,6 +279,12 @@ export default class EditTask extends Vue {
     let checked = false
     try {
       checked = await this.$refs.$form.validate()
+      for (let i = 0; i < this.form.userParams.length; i++) {
+        checked = await this.$refs[`$form${i}`][0].validate()
+        if (!checked) {
+          break;
+        }
+      }
     } catch (err) {
       checked = false
     }
@@ -220,7 +293,7 @@ export default class EditTask extends Vue {
     }
     try {
       if (actionType === 'remove' && this.taskInfo?.scheduleInfo?.entities.length === 1) {
-        // 只有一个节点时点击「Rmove」按钮直接删除调度
+        // 只有一个节点时点击「Remove」按钮直接删除调度
         const res = await this.deleteSchedule(this.taskInfo?.scheduleInfo.id)
         if (res?.msg === 'success') {
           this.showMessage('remove')
@@ -301,7 +374,8 @@ export default class EditTask extends Vue {
         entity_id: entity.entity_id,
         task_name: this.form.taskName,
         task_desc: this.form.taskDescription,
-        action: type
+        action: type,
+        user_params: this.form.userParams
       }
     }
 
@@ -320,26 +394,54 @@ export default class EditTask extends Vue {
 .schedule-form-wrap {
   max-height: 60vh;
   overflow-y: auto;
+
+  // 隐藏滚动栏
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .user-params {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      i {
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
+
   .schedule-form {
     &-label {
       line-height: 34px;
       font-weight: bold !important;
+
       .start {
         margin-right: 5px;
       }
     }
+
     &-content {
       background: $--background-color-secondary;
       border: 1px solid $--border-update-schedule;
       box-sizing: border-box;
       border-radius: 6px;
       padding: 16px 24px;
+
       .type-select {
         margin-bottom: 22px !important;
       }
     }
   }
 }
+
 .schedule-form-footer-remove-btn {
   color: $--color-danger !important;
 }

@@ -45,7 +45,7 @@ import '@antv/x6-vue-shape'
 import { DagreLayout } from '@antv/layout'
 import vuex, { actionsTypes } from '../../store/index'
 import store from './store'
-import { Darge_Layout_ATTRS, GRAPH_EDGE_ATTRS, GRAPH_NODE_ATTRS } from '../../config'
+import { Darge_Layout_ATTRS, GRAPH_EDGE_ATTRS, GRAPH_NODE_ATTRS } from '@/config'
 vuex.registerModule(['modals', 'DAGViewModal'], store)
 
 @Component({
@@ -74,6 +74,7 @@ export default class DAGView extends Vue {
   taskDescription = ''
   scheduleName = ''
   previousTask = ''
+  userParams = {}
 
   graphIns = undefined
 
@@ -87,6 +88,7 @@ export default class DAGView extends Vue {
       const entity = entities.find(e => e.entity_id === Number(id))
       this.taskName = entity?.name
       this.taskDescription = entity?.description
+      this.userParams = entity?.user_params
       this.scheduleName = name
       /**
        * c
@@ -130,7 +132,8 @@ export default class DAGView extends Vue {
           taskName: this.taskName,
           taskDescription: this.taskDescription,
           scheduleName: this.scheduleName,
-          previousTask: this.previousTask
+          previousTask: this.previousTask,
+          userParams: this.userParams
         }
       })
     )
