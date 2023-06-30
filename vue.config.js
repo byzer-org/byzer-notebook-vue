@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs');
 const FileManagerPlugin = require('filemanager-webpack-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 function resolvePath (dir) {
   return path.resolve(__dirname, '.', dir)
@@ -29,8 +30,29 @@ module.exports = {
     resolve: {
       alias: {
         'vue$': 'vue/dist/vue.common.js'
-      }
-    }
+      },
+    },
+    plugins: isProd
+      ? [
+          new UglifyJsPlugin({
+            test: /\.js|vue(\?.*)?$/i, //包含以js、vue结尾的文件
+            extractComments: false, //是否提取注释
+            sourceMap: false, //是否开启sourceMap
+            cache: true, //是否进行压缩缓存
+            parallel: true, //是否开启多线程、多核
+            uglifyOptions: {
+              compress: {
+                unused: true, //去除未使用的变量和函数
+                dead_code: true, //去除无用代码
+                drop_debugger: true, //去除debugger语句
+                drop_console: true, //去除console语句
+                passes: 2, //压缩代码的次数
+                sequences: true //折叠多个连续语句
+              }
+            }
+          })
+        ]
+      : []
   },
   chainWebpack: config => {
     const oneOfsMap = config.module.rule('scss').oneOfs.store;
