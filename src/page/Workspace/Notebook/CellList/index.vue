@@ -187,6 +187,7 @@ import cellCommand from './command.vue'
 import { formatGetParams } from '../../../../util'
 import { LANG, langList, PythonTag, VisualizeTag, MarkdownTag, OpenMLDBTag, KylinTag, LANG_PREFIX } from '@/config/lang'
 import { getDefaultConfig, getLangByContent, getCellConfig } from './util'
+import { base64Encode } from '@/util'
 
 export default {
   name: 'cellList',
@@ -896,10 +897,15 @@ export default {
           }
           return item
         })
+        const sendCellList = this.oldCellList.map(cell => {
+          cell.content = base64Encode(cell.content)
+          return cell
+        })
         const params = {
           id: this.activeNotebookId,
           data: {
-            cell_list: this.oldCellList
+            cell_list: sendCellList,
+            encType: 'base64'
           }
         }
         this.saveNotebook(params).then(() => {
