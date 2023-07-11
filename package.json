@@ -31,6 +31,7 @@
     "katex": "0.15.1",
     "keymaster": "1.6.2",
     "lodash": "4.17.21",
+    "lossless-json": "^2.0.10",
     "mermaid": "8.13.5",
     "moment": "2.29.1",
     "node-sass": "6.0.1",
