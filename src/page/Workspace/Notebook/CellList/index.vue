@@ -226,7 +226,7 @@ export default {
       langList: langList
     }
   },
-  props: ['removeTabId', 'currentNotebook', 'activeNotebookId'],
+  props: ['currentNotebook', 'activeNotebookId'],
   components: {
     CellBox,
     draggable,
@@ -342,25 +342,6 @@ export default {
         }
       },
       deep: true
-    },
-    removeTabId : {
-      handler (newVal) {
-        if (this.isDemo) {
-          return
-        }
-        if (newVal === this.currentNotebook.uniq) {
-          this.removeLoadedCellList({
-            name: 'logMessageList',
-            notebookId: this.currentNotebook.id,
-            cellIdList: this.newCellList.map(i => i.id)
-          })
-          this.removeLoadedCellList({
-            name: 'resultList',
-            notebookId: this.currentNotebook.id,
-            cellIdList: this.newCellList.map(i => i.id)
-          })
-        }
-      }
     }
   },
   methods: {
@@ -396,6 +377,20 @@ export default {
     ...mapActions('CreateNoteBookModal', {
       callCreateNoteBookModal: 'CALL_MODAL'
     }),
+    removeLogAndMessage (uniq) {
+        if (uniq === this.currentNotebook.uniq) {
+          this.removeLoadedCellList({
+            name: 'logMessageList',
+            notebookId: this.currentNotebook.id,
+            cellIdList: this.newCellList.map(i => i.id)
+          })
+          this.removeLoadedCellList({
+            name: 'resultList',
+            notebookId: this.currentNotebook.id,
+            cellIdList: this.newCellList.map(i => i.id)
+          })
+        }
+    },
     getEditType () {
       return langList.find(item => item.value === this.editType)?.label
     },

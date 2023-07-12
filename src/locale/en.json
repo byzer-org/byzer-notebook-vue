@@ -42,6 +42,9 @@
   "hideDetails": "Hide Details",
   "viewAll": "View All",
   "copySuccess": "Successfully Copied!",
+  "closeCurrentTab": "Close Current Tab",
+  "closeOtherTabs": "Close Other Tabs",
+  "closeAllTabs": "Close All Tabs",
   "menu": {
     "home": "Home",
     "workspace": "Workspace",

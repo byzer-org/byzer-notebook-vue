@@ -42,6 +42,9 @@
   "hideDetails": "收起详情",
   "viewAll": "查看所有",
   "copySuccess": "复制成功!" ,
+  "closeCurrentTab": "关闭当前标签页",
+  "closeOtherTabs": "关闭其他标签页",
+  "closeAllTabs": "关闭所有标签页",
   "menu": {
     "home": "主页",
     "workspace": "工作区",
