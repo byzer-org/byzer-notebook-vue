@@ -99,6 +99,7 @@ export const CLEAR_USER_INFO = 'CLEAR_USER_INFO'
 export const GET_ENV = 'GET_ENV'
 export const SET_CURRENT_ENV = 'SET_CURRENT_ENV'
 export const SET_SCHEDULE_ENABLE = 'SET_SCHEDULE_ENABLE'
+export const SET_LOGO = 'SET_LOGO'
 
 // data catalog
 export const GET_DB_LIST = 'GET_DB_LIST'

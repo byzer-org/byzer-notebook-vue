@@ -2,7 +2,7 @@
 <template>
   <div class="page-header">
     <div class="page-header-left">
-      <span class="page-header-left-logo">Byzer Notebook</span>
+      <span class="page-header-left-logo">{{logo}}</span>
       <header-menu v-if="!isLoginPage"></header-menu>
     </div>
     <div class="page-header-right">
@@ -33,7 +33,8 @@ import { mapState } from 'vuex'
   computed: {
     ...mapState({
       userInfo: state => state.user.userInfo,
-      isTrial: state => state.global.is_trial
+      isTrial: state => state.global.is_trial,
+      logo: state => state.global.logo
     }),
     isLoginPage () {
       return this.$route.name === 'login'
@@ -53,7 +54,7 @@ export default class Header extends Vue {
   &-left {
     display: flex;
     &-logo {
-      width: 300px;
+      min-width: 300px;
       font-size: 20px;
       color: $--color-white;
       line-height: 48px;
