@@ -1,4 +1,3 @@
-
 <template>
   <div class="notebookPage">
     <div ref="$layout-left" v-show="sideBarVisible" class="layout-left clearfix" :style="layoutLeftStyle">
@@ -31,7 +30,7 @@
       </div>
     </div>
     <div ref="$layout-right" :class="notebookTab.length ? '' : 'nodata'" class="layout-right" :style="layoutRightStyle">
-      <div class="container-r" v-loading="loadingList">
+      <div class="container-r" v-loading="loadingList" ref="$tabs">
         <!-- tab 区 begin -->
         <el-tabs
           v-if="notebookTab.length"
@@ -56,7 +55,6 @@
                 class="tab-content-cells"
                 :ref="'cellList' + tab.uniq"
                 :currentNotebook="tab"
-                :removeTabId="removeTabId"
                 @changeTabList="changeTabList"
                 @handleRename="handleRename"
                 @handleClone="handleClone"
@@ -95,6 +93,12 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
+        <!-- 右键功能 -->
+        <ul v-show="contextMenuVisible" :style="{left:menuLeft +'px',top:menuTop+'px'}" class="contextmenu">
+          <li @click="() => confirmCloseTab(contextSelectTab)">{{$t('closeCurrentTab')}}</li>
+          <li @click="() => confirmCloseOtherTab(contextSelectTab)">{{$t('closeOtherTabs')}}</li>
+          <li @click="() => confirmCloseAllTab()">{{$t('closeAllTabs')}}</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -109,7 +113,7 @@ import WorkflowSide from '../Workflow/components/SideBar'
 import { getDemoList, getCasAndTree } from '@/util'
 import _ from 'lodash'
 import Sortable from 'sortablejs'
-import { getAllList } from '../../../util'
+import { getAllList, findParentWithClass } from '../../../util'
 import { FileSuffixMap } from '@/config'
 
 export default {
@@ -131,7 +135,19 @@ export default {
       isCollapse: false,
       loadingList: false,
       defaultLeftWidth: 268,
-      removeTabId: ''
+      contextMenuVisible: false,
+      menuLeft: 0,
+      menuTop: 0,
+      contextSelectTab: ''
+    }
+  },
+  watch: {
+    contextMenuVisible () {
+      if (this.contextMenuVisible) {
+        document.body.addEventListener('click', this.closeMenu)
+      } else {
+        document.body.removeEventListener('click', this.closeMenu)
+      }
     }
   },
   components: {
@@ -174,6 +190,13 @@ export default {
     this.fetchNotebookList()
     addEventListener('mousemove', this.handleResize)
     addEventListener('mouseup', this.handleStopResize)
+    this.$refs.$tabs.addEventListener('contextmenu',  event => {
+      const target = event.target
+      const tab = findParentWithClass(target, [ 'el-tabs__item','is-top'])
+      if (tab && tab.id){
+        this.openContextmenu(event, tab.id.substring(4))
+      }
+    })
   },
   methods: {
     ...mapMutations({
@@ -254,11 +277,28 @@ export default {
         return true;
       }
     },
-    confirmCloseTab (tabTypeId) {
-      this.removeTabId = tabTypeId
+    async confirmCloseTab (tabTypeId) {
       const list = this.notebookTab.filter(v => v.uniq !== tabTypeId)
       list.length && (list[0].active = true)
-      this.minusTabList(list)
+      const cellRef = 'cellList' + tabTypeId
+      this.$refs[cellRef][0].removeLogAndMessage(tabTypeId)
+      await this.minusTabList(list)
+    },
+    async confirmCloseOtherTab (tabTypeId) {
+      const list = this.notebookTab.filter(v => v.uniq !== tabTypeId)
+      list.forEach(item => {
+        const cellRef = 'cellList' + item.uniq
+        this.$refs[cellRef][0].removeLogAndMessage(item.uniq)
+      })
+      const self = this.notebookTab.filter(v => v.uniq === tabTypeId)
+      await this.minusTabList(self)
+    },
+    async confirmCloseAllTab () {
+      this.notebookTab.forEach(item => {
+        const cellRef = 'cellList' + item.uniq
+        this.$refs[cellRef][0].removeLogAndMessage(item.uniq)
+      })
+      await this.minusTabList([])
     },
     handleCommand (type) {
       if (['notebook', 'workflow'].includes(type)) {
@@ -386,7 +426,7 @@ export default {
     async minusTabList (newTabList) {
       try {
         await this.saveOpenedNotebook({list: newTabList})
-        this.fetchNotebookList()
+        await this.fetchNotebookList()
       } catch (e) {
         console.log(e)
       }
@@ -548,7 +588,7 @@ export default {
             const needSaveNewList = this.setOpenedList()
             await this.saveOpenedNotebook({ list: needSaveNewList })
           }
-          this.getNotebookTab()
+          await this.getNotebookTab()
         }
       } catch (e) {
         console.log(e)
@@ -585,6 +625,16 @@ export default {
           this.layoutStyle.rightWidth = resizeData.rightStartWidth - offsetX
         }
       }
+    },
+    openContextmenu (e, id) {
+      e.preventDefault()
+      this.contextMenuVisible = true
+      this.menuLeft = e.clientX
+      this.menuTop = e.clientY
+      this.contextSelectTab = id
+    },
+    closeMenu () {
+      this.contextMenuVisible = false
     }
   }
 }
@@ -685,6 +735,34 @@ export default {
       & > .el-tabs--card > .el-tabs__header {
         padding: 0 20px;
         margin-bottom: 0px;
+      }
+      .contextmenu {
+        width: 120px;
+        border: 1px solid $--border-color-light;
+        background-color: $--color-white;
+        z-index: 3000;
+        position: fixed;
+        list-style-type: none;
+        border-radius: 4px;
+        color: #333;
+        box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        padding: 5px 0;
+
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: start;
+          color: #2c3e50;
+          padding: 5px 10px;
+          font-size: 12px;
+
+          &:hover {
+            background: #f2f2f2;
+            cursor: pointer;
+          }
+        }
       }
     }
   }

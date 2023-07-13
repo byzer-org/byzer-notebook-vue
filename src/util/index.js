@@ -222,3 +222,18 @@ export function hasOwnProperty (obj, key) {
     }
 }
 
+export function findParentWithClass (element, className) {
+    let current = element
+    const containsAll = (sourceArray, compareArray) =>
+      compareArray.every(function (element) {
+        return sourceArray.contains(element)
+      })
+
+    while (current !== null) {
+      if (containsAll(current.classList ?? [], className)) {
+        return current
+      }
+      current = current.parentNode
+    }
+    return null
+}
