@@ -6,6 +6,7 @@ export default {
   state: {
     is_trial: true,
     is_scheduler_enabled: false,
+    logo: 'Byzer Notebook',
     lang: getGlobalLang()
   },
   mutations: {
@@ -18,6 +19,9 @@ export default {
     [types.CHANGE_LANG]: (state, data) => {
       state.lang = data
       localStorage.setItem('lang', data)
+    },
+    [types.SET_LOGO]: (state, data) => {
+      state.logo = data
     }
   },
   actions: {

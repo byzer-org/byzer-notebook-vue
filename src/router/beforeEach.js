@@ -8,7 +8,8 @@ export default async function beforeEach (to, from, next) {
     const res = await store.dispatch(actionsTypes.GET_ENV)
     store.commit('SET_CURRENT_ENV', res.data.is_trial)
     store.commit('SET_SCHEDULE_ENABLE', res.data.is_scheduler_enabled)
-    document.title = 'Byzer Notebook'
+    store.commit('SET_LOGO', res.data.logo)
+    document.title = res.data.logo || 'Byzer Notebook'
   } catch (e) {
     console.log(e)
   }
