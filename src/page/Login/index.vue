@@ -3,7 +3,7 @@
   <div id="loginPage">
     <div class="login-box">
       <div class="login-logo">
-        <div class="login-logo-text">Byzer Notebook</div>
+        <div class="login-logo-text">{{logo}}</div>
       </div>
       <div class="login-form">
         <el-form :model="user" ref="loginForm" :rules="rules">
@@ -31,7 +31,8 @@ import { mapState, mapActions } from 'vuex'
 @Component({
   computed: {
     ...mapState({
-      isTrial: state => state.global.is_trial
+      isTrial: state => state.global.is_trial,
+      logo: state => state.global.logo
     })
   },
   methods: {
