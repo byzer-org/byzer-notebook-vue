@@ -1,6 +1,3 @@
-
-
-
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import enLocale from 'element-ui/lib/locale/lang/en'
@@ -22,8 +19,12 @@ const messages = {
   }
 }
 
-export default new VueI18n({
+const i18n =  new VueI18n({
   locale: getGlobalLang(),
   messages,
   silentFallbackWarn: true
 })
+
+Vue.mixin({i18n})
+
+export default i18n
