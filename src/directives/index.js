@@ -1,7 +1,6 @@
+
 import Vue from 'vue'
 import ElementUI from 'element-ui'
-import CodeCopy from '@/components/Markdown/CodeCopy.vue'
-import hljs from 'highlight.js'
 
 Vue.directive('lazy', {
   inserted: (el,binding) => {
@@ -18,34 +17,6 @@ Vue.directive('lazy', {
     obServer.observe(el)
   }
 })
-
-Vue.directive('highlight', {
-  bind: el => {
-    const blocks = el.querySelectorAll('pre code')
-    console.log(blocks)
-    blocks.forEach(block => {
-      hljs.highlightElement(block)
-    })
-  }
-})
-
-Vue.directive('copy',
-  {
-    bind: el => {
-      el.querySelectorAll('pre').forEach(el => {
-        if (el.classList.contains('code-copy-added')) return
-        el.classList.add('code-copy-added')
-        el.appendChild(new Vue({
-            render: h => h(CodeCopy, {
-                props: {
-                    code: el.innerText
-                }
-            })
-        }).$mount().$el)
-      })
-    }
-   }
-)
 
 // 自定义增加tooltip指令，判断宽度（加偏移量）是否超过父盒子从而插入或移出tooltip
 let parentList = {}
