@@ -1,4 +1,3 @@
-
 <template>
   <div class="cell-excute-result">
     <div class="cell-excute-result-wrapper" ref="resultContainer">
@@ -8,7 +7,11 @@
       <div class="container" v-else-if="excuteSuccess">
         <div
           class="wrapper not-table"
-          v-if="detailType === 'html' || detailType === 'image'"
+          v-if="
+            detailType === 'html' ||
+            detailType === 'image' ||
+            detailType === 'markdown'
+          "
         >
           <section
             v-for="(detail, index) in detailContent"
@@ -24,10 +27,11 @@
             </iframe>
             <img
               class="html"
-              v-else
+              v-else-if="detailType === 'image'"
               :src="`data:image/png;base64,${detail}`"
               alt=""
-            >
+            />
+            <Markdown :source="detail" v-else/>
           </section>
         </div>
         <div class="table wrapper" v-else-if="detailType === 'table'">
@@ -118,11 +122,14 @@ import { Parser } from 'json2csv'
 import moment from 'moment'
 import { hasOwnProperty } from '../../../../util'
 import { parse } from 'lossless-json'
+import Markdown from '@/components/Markdown/index.vue'
 
 @Component({
-  props: ['result', 'status', 'innerMaxHeight']
+  props: ['result', 'status', 'innerMaxHeight'],
+  components: {
+    Markdown
+  }
 })
-
 export default class ExcuteResult extends Vue {
   message = ''
   tableList = []
@@ -173,8 +180,10 @@ export default class ExcuteResult extends Vue {
           return item
         })
         this.detailType = 'table'
-        const isIframeOrImage = dataList.some(i => hasOwnProperty(i, 'mime') && hasOwnProperty(i,'content'))
-        if (isIframeOrImage) {
+        const isMime = dataList.some(
+          i => hasOwnProperty(i, 'mime') && hasOwnProperty(i, 'content')
+        )
+        if (isMime) {
           this.detailType = dataList[0].mime
           this.detailContent = []
           dataList.forEach(item => {
