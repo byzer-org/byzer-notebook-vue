@@ -121,7 +121,7 @@ import { saveAs } from 'file-saver'
 import { Parser } from 'json2csv'
 import moment from 'moment'
 import { hasOwnProperty } from '../../../../util'
-import { parse } from 'lossless-json'
+import jsonBigint from 'json-bigint';
 import Markdown from '@/components/Markdown/index.vue'
 
 @Component({
@@ -168,11 +168,15 @@ export default class ExcuteResult extends Vue {
     } else {
       this.excuteSuccess = this.result.status === '1'
       if (this.result.status !== '0') {
-        let parsedResult = this.result && this.result.result ? parse(this.result.result) : ''
+        const json = jsonBigint({storeAsString: true})
+        let parsedResult = this.result && this.result.result ? json.parse(this.result.result) : ''
         const schema = (parsedResult.schema?.fields || [])
         this.headerList = schema.map(v => ({prop: v.name, label: v.name}))
         const dataList = (parsedResult.data || []).map(item => {
           schema.forEach(s => {
+            if (s.type.type === 'struct') {
+              item[s.name] = json.stringify(item[s.name])
+            }
             if (!Object.prototype.hasOwnProperty.call(item, s.name)) {
               item[s.name] = null
             }

@@ -277,28 +277,28 @@ export default {
         return true;
       }
     },
-    async confirmCloseTab (tabTypeId) {
+    confirmCloseTab (tabTypeId) {
       const list = this.notebookTab.filter(v => v.uniq !== tabTypeId)
       list.length && (list[0].active = true)
       const cellRef = 'cellList' + tabTypeId
       this.$refs[cellRef][0].removeLogAndMessage(tabTypeId)
-      await this.minusTabList(list)
+      this.minusTabList(list)
     },
-    async confirmCloseOtherTab (tabTypeId) {
+    confirmCloseOtherTab (tabTypeId) {
       const list = this.notebookTab.filter(v => v.uniq !== tabTypeId)
       list.forEach(item => {
         const cellRef = 'cellList' + item.uniq
         this.$refs[cellRef][0].removeLogAndMessage(item.uniq)
       })
       const self = this.notebookTab.filter(v => v.uniq === tabTypeId)
-      await this.minusTabList(self)
+      this.minusTabList(self)
     },
-    async confirmCloseAllTab () {
+    confirmCloseAllTab () {
       this.notebookTab.forEach(item => {
         const cellRef = 'cellList' + item.uniq
         this.$refs[cellRef][0].removeLogAndMessage(item.uniq)
       })
-      await this.minusTabList([])
+      this.minusTabList([])
     },
     handleCommand (type) {
       if (['notebook', 'workflow'].includes(type)) {
@@ -426,7 +426,7 @@ export default {
     async minusTabList (newTabList) {
       try {
         await this.saveOpenedNotebook({list: newTabList})
-        await this.fetchNotebookList()
+        this.fetchNotebookList()
       } catch (e) {
         console.log(e)
       }
@@ -753,7 +753,7 @@ export default {
         li {
           display: flex;
           align-items: center;
-          justify-content: start;
+          justify-content: flex-start;
           color: #2c3e50;
           padding: 5px 10px;
           font-size: 12px;
