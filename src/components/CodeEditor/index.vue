@@ -129,6 +129,7 @@ export default {
                 const resl = await this.autoComplete({
                   excuteMode: 'autoSuggest', // 脚本执行类，autoSuggest->语法提示
                   sql: base64Encode(sql),
+                  encType: 'base64',
                   lineNum,
                   columnNum,
                   isDebug: false // 后台是否显示debug日志
