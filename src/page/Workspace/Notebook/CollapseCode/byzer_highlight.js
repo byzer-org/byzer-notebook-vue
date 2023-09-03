@@ -114,7 +114,16 @@ function byzer (hljs) {
     '!withWartermark',
     '!plugin',
     '!kafkaTool',
-    '!callback'
+    '!callback',
+    '!assert',
+    '!assertNotNull',
+    '!assertNotNullThrow',
+    '!assertUniqueKey',
+    '!assertUniqueKeyThrow',
+    '!assertUniqueKeys',
+    '!assertUniqueKeysThrow',
+    '!assertCondition',
+    '!assertConditionThrow'
   ];
 
   const TYPES = [
