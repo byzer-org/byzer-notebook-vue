@@ -18,7 +18,7 @@ ace.define('ace/mode/sql_highlight_rules', ['require', 'exports', 'module', 'ace
         '!show|!hdfs|!kill|!desc|!cache|!unCache|!if|!elif|!then|!else|!fi|!println|!runScript|!last|' +
         '!lastTableName|!tableRepartition|!saveFile|!emptyTable|!profiler|!python|!ray|!delta|!withWartermark|' +
         '!plugin|!kafkaTool|!callback|!assert|!assertNotNull|!assertNotNullThrow|!assertUniqueKey|' +
-        '!assertUniqueKeyThrow|!assertUniqueKeys|!assertUniqueKeysThrow|!assertCondition|!assertConditionThrow'// 宏语法
+        '!assertUniqueKeyThrow|!assertUniqueKeys|!assertUniqueKeysThrow|!assertCondition|!assertConditionThrow|!byzerllm'// 宏语法
       )
 
       var builtinConstants = (

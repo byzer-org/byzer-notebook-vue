@@ -123,7 +123,8 @@ function byzer (hljs) {
     '!assertUniqueKeys',
     '!assertUniqueKeysThrow',
     '!assertCondition',
-    '!assertConditionThrow'
+    '!assertConditionThrow',
+    '!byzerllm'
   ];
 
   const TYPES = [
