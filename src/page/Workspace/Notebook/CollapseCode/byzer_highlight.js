@@ -124,7 +124,8 @@ function byzer (hljs) {
     '!assertUniqueKeysThrow',
     '!assertCondition',
     '!assertConditionThrow',
-    '!byzerllm'
+    '!byzerllm',
+    '!deltaTable'
   ];
 
   const TYPES = [
